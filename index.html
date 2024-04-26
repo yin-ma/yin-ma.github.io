@@ -1,37 +1,28 @@
 <!DOCTYPE html>
-<head>
-  <title>hello world</title>
-</head>
-<body>
-  <header>
-    <nav class="header-container"> 
-      <a href="/testing.html" class="header-item">a1</a>
-      <a class="header-item">a2</a>
-      <a class="header-item">a3</a>
-    </nav>
-  </header>
-  <main>
-    <div class="body-container">
-      <h1>Hello World!</h1>
-      <p>nice to meet you!</p>
-    
-      <div class="info-box">
-        <h2 class="info-title">project1</h2>
-        <p class="info-content">sorting algos</p>
-      </div>
-    
-      <div class="info-box">
-        <h2 class="info-title">project2</h2>
-        <p>path finding</p>
-      </div>
-    
-      <div class="info-box">
-        <h2 class="info-title">project3</h2>
-        <p>ray tracing</p>
-      </div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MyPage</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="router.js"></script>
+    <script src="script.js"></script>
+  </head>
+
+  <body>
+    <div id="root">
+      <header>
+        <nav class="header-container"> 
+            <a href="/" onclick=route()>Home</a>
+            <a href="/codesamples" onclick=route()>Code Samples</a>
+            <a href="/about" onclick=route()>About</a>
+          </nav>
+        <div id="main-page"></div>
+      </header>
+
+      <footer>
+        <div>content me</div>
+      </footer>
     </div>
-  </main>
-  <footer>
-    <div>content me</div>
-  </footer>
-</body>
+  </body>
+
+</html>
