@@ -13,6 +13,7 @@ const route = (targetPath) => {
   handleLocation();
 };
 
+
 const handleLocation = async () => {
   const path = window.location.pathname;
   const route = routes[path] || routes["404"];
