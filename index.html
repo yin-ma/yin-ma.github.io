@@ -3,36 +3,30 @@
   <head>
     <meta charset="utf-8">
     <title>MyPage</title>
-    <script type="text/javascript">
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
-    </script>
+    <script src="redirect.js" type="text/javascript" defer></script>
+    <script src="router.js" defer></script>
+    <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css" />
-    <script src="router.js"></script>
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="/src/home.css" />
   </head>
 
   <body>
     <div id="root">
       <header>
         <nav class="header-container"> 
-            <a href="/" onclick=route()>Home</a>
-            <a href="/codesamples" onclick=route()>Code Samples</a>
-            <a href="/about" onclick=route()>About</a>
-          </nav>
-        <div id="main-page"></div>
+          <div onclick="route('/')">Home</div>
+          <div onclick="route('/codesamples')">Code Samples</div>
+          <div onclick="route('/about')">About</div>
+        </nav>
       </header>
-
-      <footer>
-        <div>content me</div>
+      <div id="main-page"></div>
+        
+      <footer id="footer">
+        <div class="footer footer-title">content me</div>
+        <div class="footer footer-content">
+          <div class="footer footer-item">email:&nbsp;<span>yinma2448@gmail.com</span></div>
+          <div class="footer footer-item">github:&nbsp;<a href="https://github.com/yin-ma" target="_blank">https://github.com/yin-ma</a></div>
+        </div>
       </footer>
     </div>
   </body>
