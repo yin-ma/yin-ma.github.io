@@ -1,0 +1,34 @@
+.about-description {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  justify-self: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  max-width: 500px;
+}
+
+.about-profile-pic {
+  padding: 30px;
+}
+
+.about-profile-pic > img {
+  border-radius: 100%;
+  box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.2);
+}
+
+.about-description > div {
+  min-height: 300px;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-description > div > p {
+  justify-self: start;
+  align-self: start;
+  margin: 0.5rem;
+}
