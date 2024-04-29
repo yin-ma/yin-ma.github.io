@@ -139,16 +139,26 @@ h2 {
 	100% {transform: translateX(0%);}
 }
 
-
 .home-link {
   cursor: pointer;
   justify-self: center;
   align-self: center;
   font-size: 1.1rem;
-  transition: transform 300ms ease-in-out;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
 }
 
+.home-link span {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease;
+}
 
 .home-link:hover {
   text-decoration: underline;
+}
+
+.home-link:hover span {
+  transform: translateX(1rem);
 }
