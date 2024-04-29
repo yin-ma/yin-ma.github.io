@@ -2,6 +2,7 @@ const routes = {
   "404": "/src/404.html",
   "/": "/src/home.html",
   "/index": "/src/home.html",
+  "/index.html": "/src/home.html",
   "/home": "/src/home.html",
   "/about": "/src/about.html",
   "/codesamples": "/src/codeSample.html"
