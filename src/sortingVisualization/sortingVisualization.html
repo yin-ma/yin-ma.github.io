@@ -1,47 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualization of Sorting Algos</title>
-    <link rel="stylesheet" href="/src/sortingVisualization/sortingVisualization.css">
-    <script src="/src/sortingVisualization/sortingVisualization.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualization</title>
+  <link rel="stylesheet" href="./sortingVisualization.css">
+  <script src="./sortingVisualization.js" type="module" defer></script>
 </head>
 <body>
-  <div class="hide-btn">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-  </div>
-  <h1>Sorting Visualizer</h1>
-  <div class="main">
-    <div class="display-mid"></div>
-  </div>
-  <div class="display-right">
-    <div class="controller active">
-      <ul>
-        <li>
-          <div class="algo">
-            <a class="title">Algorithm</a>
-            <div class="algo-list">
-              <a class="algo active" data-bubble>bubble sort</a>
-              <a class="algo" data-selection>selection sort</a>
-              <a class="algo" data-quick>quick sort</a>
-              <a class="algo" data-merge>merge sort</a>
-            </div>
-          </div>
-        </li>
-        <li>
-          <label for="input">bars 30</label>
-          <input type="range" min="5" max="100" class="slider slider-bars" value="30">
-        </li>
-        <li>
-          <label for="input">speed 1.000</label>
-          <input type="range" min="-500" max="-1" class="slider slider-speed" value="1">
-        </li>
-        <li><button class="btn btn-shuffle">shuffle</button></li>
-        <li><button class="btn btn-sort">sort</button></li>
-      </ul>
+  <div class="root">
+    <div class="visualizer">
+      <h1>Sorting Visualizer</h1>
+      <div class="canvas"></div>
+      <div class="controller">
+        <div class="controller-item">
+          <label for="algos">Choose an algorithm:</label>
+          <select name="algos" class="algos">
+            <option value="bubbleSort">bubble sort</option>
+            <option value="mergeSort">merge sort</option>
+            <option value="selectionSort">selection sort</option>
+            <option value="quickSort">quick sort</option>
+          </select>
+        </div>
+        <div class="controller-item">
+          <label for="number">Number of bars</label>
+          <input type="range" min="10" max="100" value="30" name="number" class="number-slider">
+        </div>
+        <div class="controller-item">
+          <label for="speed">Speed of animation:</label>
+          <input type="range" min="1" max="500" value="500" name="speed" class="speed-slider">
+        </div>
+        <div class="controller-item">
+          <button class="shuffle-btn">shuffle</button>
+        </div>
+        <div class="controller-item">
+          <button class="start-btn">start</button>
+        </div>
+      </div>
     </div>
   </div>
 </body>
