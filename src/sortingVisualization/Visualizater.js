@@ -13,7 +13,6 @@ export class Visualizer {
   running() {
     this.algos.disabled = true;
     this.barSlider.disabled = true;
-    this.speedSlider.disabled = true;
     this.shuffleBtn.disabled = true;
     this.startBtn.disabled = true;
   }
@@ -21,7 +20,6 @@ export class Visualizer {
   finished() {
     this.algos.disabled = false;
     this.barSlider.disabled = false;
-    this.speedSlider.disabled = false;
     this.shuffleBtn.disabled = false;
     this.startBtn.disabled = false;
   }
