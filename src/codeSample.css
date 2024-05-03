@@ -58,6 +58,8 @@ h2 {
   text-decoration: none;
   color: inherit;
   opacity: 0.75;
+  background-position: center, center; 
+  background-repeat: no-repeat;
 }
 
 .info-title {

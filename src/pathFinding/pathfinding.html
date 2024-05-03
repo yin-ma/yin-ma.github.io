@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PathFinding Visualization</title>
+  <link rel="stylesheet" href="./pathfinding.css">
+  <script src="./pathfinding.js" type="module" defer></script>
+</head>
+<body>
+  <div class="root">
+    <div class="visualizer">
+      <h1>PathFinding Visualization</h1>
+      <div class="controller left">
+        <div class="controller-item">
+          <h2 style="align-self: center; margin: 1.3rem;">legend</h2>
+          <div class="legend-items">
+            <div style="background-color: green; width: 20px; height: 20px;"></div>
+            <div>starting point</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: red; width: 20px; height: 20px;"></div>
+            <div>ending point</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: black; width: 20px; height: 20px;"></div>
+            <div>walls</div>
+          </div>
+        </div>
+      </div>
+      <div class="canvas"></div>
+      <div class="controller right">
+        <div class="controller-item">
+          <label for="algos">Choose an algorithm:</label>
+          <select name="algos" class="algos">
+            <option value="DFS">DFS</option>
+            <option value="BFS">BFS</option>
+            <option value="Dijkstra">Dijkstra </option>
+            <option value="AStar">A star</option>
+          </select>
+        </div>
+        <div class="controller-item">
+          <label for="speed">Speed of animation:</label>
+          <input type="range" min="1" max="500" value="500" name="speed" class="speed-slider slider">
+        </div>
+        <div class="controller-item">
+          <button class="start-btn">start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <a class="home-link" href="/src/codeSample.html"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
