@@ -42,7 +42,7 @@ body {
 }
 
 .grid {
-  background-color: white;
+  background-color: #474747;
   width: 20px;
   height: 20px;
   border: 1px solid #171717;
@@ -61,6 +61,14 @@ body {
 
 .wall {
   background-color: black;
+}
+
+.path {
+  background-color: orange;
+}
+
+.close {
+  background-color: aqua;
 }
 
 .controller {
