@@ -67,7 +67,7 @@ body {
   background-color: orange;
 }
 
-.close {
+.open {
   background-color: aqua;
 }
 
@@ -106,6 +106,7 @@ body {
 .legend-items div {
   flex-shrink: 0;
 }
+
 
 .slider {
   cursor: pointer;
