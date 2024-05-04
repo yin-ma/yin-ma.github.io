@@ -395,18 +395,19 @@ async function astar() {
   function heuristic(pr1, pc1, pr2, pc2) {
     return Math.abs(pr2-pr1) + Math.abs(pc2-pc1);
   }
-  let openList = [[heuristic(startRow, startCol, endRow, endCol), 0, heuristic(startRow, startCol, endRow, endCol), startRow, startCol]];
+  let openList = [[heuristic(startRow, startCol, endRow, endCol), 0, heuristic(startRow, startCol, endRow, endCol), startRow, startCol, startRow, startCol]];
   let closeList = {};
   let ani = [];
   let pathRecord = {};
 
   while (openList.length > 0) {
-    let [fCost, gCost, hCost, currRow, currCol] = MinHeap.pop(openList);
+    let [fCost, gCost, hCost, currRow, currCol, prevRow, prevCol] = MinHeap.pop(openList);
+    
+    if (`${currRow},${currCol}` in closeList && closeList[`${currRow},${currCol}`] <= gCost) continue;
+    closeList[`${currRow},${currCol}`] = gCost;
+    pathRecord[`${currRow},${currCol}`] = `${prevRow},${prevCol}`;
     
     if (currRow === endRow && currCol === endCol) break;
-
-    if (`${currRow},${currCol}` in closeList) continue;
-    closeList[`${currRow},${currCol}`] = gCost;
     
     let direction = [[0, -1], [-1, 0], [1, 0], [0, 1]];
     for (let [dr, dc] of direction) {
@@ -414,10 +415,10 @@ async function astar() {
       let nxtCol = currCol + dc;
       if (nxtRow < 0 || nxtRow >= gridSize || nxtCol < 0 || nxtCol >= gridSize) continue;
       if (grid[nxtRow][nxtCol] === tile.wall) continue;
-
-      MinHeap.push(openList, [gCost+heuristic(nxtRow, nxtCol, endRow, endCol)+1, gCost+1, heuristic(nxtRow, nxtCol, endRow, endCol), nxtRow, nxtCol]);
+      if (`${nxtRow},${nxtCol}` in closeList) continue;
+      
+      MinHeap.push(openList, [gCost+heuristic(nxtRow, nxtCol, endRow, endCol)+1, gCost+1, heuristic(nxtRow, nxtCol, endRow, endCol), nxtRow, nxtCol, currRow, currCol]);
       ani.push([nxtRow, nxtCol])
-      pathRecord[`${nxtRow},${nxtCol}`] = `${currRow},${currCol}`;
     }
   }
 
