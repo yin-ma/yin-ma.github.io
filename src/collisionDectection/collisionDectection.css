@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #171717;
+  color: white;
+  font-family: 'Segoe UI',Arial,'Microsoft Jhenghei',sans-serif;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  margin: 2rem;
+}
+
+h2 {
+  align-self: center;
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+  gap: 0.4rem;
+}
+
+.canvas {
+  width: 600px;
+  height: 400px;
+  margin: 4rem;
+  background-color: azure;
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+.rect {
+  width: 150px;
+  height: 100px;
+  top: calc(50% - 50px);
+  left: calc(50% - 75px);
+  position: absolute;
+  background-color: greenyellow;
+}
+
+.pr-cursor {
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+}
+
+.circle {
+  width: 200px;
+  height: 200px;
+  top: calc(50% - 100px);
+  left: calc(50% - 100px);
+  border-radius: 100%;
+  position: absolute;
+  background-color: greenyellow;
+}
+
+.cursor {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.rr-cursor {
+  width: 100px;
+  height: 100px;
+}
+
+.pc-cursor {
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+}
+
+.cc-cursor {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+}
+
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+  background-color: #303134;
+  padding: 5rem;
+}
+
+.home-link {
+  cursor: pointer;
+  justify-self: center;
+  align-self: center;
+  font-size: 1.1rem;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-link span {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}
+
+.home-link:hover span {
+  transform: translateX(-1rem);
+}

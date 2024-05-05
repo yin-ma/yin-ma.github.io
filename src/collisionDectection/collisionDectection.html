@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collision Dectection</title>
+  <link rel="stylesheet" href="./collisionDectection.css">
+  <script src="./collisionDectection.js" type="module" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Collision Dectection</h1>
+    <div class="canvas-main"></div>
+    <div class="article">
+      <p>The steps to detect collisions between two objects are as follows:</p>
+      <p>1. Define a ground.</p>
+      <p>2. Project the shadows of the objects onto the ground.</p>
+      <p>3. Check for any overlap between the two shadows.</p>
+      <p>Now, we will go through different types of collisions one by one to demonstrate how the algorithm works.</p>
+    </div>
+    <div class="article">
+      <h2>Point/Circle Collision</h2>
+      <div class="pc-canvas canvas">
+        <div class="pc-circle circle"></div>
+        <div class="pc-cursor cursor"></div>
+      </div>
+    </div>
+    <div class="article">
+      <h2>Circle/Circle Collision</h2>
+      <div class="cc-canvas canvas">
+        <div class="cc-circle circle"></div>
+        <div class="cc-cursor cursor"></div>
+      </div>
+    </div>
+    <div class="article">
+      <h2>Point/Rectangle Collision</h2>
+      <div class="pr-canvas canvas">
+        <div class="pr-rect rect"></div>
+        <div class="pr-cursor cursor"></div>
+      </div>
+    </div>
+    <div class="article">
+      <h2>Rectangle/Rectangle Collision</h2>
+      <div class="rr-canvas canvas">
+        <div class="rr-rect rect"></div>
+        <div class="rr-cursor cursor"></div>
+      </div>
+    </div>
+    <div class="canvas">
+      <div class="square"></div>
+    </div>
+  </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>

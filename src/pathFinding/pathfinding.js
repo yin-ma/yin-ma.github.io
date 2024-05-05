@@ -93,13 +93,7 @@ clearBtn.addEventListener("click", () => {
 })
 
 clearBtn.addEventListener("dblclick", () => {
-  elementGrid.forEach(row => {
-    row.forEach(e => {
-      e.classList.remove("open");
-      e.classList.remove("path");
-      e.classList.remove("wall");
-    })
-  });
+  gridInit();
 })
 
 
@@ -151,11 +145,15 @@ document.addEventListener("mousedown", event =>{
   else if (event.target.classList.contains("wall")) {
     removeWall = true;
     event.target.classList.remove("wall");
+    event.target.classList.remove("open");
+    event.target.classList.remove("path");
     grid[parseInt(event.target.getAttribute("row"))][parseInt(event.target.getAttribute("col"))] = tile.space;
   }
   else {
     buildWall = true;
     event.target.classList.add("wall");
+    event.target.classList.remove("open");
+    event.target.classList.remove("path");
     grid[parseInt(event.target.getAttribute("row"))][parseInt(event.target.getAttribute("col"))] = tile.wall;
   }
 })
@@ -208,6 +206,8 @@ document.addEventListener("mouseover", event => {
   }
   else if (removeWall === true) {
     event.target.classList.remove("wall");
+    event.target.classList.remove("open");
+    event.target.classList.remove("path");
     grid[parseInt(event.target.getAttribute("row"))][parseInt(event.target.getAttribute("col"))] = tile.space;
   }
   event.stopPropagation();
@@ -243,6 +243,8 @@ async function renderOpenList(ani) {
 async function renderPath(path) {
   let currRow = endRow;
   let currCol = endCol;
+
+  if (!(`${currRow},${currCol}` in path)) return;
 
   while (true) {
     let temp = path[`${currRow},${currCol}`].split(",");
