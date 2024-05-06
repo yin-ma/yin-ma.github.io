@@ -78,6 +78,12 @@ h2 {
   height: 100px;
 }
 
+.rc-cursor {
+  width: 180px;
+  height: 180px;
+  border-radius: 100%;
+}
+
 .pc-cursor {
   width: 5px;
   height: 5px;

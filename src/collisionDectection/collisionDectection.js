@@ -93,8 +93,10 @@ rrCanvas.addEventListener("mousemove", event => {
   let canvasRect = rrCanvas.getBoundingClientRect();
   let cursorRect = rrCursor.getBoundingClientRect();
   let rectRect = rrRect.getBoundingClientRect();
-  let cursorX = cursorRect.left + cursorRect.width / 2;
-  let cursorY = cursorRect.top + cursorRect.height / 2;
+  let cursorX = cursorRect.left;
+  let cursorY = cursorRect.top;
+  let cursorWidth = cursorRect.width;
+  let cursorHeight = cursorRect.height;
   let rectX = rectRect.left;
   let rectY = rectRect.top;
   let rectWidth = rectRect.width;
@@ -104,14 +106,51 @@ rrCanvas.addEventListener("mousemove", event => {
   rrCursor.style.top = `${event.clientY - canvasRect.top - cursorRect.height / 2}px`;
 
   if (
-    rectX <= cursorX &&
-    cursorX <= rectX+rectWidth && 
-    rectY <= cursorY &&
-    cursorY <= rectY+rectHeight
+    cursorX <= rectX + rectWidth &&
+    rectX <= cursorX + cursorWidth && 
+    cursorY <= rectY + rectHeight &&
+    rectY <= cursorY + cursorHeight
   ) {
     rrRect.style.backgroundColor = "darkorange";
   } else {
     rrRect.style.backgroundColor = "greenyellow";
+  }
+});
+
+
+// rectangle-circle collision
+let rcCanvas = document.querySelector(".rc-canvas");
+let rcCursor = document.querySelector(".rc-cursor");
+let rcRect = document.querySelector(".rc-rect");
+
+rcCanvas.addEventListener("mousemove", event => {
+  let canvasRect = rcCanvas.getBoundingClientRect();
+  let cursorRect = rcCursor.getBoundingClientRect();
+  let rectRect = rcRect.getBoundingClientRect();
+  let cursorX = cursorRect.left + cursorRect.width / 2;
+  let cursorY = cursorRect.top + cursorRect.width / 2;
+  let cursorR = cursorRect.width / 2;
+  let rectX = rectRect.left;
+  let rectY = rectRect.top;
+  let rectWidth = rectRect.width;
+  let rectHeight = rectRect.height;
+  
+  rcCursor.style.left = `${event.clientX - canvasRect.left - cursorRect.width / 2}px`;
+  rcCursor.style.top = `${event.clientY - canvasRect.top - cursorRect.height / 2}px`;
+
+  let textX = cursorX;
+  let textY = cursorY;
+
+  if (cursorX < rectX) { textX = rectX; }
+  else if (cursorX > rectX + rectWidth) { textX = rectX + rectWidth; }
+
+  if (cursorY < rectY) { textY = rectY; }
+  else if (cursorY > rectY + rectHeight) { textY = rectY + rectHeight; }
+
+  if (Math.pow((cursorX - textX), 2) + Math.pow((cursorY - textY), 2) <= Math.pow(cursorR, 2)) {
+    rcRect.style.backgroundColor = "darkorange";
+  } else {
+    rcRect.style.backgroundColor = "greenyellow";
   }
 });
 
