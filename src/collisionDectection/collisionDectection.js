@@ -153,15 +153,3 @@ rcCanvas.addEventListener("mousemove", event => {
     rcRect.style.backgroundColor = "greenyellow";
   }
 });
-
-
-// let canvas = document.querySelector(".canvas");
-// let square = document.querySelector(".square");
-
-
-// canvas.addEventListener("mousemove", event => {
-//   let canvasRect = canvas.getBoundingClientRect();
-//   let squareRect = square.getBoundingClientRect();
-//   square.style.left = `${event.clientX - canvasRect.left - squareRect.width / 2}px`;
-//   square.style.top = `${event.clientY - canvasRect.top - squareRect.height / 2}px`;
-// });

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Segment Intersction</title>
+  <link rel="stylesheet" href="./lineSegmentIntersection.css">
+  <script src="./lineSegmentIntersection.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Line Segment Intersction</h1>
+    <div class="container">
+      <canvas width="600px" height="600px" class="canvas"></canvas>
+      <div class="controller">
+        <div class="controller-item">
+          <div class="item-row">
+            A:&nbsp;
+            <label for="vecAx">x:</label>
+            <input type="number" name="vecAx" class="numberfield vecAx" value="-200" step=10>
+            <label for="vecAy">y:</label>
+            <input type="number" name="vecAy" class="numberfield vecAy" value="-200" step=10>
+          </div>
+          <div class="item-row">
+            B:&nbsp;
+            <label for="vecBx">x:</label>
+            <input type="number" name="vecBx" class="numberfield vecBx" value="200" step=10>
+            <label for="vecAy">y:</label>
+            <input type="number" name="vecBy" class="numberfield vecBy" value="200" step=10>
+          </div>
+          <div class="item-row">
+            C:&nbsp;
+            <label for="vecCx">x:</label>
+            <input type="number" name="vecCx" class="numberfield vecCx" value="-200" step=10>
+            <label for="vecCy">y:</label>
+            <input type="number" name="vecCy" class="numberfield vecCy" value="200" step=10>
+          </div>
+          <div class="item-row">
+            <p>hint: could drag and drop the points in canvas</p>
+          </div>
+      </div>
+    </div>
+
+    </div>
+  </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
