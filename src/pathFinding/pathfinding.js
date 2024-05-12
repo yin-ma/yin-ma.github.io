@@ -182,7 +182,6 @@ document.addEventListener("mouseover", event => {
   if (!event.target.classList.contains("grid")) return;
 
   if (startIsDragging === true) {
-    if (event.target.classList.contains("end")) return;
     event.target.classList.add("start");
     event.target.classList.remove("wall");
     event.target.classList.remove("open");
@@ -190,7 +189,6 @@ document.addEventListener("mouseover", event => {
     grid[parseInt(event.target.getAttribute("row"))][parseInt(event.target.getAttribute("col"))] = tile.start;
   }
   else if (endIsDragging === true) {
-    if (event.target.classList.contains("start")) return;
     event.target.classList.add("end");
     event.target.classList.remove("wall");
     event.target.classList.remove("open");
