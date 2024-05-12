@@ -9,8 +9,52 @@
 </head>
 <body>
   <div class="root">
-    <h1>A Star Algorithm</h1>
-    <div class="canvas"></div>
+    <div class="visualizer">
+      <h1>A Star Algorithm</h1>
+      <div class="canvas"></div>
+      <div class="controller left">
+        <div class="controller-item">
+          <h2 style="align-self: center; margin: 1.3rem;">legend</h2>
+          <div class="legend-items">
+            <div style="background-color: cornflowerblue; width: 20px; height: 20px;"></div>
+            <div>starting point</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: coral; width: 20px; height: 20px;"></div>
+            <div>ending point</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: black; width: 20px; height: 20px;"></div>
+            <div>walls</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: green; width: 20px; height: 20px;"></div>
+            <div>open list</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: red; width: 20px; height: 20px;"></div>
+            <div>close list</div>
+          </div>
+          <div class="legend-items">
+            <div style="background-color: violet; width: 20px; height: 20px;"></div>
+            <div>path</div>
+          </div>
+        </div>
+      </div>
+      <div class="controller right">
+        <div class="controller-item">
+          <label for="speed">Speed of animation:</label>
+          <input type="range" min="1" max="1000" value="750" name="speed" class="speed-slider slider">
+        </div>
+        <div class="controller-item">
+          <button class="clear-btn">clear</button>
+        </div>
+        <div class="controller-item">
+          <button class="start-btn">start</button>
+        </div>
+
+      </div>
+    </div>
   <footer class="footer">
     <a class="home-link" onclick="history.back()"><span>←</span>back </a>
   </footer>

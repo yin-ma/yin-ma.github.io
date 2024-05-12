@@ -10,7 +10,8 @@ export class Grid {
       end: 2,
       wall: 3,
       open: 4,
-      close: 5
+      close: 5,
+      path: 6
     }
     this.grid = [];
     this.gridElement = [];
@@ -19,11 +20,12 @@ export class Grid {
   }
 
   init() {
+    this.grid = []
     for(let i=0; i<this.row; i++) {
       let tempRow = [];
       for(let j=0; j<this.col; j++) {
         tempRow.push(
-          {state: this.gridType.space, fCost: 0, gCost: 0, hCost: 0}
+          {state: this.gridType.space, fCost: -1, gCost: 0, hCost: 0}
         );
       }
       this.grid.push(tempRow);
@@ -31,6 +33,7 @@ export class Grid {
   }
 
   initHTML() {
+    this.gridElement = [];
     this.canvas.innerHTML = "";
     for (let i=0; i<this.row; i++) {
       let rowElement = document.createElement("div");
@@ -107,9 +110,30 @@ export class Grid {
             element.appendChild(gCost);
             element.appendChild(hCost);
             break;
+          case this.gridType.path:
+            element.style.backgroundColor = "violet";
+            fCost.textContent = `f: ${this.grid[i][j].fCost}`;
+            gCost.textContent = `g: ${this.grid[i][j].gCost}`;
+            hCost.textContent = `h: ${this.grid[i][j].hCost}`;
+            element.appendChild(fCost);
+            element.appendChild(gCost);
+            element.appendChild(hCost);
+            break;
           default:
             break;
         }
+      }
+    }
+  }
+
+  reset() {
+    for (let i=0; i<this.row; i++) {
+      for (let j=0; j<this.col; j++) {
+        if (this.grid[i][j].state === this.gridType.start || 
+          this.grid[i][j].state === this.gridType.end ||
+          this.grid[i][j].state === this.gridType.wall
+        ) continue;
+        this.grid[i][j] = {state: this.gridType.space, fCost: -1, gCost: 0, hCost: 0};
       }
     }
   }

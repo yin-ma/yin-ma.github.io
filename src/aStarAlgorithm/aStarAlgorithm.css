@@ -69,6 +69,15 @@ body {
   flex-wrap: wrap;
 }
 
+.visualizer {
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
 .grid-row {
   display: flex;
   flex-direction: row;
@@ -86,4 +95,40 @@ body {
   font-size: 0.75rem;
   margin-left: 0.2rem;
   user-select: none;
+}
+
+.controller {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.controller.left {
+  right: 110%;
+}
+
+.controller.right {
+  left: 110%;
+}
+
+.controller-item {
+  margin: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  margin: 0.2rem;
+}
+
+.legend-items div {
+  flex-shrink: 0;
 }
