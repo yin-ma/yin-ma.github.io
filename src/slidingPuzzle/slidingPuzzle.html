@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sliding Puzzle</title>
+  <link rel="stylesheet" href="./slidingPuzzle.css">
+  <script src="./slider.js" defer></script>
+  <script src="./slidingPuzzle.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <div class="container">
+      <h1>Sliding Puzzle</h1>
+      <div class="canvas"></div>
+      <div class="controller right">
+        <div class="controller-item">
+          <input type="file" class="myFile" name="filename">
+        </div>
+        <div class="controller-item">
+          <label for="number">Number of Grids</label>
+          <input type="range" min="2" max="10" value="4" name="number" class="number-slider slider">
+        </div>
+        <div class="controller-item">
+          <button class="shuffle-btn">shuffle</button>
+        </div>
+        <div class="controller-item">
+          <button class="solve-btn">solve</button>
+        </div>
+      </div>
+    </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
