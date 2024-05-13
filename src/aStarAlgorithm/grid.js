@@ -17,6 +17,8 @@ export class Grid {
     this.gridElement = [];
     this.init();
     this.initHTML();
+    this.showText = true;
+    this.drawing = false;
   }
 
   init() {
@@ -65,7 +67,7 @@ export class Grid {
         let hCost = document.createElement("p");
         switch (this.grid[i][j].state) {
           case this.gridType.space:
-            element.style.backgroundColor = "snow";
+            element.style.backgroundColor = "#b6b6b6";
             break;
           case this.gridType.start:
             element.style.backgroundColor = "cornflowerblue";
@@ -94,30 +96,36 @@ export class Grid {
             break;
           case this.gridType.open:
             element.style.backgroundColor = "green";
-            fCost.textContent = `f: ${this.grid[i][j].fCost}`;
-            gCost.textContent = `g: ${this.grid[i][j].gCost}`;
-            hCost.textContent = `h: ${this.grid[i][j].hCost}`;
-            element.appendChild(fCost);
-            element.appendChild(gCost);
-            element.appendChild(hCost);
+            if (this.showText) {
+              fCost.textContent = `f: ${this.grid[i][j].fCost}`;
+              gCost.textContent = `g: ${this.grid[i][j].gCost}`;
+              hCost.textContent = `h: ${this.grid[i][j].hCost}`;
+              element.appendChild(fCost);
+              element.appendChild(gCost);
+              element.appendChild(hCost);
+            }
             break;
           case this.gridType.close:
             element.style.backgroundColor = "red";
-            fCost.textContent = `f: ${this.grid[i][j].fCost}`;
-            gCost.textContent = `g: ${this.grid[i][j].gCost}`;
-            hCost.textContent = `h: ${this.grid[i][j].hCost}`;
-            element.appendChild(fCost);
-            element.appendChild(gCost);
-            element.appendChild(hCost);
+            if (this.showText) {
+              fCost.textContent = `f: ${this.grid[i][j].fCost}`;
+              gCost.textContent = `g: ${this.grid[i][j].gCost}`;
+              hCost.textContent = `h: ${this.grid[i][j].hCost}`;
+              element.appendChild(fCost);
+              element.appendChild(gCost);
+              element.appendChild(hCost);
+            }
             break;
           case this.gridType.path:
             element.style.backgroundColor = "violet";
-            fCost.textContent = `f: ${this.grid[i][j].fCost}`;
-            gCost.textContent = `g: ${this.grid[i][j].gCost}`;
-            hCost.textContent = `h: ${this.grid[i][j].hCost}`;
-            element.appendChild(fCost);
-            element.appendChild(gCost);
-            element.appendChild(hCost);
+            if (this.showText) {
+              fCost.textContent = `f: ${this.grid[i][j].fCost}`;
+              gCost.textContent = `g: ${this.grid[i][j].gCost}`;
+              hCost.textContent = `h: ${this.grid[i][j].hCost}`;
+              element.appendChild(fCost);
+              element.appendChild(gCost);
+              element.appendChild(hCost);
+            }
             break;
           default:
             break;
