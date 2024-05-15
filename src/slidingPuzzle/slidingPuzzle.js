@@ -33,7 +33,7 @@ shuffleBtn.addEventListener("click", async() => {
   numberSlider.disabled = true;
   solveBtn.disabled = true;
   shuffleBtn.disabled= true;
-  slider.shuffle();
+  await slider.shuffle();
   numberSlider.disabled = false;
   solveBtn.disabled = false;
   shuffleBtn.disabled= false;
@@ -62,9 +62,6 @@ document.addEventListener("keydown", async event => {
       break;
     case "d":
       await slider.move("L");
-      break;
-    case "t":
-      console.log(slider.history);
       break;
     default:
       break;

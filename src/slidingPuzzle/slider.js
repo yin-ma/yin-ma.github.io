@@ -110,6 +110,8 @@ class Slider{
     this.gridElement[this.emptyTileRow][this.emptyTileCol].classList.remove("empty");
     this.gridElement[this.emptyTileRow][this.emptyTileCol].classList.add("tile");
     this.gridElement[this.emptyTileRow+dr][this.emptyTileCol+dc].style.animation = "";
+
+    // update var
     this.emptyTileRow += dr;
     this.emptyTileCol += dc;
     this.isMoving = false;
