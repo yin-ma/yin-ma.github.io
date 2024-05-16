@@ -17,8 +17,8 @@ ictx.setTransform(1,0,0,-1,0,canvas.height);
 ictxWave.setTransform(1,0,0,-1,0,canvas.height);
 ictxWave.translate(canvasWidth/2, canvasHeight/2);
 
-let arr = new Array(512).fill(0);
-let iarr = new Array(512).fill(0);
+let arr = new Array(128).fill(0);
+let iarr = new Array(128).fill(0);
 let isDrawing = false;
 
 init();
@@ -29,7 +29,7 @@ canvas.addEventListener("mousedown", event => {
 
 canvas.addEventListener("mousemove", event => {
   if (isDrawing) {
-    arr[Math.min(Math.max(0, parseInt(event.offsetX)), arr.length-1)] =  new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0);
+    arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0);
     render(arr);
   }
 })
@@ -44,7 +44,7 @@ icanvas.addEventListener("mousedown", () => {
 
 icanvas.addEventListener("mousemove", event => {
   if (isDrawing) {
-    iarr[parseInt(event.offsetX/2)%iarr.length] = (-parseInt(event.offsetY) + canvasHeight) / canvasHeight;
+    iarr[parseInt(event.offsetX/8)%iarr.length] = (-parseInt(event.offsetY) + canvasHeight) / canvasHeight;
     irender(iarr);
   }
 })
@@ -104,12 +104,12 @@ function drawIwave(p) {
 }
 
 function drawiFrequency(p) {
-  ictx.lineWidth = 2;
+  ictx.lineWidth = 4;
   for (let i=0; i<p.length/2; i++) {
-    ictx.strokeStyle = `hsl(${i / canvasWidth *360}, 76%, 50%)`;
+    ictx.strokeStyle = `hsl(${i / canvasWidth * 8 *240}, 76%, 50%)`;
     ictx.beginPath();
-    ictx.moveTo(i*2, 0);
-    ictx.lineTo(i*2, p[i]*canvasHeight);
+    ictx.moveTo(i*8, 0);
+    ictx.lineTo(i*8, p[i]*canvasHeight);
     ictx.stroke();
   }
 }
@@ -118,9 +118,9 @@ function drawiFrequency(p) {
 function drawFrequency(p) {
   let absArray = p.map(v => abs(v))
   let maxAmp = Math.max(...absArray);
-  ctxFre.lineWidth = 2;
+  ctxFre.lineWidth = 4;
   for (let i=0; i<absArray.length/2; i++) {
-    ctxFre.strokeStyle = `hsl(${i / canvasWidth *360}, 76%, 50%)`;
+    ctxFre.strokeStyle = `hsl(${i / canvasWidth * 8 *240}, 76%, 50%)`;
     ctxFre.beginPath();
     ctxFre.moveTo(canvasWidth / absArray.length * i * 2, 0);
     ctxFre.lineTo(canvasWidth / absArray.length * i * 2, absArray[i] / maxAmp * canvasHeight)
