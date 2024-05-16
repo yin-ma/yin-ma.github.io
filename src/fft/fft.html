@@ -11,8 +11,24 @@
 <body>
   <div class="root">
     <h1>FFT</h1>
-    <canvas width="600px" height="300px" class="canvas-wave canvas"></canvas>
-    <canvas width="600px" height="300px" class="canvas-fre canvas"></canvas>
+    <canvas width="512px" height="300px" class="canvas-wave canvas"></canvas>
+    <div style="display: flex; flex-direction: row;">
+      <div style="width: 3px; height: 300px; background-color: azure; margin-top: 10px; margin-bottom: 10px;"></div>
+      <canvas width="512px" height="300px" class="canvas-fre canvas"></canvas>
+      <div style="width: 3px; height: 300px; background-color: azure; margin-top: 10px; margin-bottom: 10px;"></div>
+    </div>
+    <div style="width: 700px; display: flex; flex-direction: row; justify-content: space-between;">
+      <p>low freq</p>
+      <p>high freq</p>
+    </div>
+
+    <h1>iFFT</h1>
+    <canvas width="512px" height="300px" class="icanvas-fre canvas"></canvas>
+    <div style="width: 700px; display: flex; flex-direction: row; justify-content: space-between;">
+      <p>low freq</p>
+      <p>high freq</p>
+    </div>
+    <canvas width="512px" height="300px" class="icanvas-wave canvas"></canvas>
   <footer class="footer">
     <a class="home-link" onclick="history.back()"><span>←</span>back </a>
   </footer>
