@@ -28,8 +28,12 @@ canvas.addEventListener("mousedown", event => {
 })
 
 canvas.addEventListener("mousemove", event => {
-  if (isDrawing) {
+  if (isDrawing && event.which === 1) {
     arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0);
+    render(arr);
+  }
+  else if (isDrawing && event.which === 3) {
+    arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex(0, 0);
     render(arr);
   }
 })
@@ -43,8 +47,12 @@ icanvas.addEventListener("mousedown", () => {
 })
 
 icanvas.addEventListener("mousemove", event => {
-  if (isDrawing) {
+  if (isDrawing && event.which === 1) {
     iarr[parseInt(event.offsetX/8)%iarr.length] = (-parseInt(event.offsetY) + canvasHeight) / canvasHeight;
+    irender(iarr);
+  }
+  else if (isDrawing && event.which === 3) {
+    iarr[parseInt(event.offsetX/8)%iarr.length] = 0;
     irender(iarr);
   }
 })
