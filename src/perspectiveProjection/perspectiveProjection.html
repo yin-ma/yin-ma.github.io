@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perspective Projection</title>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" href="./perspectiveProjection.css">
+  <script src="./perspectiveProjection.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Perspective Projection</h1>
+    <p>$$M_{projection} = 
+      \begin{bmatrix}
+      \frac{1}{\frac{w}{h}*\tan(\frac{\theta}{2})} & 0 & 0 & 0
+      \\0 &\tan(\frac{\theta}{2}) & 0 & 0
+      \\0 & 0 & \frac{-(f+n)}{f-n}& \frac{-2fn}{f-n}
+      \\0 & 0 & -1 & 0
+      \end{bmatrix}$$</p>
+    <p>where n is near point, f is far point</p>
+    <canvas width="600px" height="600px" class="canvas"></canvas>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
