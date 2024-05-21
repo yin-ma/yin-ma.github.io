@@ -21,38 +21,9 @@ body {
   margin: 1rem;
 }
 
-.controller {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  height: 100%;
-  left: 110%;
-}
-
-.controller-item {
-  margin: 1rem;
-  width: 100%;
-}
-
-.item-row {
-  display: flex;
-  flex-direction: row;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-.numberfield {
-  width: 3rem;
-}
-
-.slider {
-  cursor: pointer;
-}
-
 .footer {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
   margin-top: 5rem;
@@ -86,11 +57,29 @@ body {
   transform: translateX(-1rem);
 }
 
-
-canvas {
-  align-self: center;
+.canvas {
   background-color: rgb(190, 190, 190);
-  cursor: none;
+}
+
+.controller {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  left: 110%;
+}
+
+.controller-item {
+  width: 100%;
+}
+
+.item-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 
 .container {

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perspective Projection</title>
+  <link rel="stylesheet" href="./threeDTransformation.css">
+  <script src="./threeDTransformation.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>3D Transformation Playground</h1>
+    <div class="container">
+      <canvas width="600px" height="600px" class="canvas"></canvas>
+      <div class="controller right">
+        <div class="controller-item">
+          <label for="slider">TranslateX</label>
+          <input type="range" min="-100000" max="100000" value="0" class="translateX-slider slider">
+        </div>
+        <div class="controller-item">
+          <label for="slider">TranslateY</label>
+          <input type="range" min="-100000" max="100000" value="0" class="translateY-slider slider">
+        </div>
+        <div class="controller-item">
+          <label for="slider">TranslateZ</label>
+          <input type="range" min="-100000" max="100000" value="0" class="translateZ-slider slider">
+        </div>
+        <div class="controller-item">
+          <label for="slider">RotateX</label>
+          <input type="range" min="-3500" max="3500" value="0" class="rotateX-slider slider">
+        </div>
+        <div class="controller-item">
+          <label for="slider">RotateY</label>
+          <input type="range" min="-3500" max="3500" value="0" class="rotateY-slider slider">
+        </div>
+        <div class="controller-item">
+          <label for="slider">RotateZ</label>
+          <input type="range" min="-3500" max="3500" value="0" class="rotateZ-slider slider">
+        </div>
+        <div class="controller-item">
+          <p>note: transform are base on the original position, not the current position</p>
+        </div>
+      </div>
+    </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
