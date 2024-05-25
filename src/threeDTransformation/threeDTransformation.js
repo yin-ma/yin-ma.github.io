@@ -8,9 +8,9 @@ ctx.translate(canvasWidth/2, canvasHeight/2);
 
 let perspectiveMatrix = getPerspectiveMatrix(-1, 1, -1, 1, 1, 100);
 let translationMatrix = getTranslationMatrix();
-let rotateXMatrix = getTranslationMatrix();
-let rotateYMatrix = getTranslationMatrix();
-let rotateZMatrix = getTranslationMatrix();
+let rotateXMatrix = getIdentitiyMatrix(4, 4);
+let rotateYMatrix = getIdentitiyMatrix(4, 4);
+let rotateZMatrix = getIdentitiyMatrix(4, 4);
 let lines = getLinesCube(-1, -1, -3, 1);
 let rotationPoint = [0, -1, -6, 1];
 
@@ -77,7 +77,7 @@ function render() {
   });
   drawGround();
   drawProjectedPoint(rotationPoint);
-  drawLines(transformedLines);
+  drawLines(transformedLines, "red");
   requestAnimationFrame(render);
 }
 
@@ -97,18 +97,18 @@ function drawProjectedPoint(pt) {
 }
 
 
-function drawLines(inputLines) {
+function drawLines(inputLines, color="black") {
   inputLines.map(l => {
     let p1 = matVecMul(perspectiveMatrix, l[0]);
     let p2 = matVecMul(perspectiveMatrix, l[1]);
-    drawCircle(p1[0]/p1[3]*canvasWidth/2, p1[1]/p1[3]*canvasHeight/2, 3, "orange");
+    drawCircle(p1[0]/p1[3]*canvasWidth/2, p1[1]/p1[3]*canvasHeight/2, 3, color);
     drawLine(
       p1[0]/p1[3]*canvasWidth/2,
       p1[1]/p1[3]*canvasHeight/2,
       p2[0]/p2[3]*canvasWidth/2,
       p2[1]/p2[3]*canvasHeight/2,
       1,
-      "orange"
+      color
     )
   })
 }
@@ -223,6 +223,18 @@ function getPerspectiveMatrix(l, r, b, t, n, f) {
   res[2][2] = - (f+n) / (f-n);
   res[2][3] = - 2 * f * n / (f-n);
   res[3][2] = -1;
+  return res;
+}
+
+function getIdentitiyMatrix(nr, nc) {
+  let res = getNewMatrix(nr, nc);
+  for (let i=0; i<nr; i++) {
+    for (let j=0; j<nc; j++) {
+      if (i === j) {
+        res[i][j] = 1;
+      }
+    }
+  }
   return res;
 }
 
