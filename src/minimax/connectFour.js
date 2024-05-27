@@ -66,7 +66,8 @@ class ConnectFour {
         break;
       }
     }
-    if (this.checkIsFull()) {
+
+    if (this.boardIsFull()) {
       this.displayText("draw");
       this.clickToRestart();
     };
@@ -116,7 +117,7 @@ class ConnectFour {
     return false;
   }
 
-  checkIsFull() {
+  boardIsFull() {
     for (let r=0; r<this.numGrid-1; r++) {
       for (let c=0; c<this.numGrid; c++) {
         if (this.board[r][c] === 0) {
@@ -129,7 +130,7 @@ class ConnectFour {
   }
 
   checkisWin() {
-    // check verticle
+    // check verticle "|"
     for (let col=0; col<this.numGrid; col ++) {
       for (let row=0; row<this.numGrid-1-3; row++) {
         if (this.board[row][col] === 0) continue;
@@ -144,7 +145,7 @@ class ConnectFour {
       }
     }
 
-    // check horizontal
+    // check horizontal "-"
     for (let row=0; row<this.numGrid-1; row++) {
       for (let col=0; col<this.numGrid-3; col++) {
         if (this.board[row][col] === 0) continue;
@@ -158,6 +159,7 @@ class ConnectFour {
         }
       }
     }
+
     // check diagonal "/"
     for (let row=3; row<this.numGrid-1; row++) {
       for (let col=0; col<this.numGrid-3; col++) {
@@ -172,6 +174,7 @@ class ConnectFour {
         }
       }
     }
+    
     // check diagonal "\"
     for (let row=0; row<this.numGrid-1-3; row++) {
       for (let col=0; col<this.numGrid-3; col++) {
@@ -195,6 +198,18 @@ class ConnectFour {
     text.innerHTML = t;
     text.classList.add("game-text");
     this.boardElement.appendChild(text);
+  }
+
+  getAvailableMove() {
+    let res = [];
+    for (let col=0; col<this.numGrid; col++) {
+      if (this.board[0][col] === 0) {
+        res.push(true);
+      } else{
+        res.push(false);
+      }
+    }
+    return res;
   }
 
 }

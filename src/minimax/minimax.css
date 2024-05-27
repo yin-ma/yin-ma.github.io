@@ -82,6 +82,18 @@ body {
   z-index: 1;
 }
 
+/* .grid::after {
+  width: calc(var(--grid-size) - 10px);
+  height: calc(var(--grid-size) - 10px);
+  content: "";
+  position: absolute;
+  border-radius: 100%;
+  border: 200px solid midnightblue;
+  left: calc(-200px - calc(var(--grid-size) - 10px)/2 + calc(var(--grid-size)/2));
+  top: calc(-200px - calc(var(--grid-size) - 10px)/2 + calc(var(--grid-size)/2));
+  z-index: -1;
+} */
+
 .grid-first-row {
   position: relative;
   overflow: hidden;
@@ -100,18 +112,6 @@ body {
   background-color: var(--opponent-color);
   border: 1px solid black;
 }
-
-/* .grid::after {
-  width: calc(var(--grid-size) - 10px);
-  height: calc(var(--grid-size) - 10px);
-  content: "";
-  position: absolute;
-  border-radius: 100%;
-  border: 200px solid midnightblue;
-  left: calc(-200px - calc(var(--grid-size) - 10px)/2 + calc(var(--grid-size)/2));
-  top: calc(-200px - calc(var(--grid-size) - 10px)/2 + calc(var(--grid-size)/2));
-  z-index: -1;
-} */
 
 .piece {
   position: absolute;
