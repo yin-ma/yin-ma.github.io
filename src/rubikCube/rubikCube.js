@@ -6,13 +6,15 @@ let canvasHeight = canvas.getBoundingClientRect().height;
 ctx.translate(canvasWidth/2, canvasHeight/2);
 ctx.transform(1, 0, 0, -1, 0, 0);
 
+let canvasIsClick = false;
+let mousePosition = {x: 0, y: 0};
 let perspectiveMatrix = getPerspectiveMatrix(1, 1, Math.PI/2, -1, -100);
-let r1 = getIndentityMatrix(4);
-let r2 = getIndentityMatrix(4);
-r1 = matMatMul(getTranslationMatrix(0, 0, 11), r1);
-r1 = matMatMul(getRotationMatrixX(-Math.PI/4), r1);
-r1 = matMatMul(getRotationMatrixY(Math.PI/4), r1);
-r1 = matMatMul(getTranslationMatrix(0, 0, -11), r1);
+let angleMatrix = getIndentityMatrix(4);
+angleMatrix = matMatMul(getTranslationMatrix(0, 0, 11), angleMatrix);
+angleMatrix = matMatMul(getRotationMatrixX(Math.PI/4), angleMatrix);
+angleMatrix = matMatMul(getRotationMatrixY(Math.PI/4), angleMatrix);
+angleMatrix = matMatMul(getTranslationMatrix(0, 0, -11), angleMatrix);
+
 
 let cubes = [];
 
@@ -24,82 +26,272 @@ for (let dx=-1; dx<2; dx++) {
   }
 }
 
-cubes.forEach(cube => {
-  cube.transform(r1);
-})
-
 drawCubes(cubes);
 
-// L
-let lRotataion = getIndentityMatrix(4);
-lRotataion = matMatMul(getTranslationMatrix(1, 0, 11), lRotataion);
-lRotataion = matMatMul(getRotationMatrixX(Math.PI/120), lRotataion);
-lRotataion = matMatMul(getTranslationMatrix(-1, 0, -11), lRotataion);
+canvas.addEventListener("mousedown", event => {
+  canvasIsClick = true;
+  mousePosition = {x: event.offsetX, y: event.offsetY};
+})
 
-// R
-let rRotataion = getIndentityMatrix(4);
-rRotataion = matMatMul(getTranslationMatrix(-1, 0, 11), rRotataion);
-rRotataion = matMatMul(getRotationMatrixX(-Math.PI/120), rRotataion);
-rRotataion = matMatMul(getTranslationMatrix(1, 0, -11), rRotataion);
-
-// T
-let tRotataion = getIndentityMatrix(4);
-tRotataion = matMatMul(getTranslationMatrix(0, -1, 11), tRotataion);
-tRotataion = matMatMul(getRotationMatrixY(Math.PI/120), tRotataion);
-tRotataion = matMatMul(getTranslationMatrix(0, 1, -11), tRotataion);
-
-// D
-let dRotataion = getIndentityMatrix(4);
-dRotataion = matMatMul(getTranslationMatrix(0, -1, 11), dRotataion);
-dRotataion = matMatMul(getRotationMatrixY(-Math.PI/120), dRotataion);
-dRotataion = matMatMul(getTranslationMatrix(0, 1, -11), dRotataion);
-
-// F
-let fRotataion = getIndentityMatrix(4);
-fRotataion = matMatMul(getTranslationMatrix(0, 0, -12), fRotataion);
-fRotataion = matMatMul(getRotationMatrixZ(-Math.PI/120), fRotataion);
-fRotataion = matMatMul(getTranslationMatrix(0, 0, 12), fRotataion);
-
-// B
-let bRotataion = getIndentityMatrix(4);
-bRotataion = matMatMul(getTranslationMatrix(0, 0, -13), bRotataion);
-bRotataion = matMatMul(getRotationMatrixZ(Math.PI/120), bRotataion);
-bRotataion = matMatMul(getTranslationMatrix(0, 0, 13), bRotataion);
-
-
-document.addEventListener("keypress", event => {
-  switch (event.key) {
-    case "a":
-      animateMove(lRotataion, 0);
-      break;
-    case "q":
-      animateMove(fRotataion, 0);
-      break;
-    case "e":
-      animateMove(bRotataion, 0);
-      break;
-    case "d":
-      animateMove(rRotataion, 0);
-      break;
-    case "w":
-      animateMove(tRotataion, 0);
-      break;
-    case "x":
-      animateMove(dRotataion, 0);
-      break;
-    default:
-      break;
+canvas.addEventListener("mousemove", event => {
+  if (canvasIsClick) {
+    let x = mousePosition.x - event.offsetX;
+    let y = mousePosition.y - event.offsetY;
+    angleMatrix = matMatMul(getTranslationMatrix(0, 0, 11), angleMatrix);
+    angleMatrix = matMatMul(getRotationMatrixX(y/150), angleMatrix);
+    angleMatrix = matMatMul(getRotationMatrixY(x/150), angleMatrix);
+    angleMatrix = matMatMul(getTranslationMatrix(0, 0, -11), angleMatrix);
+    drawCubes(cubes);
+    mousePosition = {x: event.offsetX, y: event.offsetY};
   }
 })
 
-function animateMove(matrix, i) {
-  if (i === 60) return;
-  cubes.forEach(cube => {
-    cube.transform(matrix);
-  });
-  drawCubes(cubes);
-  requestAnimationFrame(() => animateMove(matrix, ++i));
-}
+canvas.addEventListener("mouseup", event => {
+  canvasIsClick = false;
+  mousePosition = {x: 0, y: 0};
+})
+
+
+document.querySelector(".l-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(1, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixX(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(-1, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.x) === -1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".r-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(1, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixX(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(-1, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.x) === 1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".t-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixZ(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.z) === -10) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".d-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixZ(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.z) === -12) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".f-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 1, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixY(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, -1, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.y) === -1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".b-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 1, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixY(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, -1, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.y) === 1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".il-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(1, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixX(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(-1, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.x) === -1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".ir-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(1, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixX(Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(-1, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.x) === 1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".it-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixZ(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.z) === -10) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".id-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixZ(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 0, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.z) === -12) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".if-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 1, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixY(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, -1, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.y) === -1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
+document.querySelector(".ib-btn").addEventListener("click", () => {
+  let tempMatrix = getIndentityMatrix(4);
+  tempMatrix = matMatMul(getTranslationMatrix(0, 1, 11), tempMatrix);
+  tempMatrix = matMatMul(getRotationMatrixY(-Math.PI/120), tempMatrix);
+  tempMatrix = matMatMul(getTranslationMatrix(0, -1, -11), tempMatrix);
+
+  helper(0);
+
+  function helper(i) {
+    if (i === 60) return;
+    cubes.forEach(cube => {
+      if (Math.round(cube.y) === 1) {
+        cube.transform(tempMatrix);
+      }
+    });
+    drawCubes(cubes);
+    requestAnimationFrame(() => helper(++i));
+  }
+})
+
 
 function drawCubes(cubes) {
   // need to draw planes one by one and sort it because no z-indexing function...
@@ -107,26 +299,15 @@ function drawCubes(cubes) {
   ctx.clearRect(-canvasWidth/2, -canvasHeight/2, canvasWidth, canvasHeight);
   cubes.forEach(cube => {
     cube.planes.forEach(plane => {
-      let ray = vecSubtract(plane.midPoint, [0, 0, 0]);
-      if (dotProduct(plane.normal, ray) > 0) {
+      let ray = vecSubtract(matVecMul(angleMatrix, [...plane.midPoint, 1]).slice(0, 3), [0, 0, 0]);
+      if (dotProduct(matVecMul(angleMatrix, [...plane.normal, 0]).slice(0, 3), ray) > 0) {
         // add plane only if the plane is seen.
         planes.push(plane);
       }
     });
   })
-  
-  planes.sort((a, b) => (a.midPoint[2] - b.midPoint[2]));
+  planes.sort((a, b) => (matVecMul(angleMatrix, [...a.midPoint, 1])[2] - matVecMul(angleMatrix, [...b.midPoint, 1])[2]));
   planes.forEach(plane => {
-    plane.draw(ctx, perspectiveMatrix);
+    plane.draw(ctx, matMatMul(perspectiveMatrix, angleMatrix));
   })
-}
-
-function render() {
-  ctx.clearRect(-canvasWidth/2, -canvasHeight/2, canvasWidth, canvasHeight);
-  cubes.forEach(cube => {
-    cube.transform(r1);
-  });
-  drawCubes(cubes);
-
-  requestAnimationFrame(() => render());
 }
