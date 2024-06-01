@@ -46,6 +46,11 @@ canvas.addEventListener("mousemove", event => {
   }
 })
 
+canvas.addEventListener("mouseleave", event => {
+  canvasIsClick = false;
+  mousePosition = {x: 0, y: 0};
+})
+
 canvas.addEventListener("mouseup", event => {
   canvasIsClick = false;
   mousePosition = {x: 0, y: 0};
