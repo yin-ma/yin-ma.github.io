@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quaternion</title>
+  <link rel="stylesheet" href="./quaternion.css">
+  <script src='https://cdn.plot.ly/plotly-2.32.0.min.js' defer></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js' defer></script>
+  <script src="./utils.js" defer></script>
+  <script src="./quaternion.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Quaternion</h1>
+    <div class="container">
+      <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+      <div class="controller right">
+        <label for="point-x">point x:</label>
+        <input type="number" class="point-x" name="point-x" value="1">
+        <label for="point-y">point y:</label>
+        <input type="number" class="point-y" name="point-y" value="2">
+        <label for="point-z">point z:</label>
+        <input type="number" class="point-z" name="point-z" value="3">
+    
+        <label for="line-x">line x:</label>
+        <input type="number" class="line-x" name="line-x" value="4">
+        <label for="line-y">line y:</label>
+        <input type="number" class="line-y" name="line-y" value="5">
+        <label for="line-z">line z:</label>
+        <input type="number" class="line-z" name="line-z" value="6">
+    
+        <label for="angle">angle :</label>
+        <input type="number" class="angle" name="angle" value="6.28">
+        <button class="draw" style="margin-top: 0.5rem;">draw</button>
+      </div>
+    </div>
+    <footer class="footer">
+      <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+    </footer>
+  </div>
+</body>
+</html>
