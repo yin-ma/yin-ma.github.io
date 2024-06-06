@@ -10,8 +10,8 @@ let angleInput = document.querySelector(".angle");
 
 let drawBtn = document.querySelector(".draw");
 
-let point = {x:52, y:1, z:3.1};
-let line = {x:32, y:51, z:12};
+let point = {x:1, y:2, z:3};
+let line = {x:4, y:5, z:6};
 let angle = 6.28;
 let rotatedPoint = rotation(point, line, angle);
 

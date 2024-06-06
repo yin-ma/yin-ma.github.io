@@ -81,3 +81,9 @@ body {
   align-items: center;
   position: relative;
 }
+
+.description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

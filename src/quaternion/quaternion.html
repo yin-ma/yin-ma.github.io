@@ -4,15 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quaternion</title>
-  <link rel="stylesheet" href="./quaternion.css">
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src='https://cdn.plot.ly/plotly-2.32.0.min.js' defer></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js' defer></script>
   <script src="./utils.js" defer></script>
   <script src="./quaternion.js" defer></script>
+  <link rel="stylesheet" href="./quaternion.css">
 </head>
 <body>
   <div class="root">
     <h1>Quaternion</h1>
+    <p>rotation formula</p>
+    <p>$$v'=qvq*=qvq^{-1}$$</p>
+    <p>$$where\;v=[0,\; x\overrightarrow{i},\; y\overrightarrow{j},\;z\overrightarrow{k}]$$</p>
+    <p>$$q = [\cos(\frac{\theta}{2}), \sin(\frac{\theta}{2})\overrightarrow{u}]$$</p>
+    <p>$$\overrightarrow{u}\;is\;normalized\;quaternion\;of\;axis$$</p>
     <div class="container">
       <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
       <div class="controller right">
@@ -34,6 +40,13 @@
         <input type="number" class="angle" name="angle" value="6.28">
         <button class="draw" style="margin-top: 0.5rem;">draw</button>
       </div>
+    </div>
+    <div class="description">
+      <pre>
+        red line represent rotation axis.
+        orange dot represent starting point.
+        green dot represent slerp of rotation
+      </pre>
     </div>
     <footer class="footer">
       <a class="home-link" onclick="history.back()"><span>←</span>back </a>
