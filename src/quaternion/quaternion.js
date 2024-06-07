@@ -56,6 +56,11 @@ let trace3 = {
   }
 }
 
+window.onload = function() {
+  let mathFormula = document.querySelector(".math-formula");
+  mathFormula.style.display = "flex";
+};
+
 draw();
 
 function rotation(point, line, angle) {
