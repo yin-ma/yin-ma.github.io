@@ -58,19 +58,8 @@ body {
 }
 
 .canvas {
-  width: 500px;
+  width: 660px;
   height: 800px;
   background-color: azure;
   position: relative;
-}
-
-.node {
-  width: 15px;
-  height: 15px;
-  content: "A";
-  position: absolute;
-  background-color: red;
-  border-radius: 100%;
-  top: 5%;
-  left: 5%;
 }
