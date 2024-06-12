@@ -48,7 +48,7 @@ function genPath() {
   let currentCol = Math.floor(Math.random()*(numCol));
 
   nodes[currentRow][currentCol].setVisible();
-  nodes[currentRow][currentCol].setType("monster");
+  nodes[currentRow][currentCol].setType("1");
   nodes[currentRow][currentCol].setColor(eventColor["monster"]);
 
   // roll the next node
@@ -97,22 +97,23 @@ function genPath() {
       if (nodes[r][newCol].type === "none") {
         // set node type
         if (r === parseInt(numRow/2)) {
-          nodes[r][newCol].setType("treasure");
+          nodes[r][newCol].setType("2");
           nodes[r][newCol].setColor(eventColor["treasure"]);
         }
         else if (r === numRow-1) {
-          nodes[r][newCol].setType("campfire");
+          nodes[r][newCol].setType("3");
           nodes[r][newCol].setColor(eventColor["campfire"]);
         }
         else if (r < 4) {
           let eventList = ["monster", "shop", "event"];
+          let nodeList = ["1", "4", "5"]
           while (true) {
             let idx = getRandomIndexByProbability([0.6, 0.1, 0.15]);
             if (nodes[currentRow][currentCol].type === eventList[idx] && nodes[currentRow][currentCol].type === "shop") {
               continue;
             }
             else {
-              nodes[r][newCol].setType(eventList[idx]);
+              nodes[r][newCol].setType(nodeList[idx]);
               nodes[r][newCol].setColor(eventColor[eventList[idx]]);
               break;
             }
@@ -120,11 +121,12 @@ function genPath() {
         }
         else {
           let eventList = ["monster", "shop", "event", "campfire", "elite"];
+          let nodeList = ["1", "4", "5", "3", "6"]
           let flag = true;
           while (flag) {
             let idx = getRandomIndexByProbability([0.52, 0.08, 0.13, 0.12, 0.25]);
             if (r === numRow-2 && eventList[idx] === "campfire") continue;
-            nodes[r][newCol].setType(eventList[idx]);
+            nodes[r][newCol].setType(nodeList[idx]);
             nodes[r][newCol].setColor(eventColor[eventList[idx]]);
 
             flag = false;
@@ -132,7 +134,7 @@ function genPath() {
               for (let i=0; i<nodes[currentRow][currentCol].next.length; i++) {
                 if (nodes[currentRow][currentCol].type === nodes[currentRow][currentCol].next[i].type) {
                   let idx = getRandomIndexByProbability([0.05, 0.1, 0.05, 0.1, 0.6]);
-                  nodes[currentRow][currentCol].next[i].setType(eventList[idx]);
+                  nodes[currentRow][currentCol].next[i].setType(nodeList[idx]);
                   nodes[currentRow][currentCol].next[i].setColor(eventColor[eventList[idx]]);
                   flag = true;
                 }
