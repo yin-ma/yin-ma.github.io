@@ -57,35 +57,39 @@ body {
   transform: translateX(-1rem);
 }
 
+.canvas {
+  background-color: rgb(232, 232, 232);
+}
+
 .controller {
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-}
-
-.controller > input {
-  width: 5rem;
-}
-
-.controller.right {
+  height: 100%;
   left: 110%;
 }
 
-.container {
-  margin: 3rem;
+.controller-item {
+  width: 100%;
+}
+
+.item-row {
   display: flex;
-  flex-direction: row;  
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
   position: relative;
 }
 
-.description {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.controller-value {
+  margin-left: 1rem;
 }
 
 .math-formula {

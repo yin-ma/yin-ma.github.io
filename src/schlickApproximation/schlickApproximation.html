@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schlick Approximation</title>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" href="./schlickApproximation.css">
+  <script src="./schlickApproximation.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Schlick Approximation</h1>
+    <div class="math-formula">
+      <p>$$F = F_0 + (1 - F_0)*(1 - (\vec n \cdot \vec v))^5$$</p>
+      <p>$$F_0 = \frac{(n - 1)^2}{(n + 1)^2}$$</p>
+    </div>
+
+    <div class="container">
+      <canvas width="600px" height="600px" class="canvas"></canvas>
+      <div class="controller">
+        <div class="controller-item">
+          <div class="item-row">
+            <label for="controller-value">n1</label>
+            <input type="range" min="1000" max="2500" value="1000" class="controller-value">
+            <p>1</p>
+          </div>
+        </div>
+        <div class="controller-item">
+          <div class="item-row">
+            <label for="controller-value">n2</label>
+            <input type="range" min="1000" max="2500" value="1330" class="controller-value">
+            <p>1.33</p>
+          </div>
+        </div>
+        <div class="controller-item">
+          <div class="item-row">
+            <label for="controller-value">rad&nbsp&nbsp</label>
+            <input type="range" min="-1571" max="1571" value="785" class="controller-angle">
+            <p>0.785</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
