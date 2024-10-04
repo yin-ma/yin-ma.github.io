@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monte Carlo Integration</title>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://www.desmos.com/api/v1.9/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+  <link rel="stylesheet" href="./monteCarloIntegration.css">
+  <script src="./monteCarloIntegration.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Monte Carlo Integration</h1>
+    <div class="math-formula">
+      <p>$$I = \int_{a}^{b} f(x) {dx} = \frac{1}{N}\sum_{i=0}^N\frac{f(x_{i})}{p(x_{i})}$$</p>
+    </div>
+    <div class="divider"></div>
+    <div>
+      <p>let's look at an example: </p>
+      <div class="math-formula">
+        <p>$$\int_{0}^{2} x^{2}dx$$</p>
+      </div>
+    </div>
+    <div class="container">
+      <div id="calculator" style="width: 600px; height: 400px;"></div>
+    </div>
+    <div class="divider"></div>
+    <div id="curve_chart_1" style="width: 600px; height: 400px"></div>
+    <div>
+      <p>Analytical solution: 2.666...</p>
+      <p>Numerical solution: <span class="numerical-ans">0</span></p>
+    </div>
+    <div class="divider"></div>
+    <div>
+      <p>now try to use importance sampling where pdf = 3x^2/8</p>
+    </div>
+    <div>
+      <p>Analytical solution: 2.666...</p>
+      <p>Numerical solution: <span class="im-numerical-ans">0</span></p>
+    </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
