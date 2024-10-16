@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrix Factorization</title>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" href="./matrixFactorization.css">
+  <script src="./matrixFactorization.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Matrix Factorization</h1>
+    <p>
+      $$e_{ui} = r_{ui} - q_i^T p_{u}$$
+    </p>
+    <p>
+      $$p_{u}\leftarrow p_{u} + \gamma \cdot (e_{ui}\cdot q_{i} - \lambda\cdot p_{u})$$
+    </p>
+    <p>
+      $$q_{i}\leftarrow q_{i} + \gamma \cdot (e_{ui}\cdot p_{u} - \lambda\cdot q_{i})$$
+    </p>
+    <p class="target-matrix">
+      $$M_{target} = 
+      \begin{bmatrix} 
+        0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \end{bmatrix}$$
+    </p>
+    <button class="start-btn">start</button>
+    <p class="predict-matrix">
+      $$M_{predict} = 
+      \begin{bmatrix} 
+        0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \\0 & 0 & 0 & 0
+      \end{bmatrix}$$
+    </p>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
