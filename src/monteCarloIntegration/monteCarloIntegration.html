@@ -28,19 +28,26 @@
     <div class="container">
       <div id="calculator" style="width: 600px; height: 400px;"></div>
     </div>
-    <div class="divider"></div>
-    <div id="curve_chart_1" style="width: 600px; height: 400px"></div>
+    
     <div>
-      <p>Analytical solution: 2.666...</p>
-      <p>Numerical solution: <span class="numerical-ans">0</span></p>
+      <div class="divider"></div>
+      <button class="start">calculate</button>
+      <div class="divider"></div>
     </div>
-    <div class="divider"></div>
-    <div>
-      <p>now try to use importance sampling where pdf = 3x^2/8</p>
-    </div>
-    <div>
-      <p>Analytical solution: 2.666...</p>
-      <p>Numerical solution: <span class="im-numerical-ans">0</span></p>
+    <div class="google-charts" style="display: none;">
+      <div id="curve_chart_1" style="width: 600px; height: 400px"></div>
+      <div>
+        <p>Analytical solution: 2.666...</p>
+        <p>Numerical solution: <span class="numerical-ans">0</span></p>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <p>now try to use importance sampling where pdf = 3x^2/8</p>
+      </div>
+      <div>
+        <p>Analytical solution: 2.666...</p>
+        <p>Numerical solution: <span class="im-numerical-ans">0</span></p>
+      </div>
     </div>
   <footer class="footer">
     <a class="home-link" onclick="history.back()"><span>←</span>back </a>

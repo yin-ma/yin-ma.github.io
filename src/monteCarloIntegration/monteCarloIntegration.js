@@ -2,12 +2,25 @@ let elt = document.getElementById('calculator');
 let calculator = Desmos.GraphingCalculator(elt, { expressions: true });
 let ans = document.querySelector(".numerical-ans");
 let imAns = document.querySelector(".im-numerical-ans");
+let startButton = document.querySelector(".start");
+let googleCharts = document.querySelector(".google-charts");
 
 let result = [];
 let graphArr = [];
 
-mcIntegrater(30000);
-imMcIntegrater(1);
+startButton.addEventListener("click", () => {
+  googleCharts.style.display = "flex";
+  startButton.style.display = "none";
+  result = [];
+  graphArr = [];
+  mcIntegrater(20000);
+  imMcIntegrater(1);
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(() => drawChart('curve_chart_1', graphArr));
+  google.charts.setOnLoadCallback(() => drawChart('curve_chart_2', imGraphArr));
+
+})
+
 
 calculator.setExpression({id:'graph1', latex:'f\\left(x\\right)=x^{2}'});
 calculator.setExpression({id:'graph2', latex:'\\left\\{f\\left(x\\right)>0:\\ 0,\\ f\\left(x\\right)<0:\\ f\\left(x\\right)\\right\\}<y<\\ \\left\\{f\\left(x\\right)>0:\\ f\\left(x\\right),\\ f\\left(x\\right)<0:\\ 0\\right\\}\\left\\{0<x<2\\right\\}'});
@@ -18,9 +31,6 @@ calculator.setMathBounds({
   top: 5
 });
 
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(() => drawChart('curve_chart_1', graphArr));
-//google.charts.setOnLoadCallback(() => drawChart('curve_chart_2', imGraphArr));
 
 
 function drawChart(chart, arr) {
