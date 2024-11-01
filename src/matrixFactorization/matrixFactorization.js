@@ -12,24 +12,15 @@ let predictMatrix = initZeroMatrix(row, col);
 let p = initRandomMatrix_f(row, k);
 let q = initRandomMatrix_f(col, k);
 
-let promise = Promise.resolve();
-
 setMatrixHtml(targetMatrix, targetMatrixElement, "target");
 
 startBtn.addEventListener("click", () => {
   matrixFactorization(targetMatrix, p, q, k);
   predictMatrix = matMatMul(p, transpose(q));
 
-  typeset(() => {
-    setMatrixHtml(predictMatrix, predictMatrixElement, "predict");   
-  });
-
+  setMatrixHtml(predictMatrix, predictMatrixElement, "predict"); 
+  MathJax.typesetPromise();
 })
-
-function typeset(code) {
-  promise = promise.then(() => MathJax.typesetPromise(code())).catch((err) => console.log('Typeset failed: ' + err.message));
-  return promise;
-}
 
 function matrixFactorization(R, P, Q, k, steps=500, gamma=0.001, lambda=0.01) {
   for (let s=0; s<steps; s++) {

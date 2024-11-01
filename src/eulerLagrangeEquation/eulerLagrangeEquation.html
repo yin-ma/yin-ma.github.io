@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euler-Lagrange Equation</title>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+  <link rel="stylesheet" href="./eulerLagrangeEquation.css">
+  <script src="./eulerLagrangeEquation.js" defer></script>
+  <script src="sketch.js" type="module" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Euler-Lagrange Equation</h1>
+    <p class="equation">
+      $$\frac{\partial L}{\partial q_{i}} - \frac{\text{d}}{\text{d}t}\left(\frac{\partial L}{\partial \dot{q}_{i}}\right) = 0$$
+    </p>
+    <div class="spacing"></div>
+    <div>
+      <button class="prev">&lt;</button>
+      <button class="scene">1</button>
+      <button class="aft">&gt;</button>
+    </div>
+    <main></main>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
