@@ -86,12 +86,13 @@ export class CompoundAtwoodMachine {
     this.bob1.y += this.bob1.velocity;
     this.pulley2.length -= this.bob1.velocity;
 
+    let temp_acceleration;
     tempTop = 2 * this.bob1.mass * (this.bob3.mass - this.bob2.mass);
-    tempBot = this.bob1.mass * (this.bob2.mass + this.bob3.mass) - 4 * this.bob2.mass * this.bob3.mass;
-    let temp_acceleration = tempTop / tempBot * this.gravity;
+    tempBot = -this.bob1.mass * (this.bob2.mass + this.bob3.mass) - 4 * this.bob2.mass * this.bob3.mass;
+    temp_acceleration = tempTop / tempBot * this.gravity;
 
-    temp_acceleration = (this.bob2.mass - this.bob3.mass) * this.gravity - (this.bob3.mass - this.bob2.mass) * this.bob1.acceleration;
-    temp_acceleration = temp_acceleration / (this.bob2.mass + this.bob3.mass);
+    // temp_acceleration = (this.bob2.mass - this.bob3.mass) * this.gravity - (this.bob3.mass - this.bob2.mass) * this.bob1.acceleration;
+    // temp_acceleration = temp_acceleration / (this.bob2.mass + this.bob3.mass);
     
     this.bob2.acceleration = -this.bob1.acceleration + temp_acceleration;
     this.bob2.velocity += this.bob2.acceleration;
