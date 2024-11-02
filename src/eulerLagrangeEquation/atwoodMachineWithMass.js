@@ -9,7 +9,7 @@ export class AtwoodMachineWithMass {
     );
     MathJax.typesetPromise();
 
-    this.M = 800;
+    this.M = 2500;
     this.gravity = 1;
     this.l = 100;
     this.hangingRadius = 40;
@@ -122,7 +122,7 @@ export class AtwoodMachineWithMass {
     this.bob2.draw(this.p5);
 
     // pulley
-    this.p5.fill("red");
+    this.p5.fill("black");
     this.p5.circle(this.pulleyX, this.pulleyY, 10);
   }
 }

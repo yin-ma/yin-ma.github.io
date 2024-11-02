@@ -1,5 +1,6 @@
 import { AtwoodMachine } from "./atwoodMachine.js";
 import { AtwoodMachineWithMass } from "./atwoodMachineWithMass.js";
+import { CompoundAtwoodMachine } from "./compoundAtwoodMachine.js";
 import { FreeFall } from "./freefall.js";
 import { SHM } from "./shm.js";
 import { SimplePendulum } from "./simplePendulum.js";
@@ -7,7 +8,7 @@ import { SimplePendulum } from "./simplePendulum.js";
 let frame;
 let p5Ref;
 let currentScene = 1;
-let totalScene = 5;
+let totalScene = 6;
 let sceneBtn = document.querySelector(".scene");
 let preBtn = document.querySelector(".prev");
 let aftBtn = document.querySelector(".aft");
@@ -67,6 +68,9 @@ function switchScene() {
       break;
     case 5:
       frame = new AtwoodMachineWithMass(p5Ref);
+      break;
+    case 6:
+      frame = new CompoundAtwoodMachine(p5Ref);
       break;
     default:
       frame = new FreeFall(p5Ref);
