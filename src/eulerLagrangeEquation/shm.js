@@ -16,6 +16,8 @@ export class SHM {
   }
 
   show() {
+    this.p5.translate(this.p5.width / 2, this.p5.height / 2);
+    this.p5.scale(1, -1);
     this.p5.fill(127);
     this.p5.circle(this.ball.x, this.ball.y, this.ball.radius * 2);
   }
