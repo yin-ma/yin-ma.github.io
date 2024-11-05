@@ -21,16 +21,35 @@ let arr = new Array(128).fill(0);
 let iarr = new Array(128).fill(0);
 let isDrawing = false;
 
+let lastMouseX;
+let lastMouseY;
+
 init();
 
 canvas.addEventListener("mousedown", event => {
+
   isDrawing = true;
+
+  lastMouseX = event.offsetX;
+  lastMouseY = event.offsetY;
+
 })
 
 canvas.addEventListener("mousemove", event => {
   if (isDrawing && event.which === 1) {
-    arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0);
+    
+    let start = parseInt(lastMouseX / canvasWidth * 128);
+    let end = parseInt(event.offsetX / canvasWidth * 128);
+
+    for (let i=start; i<=end; i++) {
+      arr[i] = new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0)
+    }
+
+    //arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0);
     render(arr);
+
+    lastMouseX = event.offsetX;
+    lastMouseY = event.offsetY;
   }
   else if (isDrawing && event.which === 3) {
     arr[Math.min(Math.max(0, parseInt(event.offsetX/4)), arr.length-1)] =  new Complex(0, 0);
@@ -40,6 +59,8 @@ canvas.addEventListener("mousemove", event => {
 
 document.addEventListener("mouseup", event => {
   isDrawing = false;
+  lastMouseX = null;
+  lastMouseY = null;
 })
 
 icanvas.addEventListener("mousedown", () => {
