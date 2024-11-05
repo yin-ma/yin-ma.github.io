@@ -41,6 +41,12 @@ canvas.addEventListener("mousemove", event => {
     let start = parseInt(lastMouseX / canvasWidth * 128);
     let end = parseInt(event.offsetX / canvasWidth * 128);
 
+    if (end < start) {
+      let temp = end;
+      end = start;
+      start = temp;
+    }
+
     for (let i=start; i<=end; i++) {
       arr[i] = new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0)
     }
