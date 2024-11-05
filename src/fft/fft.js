@@ -47,6 +47,8 @@ canvas.addEventListener("mousemove", event => {
       start = temp;
     }
 
+    end = Math.max(end, 127);
+
     for (let i=start; i<=end; i++) {
       arr[i] = new Complex((-parseInt(Math.min(event.offsetY, canvasHeight)) + canvasHeight/2) / canvasHeight * 2, 0)
     }
