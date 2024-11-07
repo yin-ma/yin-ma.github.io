@@ -32,7 +32,10 @@ export class Circle {
     }
   }
 
-  applyImpulse() {}
+  applyImpulse(impulse, norm) {
+    let temp = norm.copy();
+    this.vel.add(temp.mult(impulse, this.mass));
+  }
 
   update(dt) {
     if (this.movable) {
@@ -54,12 +57,13 @@ export class Circle {
 
   draw() {
     this.p5.fill(this.color);
-
+    this.p5.push();
     this.p5.translate(this.pos.x, this.pos.y);
     this.p5.rotate(this.ang);
     this.p5.circle(0, 0, this.radius * 2);
     this.p5.line(0, 0, 0, this.radius);
-    this.p5.rotate(-this.ang);
-    this.p5.translate(-this.pos.x, -this.pos.y);
+    this.p5.pop();
+
+    // this.p5.circle(this.pos.x, this.pos.y, this.radius*2);
   }
 }

@@ -32,7 +32,10 @@ export class Rect {
     }
   }
 
-  applyImpulse() {}
+  applyImpulse(impulse, norm) {
+    let temp = norm.copy();
+    this.vel.add(temp.mult(impulse, this.mass));
+  }
 
   update(dt) {
     if (this.movable) {
@@ -54,10 +57,12 @@ export class Rect {
 
   draw() {
     this.p5.fill(this.color);
+    this.p5.push();
     this.p5.translate(this.pos.x, this.pos.y);
     this.p5.rotate(this.ang);
     this.p5.rect(0, 0, this.width, this.height);
-    this.p5.rotate(-this.ang);
-    this.p5.translate(-this.pos.x, -this.pos.y);
+    this.p5.pop();
+
+    // this.p5.rect(this.pos.x, this.pos.y, this.width, this.height);
   }
 }
