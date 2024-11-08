@@ -54,3 +54,14 @@ function getIntersection(p5, A, B, C, D) {
   }
   return null
 }
+
+function project(p5, axis, pts) {
+  let min = 1e12;
+  let max = -1e12;
+  for (let i=0; i<pts.length; i++) {
+    let res = dot(p5, axis, pts[i])
+    max = Math.max(res, max);
+    min = Math.min(res, min);
+  }
+  return [min, max];
+}

@@ -50,7 +50,6 @@ export class World {
 
     for (let i=0; i<this.objects.length-1; i++) {
       for (let j=i+1; j<this.objects.length; j++) {
-        if (i === j) continue;
         this.resolveCollision(this.objects[i], this.objects[j]);
       }
     }
@@ -71,7 +70,7 @@ export class World {
     }
 
     if (this.objects[idx].type === "rect") {
-      let coner = this.objects[idx].getConerCoor();
+      let coner = this.objects[idx].getCornerCoor();
       let minY = 1000;
 
       coner.forEach(c => {
@@ -122,22 +121,22 @@ export class World {
         }
 
         // apply collision formula
-        {
+        // {
           // let v21 = this.p5.createVector(obj2.vel.x - obj1.vel.x, obj2.vel.y - obj1.vel.y);
           // let x21 = this.p5.createVector(obj2.pos.x - obj1.pos.x, obj2.pos.y - obj1.pos.y);
           // x21.normalize();
-  
+
           // let dotProduct = v21.dot(x21);
           // x21.mult(dotProduct);
-  
+
           // let x12 = x21.copy();
-  
+
           // obj1.vel.add(x21.mult(2*obj2.mass / (obj1.mass + obj2.mass)));
           // obj2.vel.add(x12.mult(-2*obj1.mass / (obj1.mass + obj2.mass)));
-  
+
           // obj1.pos.add(obj1.vel);
           // obj2.pos.add(obj2.vel);
-        }
+        // }
       }
     }
 
@@ -145,21 +144,67 @@ export class World {
     }
 
     if ((obj1.type === "rect" && obj2.type === "rect")) {
+      let [norm, dist] = this.sat(obj1, obj2);
+      
+      if (norm !== null) {
+        obj1.pos.add(mult(this.p5, norm, dist / 2));
+        obj2.pos.add(mult(this.p5, norm, -dist / 2));
+      }
+    }
+  }
 
-      let coner1 = obj1.getConerCoor();
-      let coner2 = obj2.getConerCoor();
+  sat(obj1, obj2) {
+    let corner1 = obj1.getCornerCoor();
+    let corner2 = obj2.getCornerCoor();
 
-      // for (let i=0; i<coner1.length; i++) {
-      //   for (let j=0; j<coner2.length; j++) {
-      //     let intersect = getIntersection(this.p5, coner1[i], coner1[(i+1)%coner1.length], coner2[j], coner2[(j+1)%coner2.length]);
-      //     if (intersect !== null) {
-      //       this.p5.fill("red");
-      //       this.p5.circle(intersect.x, intersect.y, 10);
-      //     }
-      //   }
-      // }
+    let dist = 1e12;
+    let norm;
+  
+    for (let i=0; i<corner1.length; i++) {
+      let edge1 = sub(this.p5, corner1[i], corner1[(i+1)%corner1.length]);
+      let axis = this.p5.createVector(-edge1.y, edge1.x);
+      axis.normalize();
+      
+      let [min1, max1] = project(p5, axis, corner1);
+      let [min2, max2] = project(p5, axis, corner2);
+  
+      if (min1 >= max2 || min2 >= max1) return [null, null];
+
+      let diff = Math.min(max2 - min1, max1 - min2);
+
+      if (diff < dist) {
+        dist = diff;
+        norm = axis;
+      }
+    }
+  
+    for (let i=0; i<corner2.length; i++) {
+      let edge2 = sub(this.p5, corner2[i], corner2[(i+1)%corner2.length]);
+      let axis = this.p5.createVector(-edge2.y, edge2.x);
+      axis.normalize();
+  
+      let [min1, max1] = project(this.p5, axis, corner1);
+      let [min2, max2] = project(this.p5, axis, corner2);
+  
+      if (min1 >= max2 || min2 >= max1) return [null, null];
+
+      let diff = Math.min(max2 - min1, max1 - min2);
+
+      if (diff < dist) {
+        dist = diff;
+        norm = axis;
+      }
     }
 
+    let vBA = sub(this.p5, obj2.pos, obj1.pos);
+
+    console.log(dot(this.p5, vBA, norm));
+
+    if (dot(this.p5, vBA, norm) > 0) {
+      norm = mult(this.p5, norm, -1);
+    }
+
+    return [norm, dist];
   }
 
   translate() {

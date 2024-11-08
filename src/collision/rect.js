@@ -55,17 +55,17 @@ export class Rect {
     }
   }
 
-  getConerCoor() {
+  getCornerCoor() {
     let botLeft = this.p5.createVector(this.pos.x - this.width / 2, this.pos.y - this.height / 2);
     let botRight = this.p5.createVector(this.pos.x + this.width / 2, this.pos.y - this.height / 2);
     let topLeft = this.p5.createVector(this.pos.x - this.width / 2, this.pos.y + this.height / 2);
     let topRight = this.p5.createVector(this.pos.x + this.width / 2, this.pos.y + this.height / 2);
 
-    let coner = [];
-    coner.push(botLeft, topLeft, topRight, botRight);
-    coner = coner.map(c => rotateAbove(this.p5, c, this.pos, this.ang));
+    let corner = [];
+    corner.push(botLeft, topLeft, topRight, botRight);
+    corner = corner.map(c => rotateAbove(this.p5, c, this.pos, this.ang));
 
-    return coner;
+    return corner;
   }
 
   draw() {

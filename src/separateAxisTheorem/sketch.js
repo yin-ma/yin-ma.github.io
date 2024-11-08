@@ -1,38 +1,14 @@
 import { Rect } from "./rect.js";
 
-let p5js;
 let squares = [];
 
 const sketch = (p) => {
 
   p.setup = () => { 
-    p5js = p;
     p.createCanvas(600, 400);
     p.rectMode(p.CENTER);
 
-    squares.push(new Rect(p, 0, 0, 20, 20, p.color(0, 255, 0)));
-
-    for (let i=0; i<10; i++) {
-      let x = randomInt(-p.width/2, p.width/2);
-      let y = randomInt(-p.height/2, p.height/2);
-      let w = randomInt(20, 40);
-      let h = randomInt(20, 40);
-      let col = p.color(randomInt(0, 155), randomInt(0, 155), randomInt(0, 155));
-      let rt = new Rect(p, x, y, w, h, col);
-      rt.angVel = Math.random() * 0.2 - 0.1;
-      squares.push(rt);
-    }
-
-    for (let i=0; i<3; i++) {
-      let x = randomInt(-p.width/2, p.width/2);
-      let y = randomInt(-p.height/2, p.height/2);
-      let w = randomInt(60, 80);
-      let h = randomInt(60, 80);
-      let col = p.color(randomInt(0, 155), randomInt(0, 155), randomInt(0, 155));
-      let rt = new Rect(p, x, y, w, h, col);
-      rt.ang = Math.random() * 2.0 - 1.0;
-      squares.push(rt);
-    }
+    init(p);
   };
 
   p.draw = () => {
@@ -44,21 +20,10 @@ const sketch = (p) => {
       s.update();
     })
 
-    for (let i=0; i<squares.length-1; i++) {
-      for (let j=i+1; j<squares.length; j++) {
-        let isIntesect;
-        isIntesect = sat(p, squares[i], squares[j]);
-
-        if (isIntesect) {
-          squares[i].activated = true;
-          squares[j].activated = true;
-        }
-      }
-    }
+    checkcollision(p);
 
     squares.forEach(s => {
       s.draw();
-      s.activated = false;
     })
   };
 
@@ -73,6 +38,47 @@ const sketch = (p) => {
 };
 
 new p5(sketch);
+
+
+function init(p) {
+  squares.push(new Rect(p, 0, 0, 20, 20, p.color(0, 255, 0)));
+
+  for (let i=0; i<10; i++) {
+    let x = randomInt(-p.width/2, p.width/2);
+    let y = randomInt(-p.height/2, p.height/2);
+    let w = randomInt(20, 40);
+    let h = randomInt(20, 40);
+    let col = p.color(randomInt(0, 155), randomInt(0, 155), randomInt(0, 155));
+    let rt = new Rect(p, x, y, w, h, col);
+    rt.angVel = Math.random() * 0.2 - 0.1;
+    squares.push(rt);
+  }
+
+  for (let i=0; i<3; i++) {
+    let x = randomInt(-p.width/2, p.width/2);
+    let y = randomInt(-p.height/2, p.height/2);
+    let w = randomInt(60, 80);
+    let h = randomInt(60, 80);
+    let col = p.color(randomInt(0, 155), randomInt(0, 155), randomInt(0, 155));
+    let rt = new Rect(p, x, y, w, h, col);
+    rt.ang = Math.random() * 2.0 - 1.0;
+    squares.push(rt);
+  }
+}
+
+function checkcollision(p) {
+  for (let i=0; i<squares.length-1; i++) {
+    for (let j=i+1; j<squares.length; j++) {
+      let isIntesect;
+      isIntesect = sat(p, squares[i], squares[j]);
+
+      if (isIntesect) {
+        squares[i].activated = true;
+        squares[j].activated = true;
+      }
+    }
+  }
+}
 
 
 function sat(p5, obj1, obj2) {
@@ -114,9 +120,7 @@ function project(p5, axis, pts) {
     max = Math.max(res, max);
     min = Math.min(res, min);
   }
-
   return [min, max];
-  
 }
 
 function handleKeyPressed(key) {

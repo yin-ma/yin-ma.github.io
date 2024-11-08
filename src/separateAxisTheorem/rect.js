@@ -42,5 +42,6 @@ export class Rect {
     this.p5.rotate(this.ang);
     this.p5.rect(0, 0, this.width, this.height);
     this.p5.pop();
+    this.activated = false;
   }
 }
