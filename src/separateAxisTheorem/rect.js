@@ -10,6 +10,7 @@ export class Rect {
     this.angVel = 0;
 
     this.color = color;
+    this.activated = false;
   }
 
   update() {
@@ -17,21 +18,25 @@ export class Rect {
     this.ang += this.angVel;
   }
 
-  getConerCoor() {
+  getCornerCoor() {
     let botLeft = this.p5.createVector(this.pos.x - this.width / 2, this.pos.y - this.height / 2);
     let botRight = this.p5.createVector(this.pos.x + this.width / 2, this.pos.y - this.height / 2);
     let topLeft = this.p5.createVector(this.pos.x - this.width / 2, this.pos.y + this.height / 2);
     let topRight = this.p5.createVector(this.pos.x + this.width / 2, this.pos.y + this.height / 2);
 
-    let coner = [];
-    coner.push(botLeft, topLeft, topRight, botRight);
-    coner = coner.map(c => rotateAbove(this.p5, c, this.pos, this.ang));
+    let corner = [];
+    corner.push(botLeft, topLeft, topRight, botRight);
+    corner = corner.map(c => rotateAbove(this.p5, c, this.pos, this.ang));
 
-    return coner;
+    return corner;
   }
 
   draw() {
-    this.p5.fill(this.color);
+    if (this.activated) {
+      this.p5.fill("red");
+    } else {
+      this.p5.fill(this.color);
+    }
     this.p5.push();
     this.p5.translate(this.pos.x, this.pos.y);
     this.p5.rotate(this.ang);

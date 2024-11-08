@@ -19,3 +19,19 @@ function randomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function dot(p5, v1, v2) {
+  return v1.x * v2.x + v1.y * v2.y;
+}
+
+function sub(p5, v1, v2) {
+  return p5.createVector(v1.x - v2.x, v1.y - v2.y);
+}
+
+function add(p5, v1, v2) {
+  return p5.createVector(v1.x + v2.x, v1.y + v2.y);
+}
+
+function mult(p5, v1, t) {
+  return p5.createVector(v1.x * t, v1.y * t);
+}
