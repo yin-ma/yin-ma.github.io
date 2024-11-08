@@ -63,7 +63,5 @@ export class Circle {
     this.p5.circle(0, 0, this.radius * 2);
     this.p5.line(0, 0, 0, this.radius);
     this.p5.pop();
-
-    // this.p5.circle(this.pos.x, this.pos.y, this.radius*2);
   }
 }
