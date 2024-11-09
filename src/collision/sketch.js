@@ -17,11 +17,14 @@ const sketch = (p) => {
     world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
 
     {
-      world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false));
-      world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false));
-      world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false));
+      world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false, false));
+      world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false, false));
+      world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false, false));
       world.objects[2].ang = 1.0;
       world.objects[3].ang = 0.5;
+      world.objects[1].inertia = 1e6;
+      world.objects[2].inertia = 1e6;
+      world.objects[3].inertia = 1e6;
     }
 
     for (let i=0; i<20; i++) {

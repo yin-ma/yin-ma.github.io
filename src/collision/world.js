@@ -80,7 +80,7 @@ export class World {
   update() {
     this.objects.forEach(obj => {
       if (obj.movable) {
-        //obj.applyForce(mult(this.p5, this.gravity, obj.mass));
+        obj.applyForce(mult(this.p5, this.gravity, obj.mass));
       }
     })
 
@@ -138,13 +138,13 @@ export class World {
           }
         }
 
-        
         // computing impulse
         let n = this.p5.createVector(obj2.pos.x - obj1.pos.x, obj2.pos.y - obj1.pos.y);
         n.normalize();
-        this.applyImpulse(obj1, obj2, n, this.impulseCoeff);
         
-        this.circleCircleIntesection(obj1, obj2);
+        let pts = this.circleCircleIntesection(obj1, obj2);
+        //this.applyImpulse(obj1, obj2, n, this.impulseCoeff);
+        this.applyImpulseWithRotation(obj1, obj2, [pts], this.impulseCoeff);
       }
     }
 
@@ -169,8 +169,9 @@ export class World {
           }
         }
 
-        this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
-        this.circleRectIntesection(obj1, obj2);
+        let pts = this.circleRectIntesection(obj1, obj2);
+        //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
+        this.applyImpulseWithRotation(obj1, obj2, [pts], this.impulseCoeff);
       }
     }
 
@@ -191,8 +192,9 @@ export class World {
           }
         }
 
-        this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
-        this.rectRectIntersection(obj1, obj2);
+        let pts = this.rectRectIntersection(obj1, obj2);
+        //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
+        this.applyImpulseWithRotation(obj1, obj2, pts, this.impulseCoeff);
       }
     }
   }
@@ -271,16 +273,11 @@ export class World {
     let vAB = sub(this.p5, obj2.pos, obj1.pos);
     vAB.normalize();
     let pt = add(this.p5, obj1.pos, mult(this.p5, vAB, obj1.radius));
-
-    this.p5.fill("red");
-    this.p5.circle(pt.x, pt.y, 10);
     return pt;
   }
 
   circleRectIntesection(obj1, obj2) {
     let [temp, tempDist] = this.shortestDistBetweenPointAndPolygon(obj1.pos, obj2.getCornerCoor());
-    this.p5.fill("red");
-    this.p5.circle(temp.x, temp.y, 10);
     return temp;
   }
 
@@ -326,6 +323,41 @@ export class World {
   }
 
   applyFriction(obj, coeff=0.6) {}
+
+  applyImpulseWithRotation(obj1, obj2, pointOfContacts, coeff=1.0) {
+    let im = [];
+    let norm = sub(this.p5, obj1.pos, obj2.pos);
+    norm.normalize();
+
+    for (let i=0; i<pointOfContacts.length; i++) {
+      let rAP = sub(this.p5, pointOfContacts[i], obj1.pos);
+      let rBP = sub(this.p5, pointOfContacts[i], obj2.pos);
+      
+      rAP = this.p5.createVector(-rAP.y, rAP.x);
+      rBP = this.p5.createVector(-rBP.y, rBP.x);
+
+      let vAP = add(this.p5, obj1.vel, mult(this.p5, rAP, obj1.angVel));
+      let vBP = add(this.p5, obj2.vel, mult(this.p5, rBP, obj2.angVel));
+
+      let vAB = sub(this.p5, vAP, vBP);
+
+      let top = -(1+coeff) * dot(this.p5, vAB, norm);
+      let bot = (1/obj1.mass) + (1/obj2.mass) + dot(this.p5, rAP, norm) * dot(this.p5, rAP, norm) / obj1.inertia + dot(this.p5, rBP, norm) * dot(this.p5, rBP, norm) / obj2.inertia;
+
+      let J = top / bot;
+      J /= pointOfContacts.length;
+
+      im.push(J);
+    }
+
+    im.forEach(J => {
+      if (obj1.movable) obj1.vel.add(mult(this.p5, norm, J / obj1.mass));
+      if (obj2.movable) obj2.vel.add(mult(this.p5, norm, -J / obj2.mass));
+
+      //if (obj1.rotatable) obj1.angVel = obj1.angVel + J / obj1.inertia;
+      //if (obj2.rotatable) obj2.angVel = obj2.angVel - J / obj2.inertia;
+    })
+  }
 
   applyImpulse(obj1, obj2, norm, coeff) {
     let vAB = this.p5.createVector(obj1.vel.x - obj2.vel.x, obj1.vel.y - obj2.vel.y);
