@@ -21,14 +21,6 @@ const sketch = (p) => {
       obj.vel = p.createVector(randomInt(-3, 3), randomInt(-3, 3));
     }
 
-    // {
-    //   world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false));
-    //   world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false));
-    //   world.objects[2].ang = 1.0;
-    //   world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false));
-    //   world.objects[3].ang = 0.5;
-    // }
-
   };
 
   p.draw = () => {
