@@ -34,17 +34,17 @@ const sketch = (p) => {
     p.background(255);
     
     world.translate();
-    world.update();
     world.draw();
+    world.update();
   };
 
   p.keyPressed = () => {
     handleKeyPressed(p.key);
   }
 
-  // p.keyReleased = () => {
-  //   handleKeyReleased(p.key);
-  // }
+  p.keyReleased = () => {
+    handleKeyReleased(p.key);
+  }
 
 };
 

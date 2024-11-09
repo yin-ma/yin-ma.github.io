@@ -5,9 +5,10 @@ import { Rect } from "./rect.js";
 export class World {
   constructor(p5) {
     this.p5 = p5;
-    this.gravity = this.p5.createVector(0, -10);
+    this.gravity = this.p5.createVector(0, -0.3);
     this.objects = [];
     this.deltaTime = 1;
+    this.impulseCoeff = 0.9;
   }
 
   handleClick() {
@@ -19,36 +20,52 @@ export class World {
 
     if (r < 0.5) {
       let d = randomInt(10, 25);
-      temp = new Circle(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, d, d, col, true);
+      temp = new Circle(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, d, d*d, col, true);
     } else {
       let w = randomInt(10, 25);
       let h = randomInt(10, 25);
-      temp = new Rect(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, w, h, Math.max(r, h), col, true);
+      temp = new Rect(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, w, h, w*h, col, true);
     }
 
-    temp.applyTorque(randomInt(-100, 100));
-    temp.applyForce(this.p5.createVector(randomInt(-100, 100), randomInt(10, 200)));
+    // temp.applyTorque(randomInt(-100, 100));
+    // temp.applyForce(this.p5.createVector(randomInt(-100, 100), randomInt(10, 200)));
+    temp.ang = Math.random() * 2.0 - 1.0;
     this.add(temp);
   }
 
-  addRandomObject() {
+  addRandomObject(movable=true) {
     let r = Math.random();
-    let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
     let temp;
-    let x = randomInt(-this.p5.width / 2, this.p5.width / 2);
-    let y = randomInt(-this.p5.height / 2, this.p5.height / 2);
 
-    if (r < 0.5) {
-      let d = randomInt(10, 25);
-      temp = new Circle(this.p5, x, y, d, d, col, true);
+    if (r > 0.5) {
+      temp = this.addRandomCircle(movable);
     } else {
-      let w = randomInt(10, 25);
-      let h = randomInt(10, 25);
-      temp = new Rect(this.p5, x, y, w, h, Math.max(r, h), col, true);
+      temp = this.addRandomRect(movable);
     }
 
-    this.add(temp);
+    return temp;
+  }
 
+  addRandomCircle(movable=true) {
+    let d = randomInt(15, 30);
+    let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
+    let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
+    let y = randomInt(20, this.p5.height - 20);
+    let weight = movable ? d*d : 1e12;
+    let temp = new Circle(this.p5, x, y, d, weight, col, movable);
+    this.add(temp);
+    return temp;
+  }
+
+  addRandomRect(movable=true) {
+    let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
+    let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
+    let y = randomInt(20, this.p5.height - 20);
+    let w = randomInt(15, 30);
+    let h = randomInt(15, 30);
+    let weight = movable ? w*h : 1e12;
+    let temp = new Rect(this.p5, x, y, w, h, weight, col, movable);
+    this.add(temp);
     return temp;
   }
 
@@ -56,14 +73,14 @@ export class World {
     this.objects.push(object);
   }
 
-  remove(i) {
-    this.objects.splice(i, 1);
+  remove(idx) {
+    this.objects.splice(idx, 1);
   }
 
   update() {
     this.objects.forEach(obj => {
       if (obj.movable) {
-        // obj.applyForce(this.gravity);
+        //obj.applyForce(mult(this.p5, this.gravity, obj.mass));
       }
     })
 
@@ -84,35 +101,15 @@ export class World {
   }
 
   checkOutOfBoundary(idx) {
-    if (this.objects[idx].pos.y <= 0) {
-      this.objects[idx].pos.y = this.p5.height;
+    if (this.objects[idx].pos.y < -20) {
+      this.remove(idx);
       return;
     }
 
-    if (this.objects[idx].pos.y >= this.p5.height) {
-      this.objects[idx].pos.y = 0;
+    if (this.objects[idx].pos.x < -this.p5.width / 2 - 20 || this.objects[idx].pos.x > this.p5.width / 2 + 20) {
+      this.remove(idx);
       return;
     }
-
-    if (this.objects[idx].pos.x <= -this.p5.width / 2) {
-      this.objects[idx].pos.x = this.p5.width / 2;
-      return;
-    }
-
-    if (this.objects[idx].pos.x >= this.p5.width / 2) {
-      this.objects[idx].pos.x = -this.p5.width / 2;
-      return;
-    }
-
-    // if (this.objects[idx].pos.y < -20) {
-    //   this.remove(idx);
-    //   return;
-    // }
-
-    // if (this.objects[idx].pos.x < -this.p5.width / 2 - 20 || this.objects[idx].pos.x > this.p5.width / 2 + 20) {
-    //   this.remove(idx);
-    //   return;
-    // }
   }
 
   resolveCollision(obj1, obj2) {
@@ -141,10 +138,13 @@ export class World {
           }
         }
 
+        
         // computing impulse
         let n = this.p5.createVector(obj2.pos.x - obj1.pos.x, obj2.pos.y - obj1.pos.y);
         n.normalize();
-        this.applyImpulse(obj1, obj2, n, 1.0);
+        this.applyImpulse(obj1, obj2, n, this.impulseCoeff);
+        
+        this.circleCircleIntesection(obj1, obj2);
       }
     }
 
@@ -169,7 +169,8 @@ export class World {
           }
         }
 
-        this.applyImpulse(obj1, obj2, norm, 1.0);
+        this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
+        this.circleRectIntesection(obj1, obj2);
       }
     }
 
@@ -190,20 +191,148 @@ export class World {
           }
         }
 
-        this.applyImpulse(obj1, obj2, norm, 1.0);
+        this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
+        this.rectRectIntersection(obj1, obj2);
       }
     }
   }
 
-  applyFriction(obj, coeff=0.6) {
-    obj.applyForce(mult(this.p5, obj.vel, -1 * coeff));
+  rectRectIntersection(obj1, obj2) {
+    let vertices1 = obj1.getCornerCoor();
+    let vertices2 = obj2.getCornerCoor();
+
+    let shortestDist = 1e8;
+    let shortestPoint1 = null;
+    let shortestPoint2 = null;
+    let count = 0;
+
+    for (let i=0; i<vertices1.length; i++) {
+      for (let j=0; j<vertices2.length; j++) {
+        let projection = this.projectPointToLine(vertices1[i], vertices2[j], vertices2[(j+1)%vertices2.length]);
+        let tempDist = sqLen(this.p5, sub(this.p5, vertices1[i], projection));
+
+        if (this.nearlyEqualValue(tempDist, shortestDist)) {
+          if (!this.nearlyEqual(projection, shortestPoint1)) {
+            shortestPoint2 = projection;
+            count = 2;
+          }
+
+        } else if (tempDist < shortestDist) {
+          shortestDist = tempDist;
+          shortestPoint1 = projection;
+          shortestPoint2 = null;
+          count = 1;
+        }
+      }
+    }
+
+    for (let i=0; i<vertices2.length; i++) {
+      for (let j=0; j<vertices1.length; j++) {
+        let projection = this.projectPointToLine(vertices2[i], vertices1[j], vertices1[(j+1)%vertices1.length]);
+        let tempDist = sqLen(this.p5, sub(this.p5, vertices2[i], projection));
+
+        if (this.nearlyEqualValue(tempDist, shortestDist)) {
+          if (!this.nearlyEqual(projection, shortestPoint1)) {
+            shortestPoint2 = projection;
+            count = 2;
+          }
+
+        } else if (tempDist < shortestDist) {
+          shortestDist = tempDist;
+          shortestPoint1 = projection;
+          shortestPoint2 = null;
+          count = 1;
+        }
+      }
+    }
+
+    if (count === 1) {
+      return [shortestPoint1];
+    }
+    if (count === 2) {
+      return [shortestPoint1, shortestPoint2];
+    }
+
   }
+
+  nearlyEqualValue(a, b) {
+    if (Math.abs(a - b) < 1e-4) return true;
+    return false;
+  }
+
+  nearlyEqual(pt1, pt2) {
+    if (Math.abs(pt1.x - pt2.x) < 1e-4 && Math.abs(pt1.y - pt2.y) < 1e-4) {
+      return true;
+    }
+    return false;
+  }
+
+  circleCircleIntesection(obj1, obj2) {
+    let vAB = sub(this.p5, obj2.pos, obj1.pos);
+    vAB.normalize();
+    let pt = add(this.p5, obj1.pos, mult(this.p5, vAB, obj1.radius));
+
+    this.p5.fill("red");
+    this.p5.circle(pt.x, pt.y, 10);
+    return pt;
+  }
+
+  circleRectIntesection(obj1, obj2) {
+    let [temp, tempDist] = this.shortestDistBetweenPointAndPolygon(obj1.pos, obj2.getCornerCoor());
+    this.p5.fill("red");
+    this.p5.circle(temp.x, temp.y, 10);
+    return temp;
+  }
+
+  projectPointToLine(pos, vertices1, vertices2) {
+    let orgEdge = sub(this.p5, vertices2, vertices1);
+    let edge = sub(this.p5, vertices2, vertices1);
+    edge.normalize();
+
+    let vAO = sub(this.p5, pos, vertices1);
+    let lenFromA = dot(this.p5, vAO, edge);
+    let projectedVec = mult(this.p5, edge, lenFromA);
+
+    let dotAP = dot(this.p5, projectedVec, orgEdge);
+    let dotAB = dot(this.p5, orgEdge, orgEdge);
+
+    let t = dotAP / dotAB;
+
+    if (t > 1) {
+      projectedVec = orgEdge;
+    }
+    if (t < 0) {
+      projectedVec = this.p5.createVector(0, 0);
+    }
+
+    return add(this.p5, vertices1, projectedVec);
+  }
+
+  shortestDistBetweenPointAndPolygon(pos, vertices) {
+    let shortestDist = 1e8;
+    let shortestProjectedPoint;
+    for(let i=0; i<vertices.length; i++) {
+      let projection = this.projectPointToLine(pos, vertices[i], vertices[(i+1)%vertices.length]);
+
+      let dist = sub(this.p5, pos, projection);
+      let lenDist = sqLen(this.p5, dist);
+  
+      if (lenDist < shortestDist) {
+        shortestDist = lenDist;
+        shortestProjectedPoint = projection;
+      }
+    }
+    return [shortestProjectedPoint, shortestDist];
+  }
+
+  applyFriction(obj, coeff=0.6) {}
 
   applyImpulse(obj1, obj2, norm, coeff) {
     let vAB = this.p5.createVector(obj1.vel.x - obj2.vel.x, obj1.vel.y - obj2.vel.y);
     let J = -(1+coeff) * dot(this.p5, vAB, norm) * obj1.mass * obj2.mass / ( obj1.mass + obj2.mass);
-    obj1.vel.add(mult(this.p5, norm, J / obj1.mass));
-    obj2.vel.add(mult(this.p5, norm, -J / obj2.mass));
+
+    if (obj1.movable) obj1.vel.add(mult(this.p5, norm, J / obj1.mass));
+    if (obj2.movable) obj2.vel.add(mult(this.p5, norm, -J / obj2.mass));
   }
 
   satCircleRect(obj1, obj2) {
@@ -212,7 +341,7 @@ export class World {
 
     let vertices = obj2.getCornerCoor();
   
-    // project along normal of polygon
+    // project polygon along normal
     for (let i=0; i<vertices.length; i++) {
       let edge1 = sub(this.p5, vertices[i], vertices[(i+1)%vertices.length]);
       let axis = this.p5.createVector(-edge1.y, edge1.x);
@@ -235,7 +364,7 @@ export class World {
       }
     }
 
-    // project along cloest point from circle to polygon
+    // project polygon along cloest point from circle to polygon
     let tempPt = closestPoint(this.p5, obj1.pos, vertices);
     let tempAxis = sub(this.p5, tempPt, obj1.pos);
 

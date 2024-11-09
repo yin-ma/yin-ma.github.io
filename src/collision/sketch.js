@@ -14,20 +14,21 @@ const sketch = (p) => {
 
     world = new World(p);
     
-    world.add(new Rect(p, 0,  p.height/2, 40, 40, 20, "green", true));
+    world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
+
+    {
+      world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false));
+      world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false));
+      world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false));
+      world.objects[2].ang = 1.0;
+      world.objects[3].ang = 0.5;
+    }
 
     for (let i=0; i<20; i++) {
       let obj = world.addRandomObject();
-      obj.vel = p.createVector(randomInt(-3, 3), randomInt(-3, 3));
+      obj.vel = p.createVector(randomInt(-2, 2), randomInt(-2, 2));
+      obj.ang = Math.random() * 2.0 - 1.0;
     }
-
-    // {
-    //   world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false));
-    //   world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false));
-    //   world.objects[2].ang = 1.0;
-    //   world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false));
-    //   world.objects[3].ang = 0.5;
-    // }
 
   };
 
@@ -35,15 +36,15 @@ const sketch = (p) => {
     p.background(255);
     
     world.translate();
-    world.update();
     world.draw();
+    world.handleClick();
+    world.update();
   };
   
   p.mousePressed = () => {
-    world.handleClick();
   }
 
-  p.keyPressed = () => {
+    p.keyPressed = () => {
     handleKeyPressed(p.key);
   }
 
@@ -57,7 +58,7 @@ new p5(sketch);
 
 
 function handleKeyPressed(key) {
-  let mag = 5;
+  let mag = 3;
   switch (key) {
     case "a":
       world.objects[0].vel.x -= mag;

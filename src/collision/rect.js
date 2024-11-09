@@ -39,10 +39,8 @@ export class Rect {
 
   update(dt) {
     if (this.movable) {
- 
       this.vel.add(mult(this.p5, this.acc, dt));
       this.pos.add(mult(this.p5, this.vel, dt));
-  
       this.acc.mult(0);
     }
 
