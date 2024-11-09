@@ -1,5 +1,5 @@
 export class Rect {
-  constructor(p5, x, y, width, height, mass, color, movable=true, rotatable=true) {
+  constructor(p5, x, y, width, height, mass, color, movable=true) {
     this.p5 = p5;
     this.type = "rect";
     this.pos = p5.createVector(x, y);
@@ -8,27 +8,16 @@ export class Rect {
     this.mass = mass;
     this.vel = p5.createVector(0, 0);
     this.acc = p5.createVector(0, 0);
-
     this.ang = 0;
-    this.angVel = 0;
-    this.angAcc = 0;
-    this.inertia = 1 / 12 * this.mass * (this.width * this.width + this.height * this.height);
 
     this.color = color;
     this.movable = movable;
-    this.rotatable = rotatable;
   }
 
   applyForce(force) {
     if (this.movable) {
       this.acc.x += force.x / this.mass;
       this.acc.y += force.y / this.mass;
-    }
-  }
-
-  applyTorque(torque) {
-    if (this.rotatable) {
-      this.angAcc += torque / this.inertia;
     }
   }
 
@@ -39,17 +28,9 @@ export class Rect {
 
   update(dt) {
     if (this.movable) {
- 
       this.vel.add(mult(this.p5, this.acc, dt));
       this.pos.add(mult(this.p5, this.vel, dt));
-  
       this.acc.mult(0);
-    }
-
-    if (this.rotatable) {
-      this.angVel += this.angAcc * dt;
-      this.ang += this.angVel * dt;
-      this.angAcc = 0;
     }
   }
 
@@ -67,7 +48,8 @@ export class Rect {
   }
 
   draw() {
-    this.p5.fill(this.color);
+    let color = this.movable ? this.color : this.p5.color(10, 10, 10);
+    this.p5.fill(color);
     this.p5.push();
     this.p5.translate(this.pos.x, this.pos.y);
     this.p5.rotate(this.ang);

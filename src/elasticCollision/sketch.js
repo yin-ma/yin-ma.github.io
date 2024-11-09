@@ -14,11 +14,18 @@ const sketch = (p) => {
 
     world = new World(p);
     
-    world.add(new Rect(p, 0,  p.height/2, 40, 40, 20, "green", true));
+    world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "red", true));
+    //world.add(new Circle(p, 0, p.height/2, 40, 40, "red", true));
+    
+    world.add(new Rect(p, 100, 200, 60, 70, 1e12, "blue", false));
+    //world.add(new Circle(p, 100, 200, 50, 50, "blue", false));
 
     for (let i=0; i<20; i++) {
-      let obj = world.addRandomObject();
-      obj.vel = p.createVector(randomInt(-3, 3), randomInt(-3, 3));
+      let movable = Math.random() < 0.8 ? true : false;
+      let obj = world.addRandomObject(movable);
+      if (movable) {
+        obj.vel = p.createVector(randomInt(-2, 2), randomInt(-2, 2));
+      }
     }
 
   };
@@ -30,26 +37,21 @@ const sketch = (p) => {
     world.update();
     world.draw();
   };
-  
-  p.mousePressed = () => {
-    world.handleClick();
-  }
 
   p.keyPressed = () => {
     handleKeyPressed(p.key);
   }
 
-  p.keyReleased = () => {
-    handleKeyReleased(p.key);
-  }
+  // p.keyReleased = () => {
+  //   handleKeyReleased(p.key);
+  // }
 
 };
 
 new p5(sketch);
 
-
 function handleKeyPressed(key) {
-  let mag = 5;
+  let mag = 3;
   switch (key) {
     case "a":
       world.objects[0].vel.x -= mag;

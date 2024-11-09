@@ -10,45 +10,39 @@ export class World {
     this.deltaTime = 1;
   }
 
-  handleClick() {
-    if (!this.p5.mouseIsPressed) return;
-
+  addRandomObject(movable=true) {
     let r = Math.random();
-    let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
     let temp;
 
-    if (r < 0.5) {
-      let d = randomInt(10, 25);
-      temp = new Circle(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, d, d, col, true);
+    if (r > 0.5) {
+      temp = this.addRandomCircle(movable);
     } else {
-      let w = randomInt(10, 25);
-      let h = randomInt(10, 25);
-      temp = new Rect(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, w, h, Math.max(r, h), col, true);
+      temp = this.addRandomRect(movable);
     }
 
-    temp.applyTorque(randomInt(-100, 100));
-    temp.applyForce(this.p5.createVector(randomInt(-100, 100), randomInt(10, 200)));
-    this.add(temp);
+    return temp;
   }
 
-  addRandomObject() {
-    let r = Math.random();
+  addRandomCircle(movable=true) {
+    let d = randomInt(15, 30);
     let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
-    let temp;
-    let x = randomInt(-this.p5.width / 2, this.p5.width / 2);
-    let y = randomInt(-this.p5.height / 2, this.p5.height / 2);
-
-    if (r < 0.5) {
-      let d = randomInt(10, 25);
-      temp = new Circle(this.p5, x, y, d, d, col, true);
-    } else {
-      let w = randomInt(10, 25);
-      let h = randomInt(10, 25);
-      temp = new Rect(this.p5, x, y, w, h, Math.max(r, h), col, true);
-    }
-
+    let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
+    let y = randomInt(20, this.p5.height - 20);
+    let weight = movable ? d*d : 1e12;
+    let temp = new Circle(this.p5, x, y, d, weight, col, movable);
     this.add(temp);
+    return temp;
+  }
 
+  addRandomRect(movable=true) {
+    let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
+    let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
+    let y = randomInt(20, this.p5.height - 20);
+    let w = randomInt(15, 30);
+    let h = randomInt(15, 30);
+    let weight = movable ? w*h : 1e12;
+    let temp = new Rect(this.p5, x, y, w, h, weight, col, movable);
+    this.add(temp);
     return temp;
   }
 
@@ -56,17 +50,11 @@ export class World {
     this.objects.push(object);
   }
 
-  remove(i) {
-    this.objects.splice(i, 1);
+  remove(idx) {
+    this.objects.splice(idx, 1);
   }
 
   update() {
-    this.objects.forEach(obj => {
-      if (obj.movable) {
-        // obj.applyForce(this.gravity);
-      }
-    })
-
     this.objects.forEach(obj => {
       obj.update(this.deltaTime);
     })
@@ -103,16 +91,6 @@ export class World {
       this.objects[idx].pos.x = -this.p5.width / 2;
       return;
     }
-
-    // if (this.objects[idx].pos.y < -20) {
-    //   this.remove(idx);
-    //   return;
-    // }
-
-    // if (this.objects[idx].pos.x < -this.p5.width / 2 - 20 || this.objects[idx].pos.x > this.p5.width / 2 + 20) {
-    //   this.remove(idx);
-    //   return;
-    // }
   }
 
   resolveCollision(obj1, obj2) {
@@ -195,15 +173,12 @@ export class World {
     }
   }
 
-  applyFriction(obj, coeff=0.6) {
-    obj.applyForce(mult(this.p5, obj.vel, -1 * coeff));
-  }
-
   applyImpulse(obj1, obj2, norm, coeff) {
     let vAB = this.p5.createVector(obj1.vel.x - obj2.vel.x, obj1.vel.y - obj2.vel.y);
     let J = -(1+coeff) * dot(this.p5, vAB, norm) * obj1.mass * obj2.mass / ( obj1.mass + obj2.mass);
-    obj1.vel.add(mult(this.p5, norm, J / obj1.mass));
-    obj2.vel.add(mult(this.p5, norm, -J / obj2.mass));
+
+    if (obj1.movable) obj1.vel.add(mult(this.p5, norm, J / obj1.mass));
+    if (obj2.movable) obj2.vel.add(mult(this.p5, norm, -J / obj2.mass));
   }
 
   satCircleRect(obj1, obj2) {
@@ -212,7 +187,7 @@ export class World {
 
     let vertices = obj2.getCornerCoor();
   
-    // project along normal of polygon
+    // project polygon along normal
     for (let i=0; i<vertices.length; i++) {
       let edge1 = sub(this.p5, vertices[i], vertices[(i+1)%vertices.length]);
       let axis = this.p5.createVector(-edge1.y, edge1.x);
@@ -235,7 +210,7 @@ export class World {
       }
     }
 
-    // project along cloest point from circle to polygon
+    // project polygon along cloest point from circle to polygon
     let tempPt = closestPoint(this.p5, obj1.pos, vertices);
     let tempAxis = sub(this.p5, tempPt, obj1.pos);
 
