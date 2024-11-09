@@ -20,6 +20,10 @@ function mult(p5, v1, t) {
   return p5.createVector(v1.x * t, v1.y * t);
 }
 
+function sqLen(p5, v) {
+  return v.x * v.x + v.y * v.y;
+}
+
 function rotateAbove(p5, v1, v2, ang) {
   let ca = Math.cos(ang);
   let sa = Math.sin(ang);
@@ -64,4 +68,26 @@ function project(p5, axis, pts) {
     min = Math.min(res, min);
   }
   return [min, max];
+}
+
+function projectCircle(p5, axis, c) {
+  let points = [];
+  points.push(add(p5, c.pos, mult(p5, axis, c.radius)));
+  points.push(sub(p5, c.pos, mult(p5, axis, c.radius)));
+
+  return project(p5, axis, points);
+}
+
+function closestPoint(p5, org, vertices) {
+  let pt;
+  let dist = 1e12;
+
+  for (let i=0; i<vertices.length; i++) {
+    let tempLen = sqLen(p5, sub(p5, vertices[i], org));
+    if (tempLen < dist) {
+      dist = tempLen;
+      pt = vertices[i];
+    }
+  }
+  return pt;
 }

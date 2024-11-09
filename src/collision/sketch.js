@@ -14,27 +14,18 @@ const sketch = (p) => {
 
     world = new World(p);
 
-    world.add(new Rect(p, 0, 0, 50, 50, 20, "green", true));
+    //world.add(new Circle(p, 0,  p.height/2, 20, 20, "green", true));
+    world.add(new Rect(p, 0,  p.height/2, 40, 40, 20, "green", true));
+    world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false));
 
-    // world.add(new Circle(p, -200, 100, 50, 20, "white", true));
-    // world.add(new Rect(p, 100, 100, 200, 100, 20, "white", true));
-
-    // world.add(new Circle(p, -300, 100, 50, 50, "white", true));
-    // world.add(new Circle(p, 0, 100, 30, 30, "red", true));
-
-    // world.objects[0].vel.x = 10.0;
-
-    // world.add(new Rect(p, -100, 200, 200, 10, 20, "white", true));
-    // world.objects[0].ang = 0.5;
-
-    // world.add(new Rect(p, -100, 200, 10, 100, 20, "white", true));
-    // world.objects[1].ang = 0.5;
-
-    world.add(new Rect(p, -100, p.height/2, 50, 100, 20, "white", true));
-    world.objects[0].ang = 0.4;
+    //world.add(new Circle(p, -11, p.height/2, 50, 50, "white", true));
+    world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false));
+    world.objects[2].ang = 1.0;
     
-    world.add(new Rect(p, 150, p.height/2, 70, 100, 20, "white", true));
-    world.objects[1].ang = -0.6;
+    //world.add(new Rect(p, 150, p.height/2, 70, 100, 20, "white", true));
+    world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false));
+
+    world.objects[3].ang = 0.5;
 
   };
 
