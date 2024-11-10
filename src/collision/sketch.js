@@ -14,7 +14,8 @@ const sketch = (p) => {
 
     world = new World(p);
     
-    world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
+    //world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
+    world.add(new Circle(p, 0,  p.height/2, 40, 40, "green", true));
 
     {
       world.add(new Rect(p, 0, 0, p.width - 100, 80, 1e12, "white", false, false));
@@ -39,8 +40,8 @@ const sketch = (p) => {
     p.background(255);
     
     world.translate();
-    world.update();
     world.draw();
+    world.update();
 
     console.log(world.objects[0].vel.x, world.objects[0].vel.y);
   };

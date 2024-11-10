@@ -12,7 +12,7 @@ export class World {
     this.applyGravity = true;
 
     this.staticFriction = 0.7;
-    this.dynamticFriction = 0.6;
+    this.dynamticFriction = 0.5;
   }
 
   handleClick() {
@@ -23,11 +23,11 @@ export class World {
     let temp;
 
     if (r < 0.5) {
-      let d = randomInt(10, 25);
+      let d = randomInt(20, 35);
       temp = new Circle(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, d, d*d, col, true);
     } else {
-      let w = randomInt(10, 25);
-      let h = randomInt(10, 25);
+      let w = randomInt(20, 35);
+      let h = randomInt(20, 35);
       temp = new Rect(this.p5, this.p5.mouseX - this.p5.width/2, -this.p5.mouseY + this.p5.height, w, h, w*h, col, true);
     }
 
@@ -51,7 +51,7 @@ export class World {
   }
 
   addRandomCircle(movable=true) {
-    let d = randomInt(15, 30);
+    let d = randomInt(20, 35);
     let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
     let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
     let y = randomInt(20, this.p5.height - 20);
@@ -65,8 +65,8 @@ export class World {
     let col = this.p5.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
     let x = randomInt(-this.p5.width / 2 + 20, this.p5.width / 2 - 20);
     let y = randomInt(20, this.p5.height - 20);
-    let w = randomInt(15, 30);
-    let h = randomInt(15, 30);
+    let w = randomInt(20, 35);
+    let h = randomInt(20, 35);
     let weight = movable ? w*h : 1e12;
     let temp = new Rect(this.p5, x, y, w, h, weight, col, movable);
     this.add(temp);
@@ -143,13 +143,14 @@ export class World {
         }
 
         // computing impulse
-        let norm = this.p5.createVector(obj2.pos.x - obj1.pos.x, obj2.pos.y - obj1.pos.y);
+        let norm = sub(this.p5, obj1.pos, obj2.pos);
         norm.normalize();
         
         let pts = this.circleCircleIntesection(obj1, obj2);
         //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
         let Js = this.applyImpulseWithRotation(obj1, obj2, norm, [pts], this.impulseCoeff);
         this.applyImpulseWithRotationFriction(obj1, obj2, norm, [pts], Js, this.impulseCoeff);
+
       }
     }
 
@@ -174,10 +175,12 @@ export class World {
           }
         }
 
+        
         let pts = this.circleRectIntesection(obj1, obj2);
         //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
         let Js = this.applyImpulseWithRotation(obj1, obj2, norm, [pts], this.impulseCoeff);
         this.applyImpulseWithRotationFriction(obj1, obj2, norm, [pts], Js, this.impulseCoeff);
+        
       }
     }
 
@@ -202,6 +205,7 @@ export class World {
         //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
         let Js = this.applyImpulseWithRotation(obj1, obj2, norm, pts, this.impulseCoeff);
         this.applyImpulseWithRotationFriction(obj1, obj2, norm, pts, Js, this.impulseCoeff);
+
       }
     }
   }
@@ -265,12 +269,12 @@ export class World {
   }
 
   nearlyEqualValue(a, b) {
-    if (Math.abs(a - b) < 1e-4) return true;
+    if (Math.abs(a - b) < 0.05) return true;
     return false;
   }
 
   nearlyEqual(pt1, pt2) {
-    if (Math.abs(pt1.x - pt2.x) < 1e-4 && Math.abs(pt1.y - pt2.y) < 1e-4) {
+    if (Math.abs(pt1.x - pt2.x) < 0.05 && Math.abs(pt1.y - pt2.y) < 0.05) {
       return true;
     }
     return false;
@@ -375,11 +379,11 @@ export class World {
     }
 
     fs.forEach((J, idx) => {
-      if (obj1.movable) obj1.vel.add(mult(this.p5, tens[idx], J / obj1.mass));
-      if (obj2.movable) obj2.vel.add(mult(this.p5, tens[idx], -J / obj2.mass));
+      //if (obj1.movable) obj1.vel.add(mult(this.p5, tens[idx], J / obj1.mass));
+      //if (obj2.movable) obj2.vel.add(mult(this.p5, tens[idx], -J / obj2.mass));
 
-      if (obj1.rotatable) obj1.angVel = obj1.angVel + J / obj1.inertia * dot(this.p5, rs[idx][0], tens[idx]);
-      if (obj2.rotatable) obj2.angVel = obj2.angVel - J / obj2.inertia * dot(this.p5, rs[idx][1], tens[idx]);
+      //if (obj1.rotatable) obj1.angVel = obj1.angVel + J / obj1.inertia * dot(this.p5, rs[idx][0], tens[idx]);
+      //if (obj2.rotatable) obj2.angVel = obj2.angVel - J / obj2.inertia * dot(this.p5, rs[idx][1], tens[idx]);
     })
 
   }
@@ -514,7 +518,6 @@ export class World {
     for (let i=0; i<vertices1.length; i++) {
       let edge1 = sub(this.p5, vertices1[i], vertices1[(i+1)%vertices1.length]);
       let axis = this.p5.createVector(-edge1.y, edge1.x);
-
       axis.normalize();
       
       let [min1, max1] = project(p5, axis, vertices1);
@@ -533,6 +536,7 @@ export class World {
     for (let i=0; i<vertices2.length; i++) {
       let edge2 = sub(this.p5, vertices2[i], vertices2[(i+1)%vertices2.length]);
       let axis = this.p5.createVector(-edge2.y, edge2.x);
+      
       axis.normalize();
   
       let [min1, max1] = project(this.p5, axis, vertices1);
