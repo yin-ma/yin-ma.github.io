@@ -20,7 +20,7 @@ const sketch = (p) => {
       world.add(new Rect(p, 0, 0, p.width - 100, 80, 1e12, "white", false, false));
       world.add(new Rect(p, -150, p.height/2, 20, 180, 1e12, "white", false, false));
       world.add(new Circle(p, 150, p.height/2, 70, 1e12, "white", false, false));
-      world.objects[2].ang = 1.0;
+      world.objects[2].ang = 1.3;
       world.objects[3].ang = 0.5;
       world.objects[1].inertia = 1e12;
       world.objects[2].inertia = 1e12;
@@ -39,8 +39,10 @@ const sketch = (p) => {
     p.background(255);
     
     world.translate();
-    world.draw();
     world.update();
+    world.draw();
+
+    console.log(world.objects[0].vel.x, world.objects[0].vel.y);
   };
   
   p.mousePressed = () => {
