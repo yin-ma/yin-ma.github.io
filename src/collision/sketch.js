@@ -17,14 +17,14 @@ const sketch = (p) => {
     world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
 
     {
-      world.add(new Rect(p, 0, 0, p.width - 100, 80, 5000, "white", false, false));
-      world.add(new Rect(p, -150, p.height/2, 20, 180, 200, "white", false, false));
-      world.add(new Circle(p, 150, p.height/2, 70, 100, "white", false, false));
+      world.add(new Rect(p, 0, 0, p.width - 100, 80, 1e12, "white", false, false));
+      world.add(new Rect(p, -150, p.height/2, 20, 180, 1e12, "white", false, false));
+      world.add(new Circle(p, 150, p.height/2, 70, 1e12, "white", false, false));
       world.objects[2].ang = 1.0;
       world.objects[3].ang = 0.5;
-      world.objects[1].inertia = 1e6;
-      world.objects[2].inertia = 1e6;
-      world.objects[3].inertia = 1e6;
+      world.objects[1].inertia = 1e12;
+      world.objects[2].inertia = 1e12;
+      world.objects[3].inertia = 1e12;
     }
 
     for (let i=0; i<20; i++) {
@@ -40,11 +40,11 @@ const sketch = (p) => {
     
     world.translate();
     world.draw();
-    world.handleClick();
     world.update();
   };
   
   p.mousePressed = () => {
+    world.handleClick();
   }
 
     p.keyPressed = () => {
@@ -61,19 +61,19 @@ new p5(sketch);
 
 
 function handleKeyPressed(key) {
-  let mag = 3;
+  let mag = 4;
   switch (key) {
     case "a":
-      world.objects[0].vel.x -= mag;
+      world.objects[0].acc.x -= mag;
       break;
     case "d":
-      world.objects[0].vel.x += mag;
+      world.objects[0].acc.x += mag;
       break;
     case "w":
-      world.objects[0].vel.y += mag;
+      world.objects[0].acc.y += mag + 10;
       break;
     case "s":
-      world.objects[0].vel.y -= mag;
+      world.objects[0].acc.y -= mag + 10;
       break;
     default:
       break;
