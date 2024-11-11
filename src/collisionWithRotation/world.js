@@ -379,6 +379,12 @@ export class World {
         this.drawLine(pointOfContacts[i], add(this.p5, pointOfContacts[i], mult(this.p5, tangent, 50)), 3, "green");
       }
 
+      if (this.nearlyEqual(tangent, this.p5.createVector(0, 0))) {
+        continue;
+      } else {
+        tangent.normalize();
+      }
+
       let raDotT = dot(this.p5, rAPper, tangent);
       let rbDotT = dot(this.p5, rBPper, tangent);
 
@@ -445,7 +451,6 @@ export class World {
 
       obj1.angVel = obj1.angVel + J * obj1.invInertia * dot(this.p5, rs[idx][0], norm);
       obj2.angVel = obj2.angVel - J * obj2.invInertia * dot(this.p5, rs[idx][1], norm);
-
     })
 
     return im;
