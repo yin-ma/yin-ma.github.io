@@ -17,6 +17,14 @@ export class Rect {
     this.color = color;
     this.movable = movable;
     this.rotatable = rotatable;
+
+    this.invMass = 0;
+    this.invInertia = 0;
+
+    if (this.movable) {
+      this.invMass = 1 / this.mass;
+      this.invInertia = 1 / this.inertia;
+    }
   }
 
   applyForce(force) {
@@ -30,11 +38,6 @@ export class Rect {
     if (this.rotatable) {
       this.angAcc += torque / this.inertia;
     }
-  }
-
-  applyImpulse(impulse, norm) {
-    let temp = norm.copy();
-    this.vel.add(temp.mult(impulse, this.mass));
   }
 
   update(dt) {
