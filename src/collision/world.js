@@ -17,8 +17,8 @@ export class World {
 
     this.interation = 4;
 
-    this.staticFriction = 0.5;
-    this.dynamticFriction = 0.3;
+    this.staticFriction = 0.7;
+    this.dynamticFriction = 0.5;
 
     this.debug = true;
   }
@@ -210,7 +210,12 @@ export class World {
           }
         }
 
-        let pts = this.rectRectIntersection(obj1, obj2);
+        let temp = this.rectRectIntersection(obj1, obj2);
+        let pts = [];
+        if (temp.length === 1) pts.push(temp[0]);
+        if (temp.length === 2) {
+          pts.push(this.p5.createVector(temp[0].x * 0.5 + temp[1].x * 0.5, temp[0].y * 0.5 + temp[1].y * 0.5));
+        }
         //this.applyImpulse(obj1, obj2, norm, this.impulseCoeff);
         let Js = this.applyImpulseWithRotation(obj1, obj2, norm, pts, this.impulseCoeff);
         this.applyImpulseWithRotationFriction(obj1, obj2, norm, pts, Js, this.impulseCoeff);
@@ -282,8 +287,8 @@ export class World {
     return false;
   }
 
-  nearlyEqual(pt1, pt2) {
-    if (Math.abs(pt1.x - pt2.x) < 0.05 && Math.abs(pt1.y - pt2.y) < 0.05) {
+  nearlyEqual(pt1, pt2, th=0.05) {
+    if (Math.abs(pt1.x - pt2.x) < th && Math.abs(pt1.y - pt2.y) < th) {
       return true;
     }
     return false;
@@ -372,15 +377,16 @@ export class World {
       let vAP = add(this.p5, obj1.vel, aAngVel);
       let vBP = add(this.p5, obj2.vel, bAngVel);
 
-      let vAB = sub(this.p5, vAP, vBP);
+      let vAB = sub(this.p5, vBP, vAP);
       let tangent;
-      tangent = add(this.p5, vAB, mult(this.p5, norm, dot(this.p5, vAB, norm)));
+      tangent = sub(this.p5, vAB, mult(this.p5, norm, dot(this.p5, vAB, norm)));
 
-      if (this.nearlyEqual(tangent, this.p5.createVector(0, 0))) {
-        continue;
-      } else {
-        tangent.normalize();
-      }
+      // if (this.nearlyEqual(tangent, this.p5.createVector(0, 0)), 0.001) {
+      //   continue;
+      // } else {
+      //   tangent.normalize();
+      // }
+      tangent.normalize();
 
       if (this.debug) {
         this.drawLine(pointOfContacts[i], add(this.p5, pointOfContacts[i], mult(this.p5, tangent, 50)), 3, "green");
@@ -405,12 +411,13 @@ export class World {
     }
 
     fs.forEach((J, idx) => {
-      console.log(J, Js[idx]);
-      obj1.vel.add(mult(this.p5, tens[idx], J * obj1.InvMass));
-      obj2.vel.add(mult(this.p5, tens[idx], -J * obj2.InvMass));
+      obj1.vel.add(mult(this.p5, tens[idx], -J * obj1.invMass));
+      obj2.vel.add(mult(this.p5, tens[idx], J * obj2.invMass));
 
-      obj1.angVel = obj1.angVel + J * obj1.invInertia * dot(this.p5, rs[idx][0], tens[idx]);
-      obj2.angVel = obj2.angVel - J * obj2.invInertia * dot(this.p5, rs[idx][1], tens[idx]);
+      obj1.angVel = obj1.angVel - J * obj1.invInertia * dot(this.p5, rs[idx][0], tens[idx]);
+      obj2.angVel = obj2.angVel + J * obj2.invInertia * dot(this.p5, rs[idx][1], tens[idx]);
+
+
     })
   }
 
@@ -434,6 +441,8 @@ export class World {
 
       let vAB = sub(this.p5, vAP, vBP);
 
+      if (dot(this.p5, vAB, norm) > 0) continue;
+
       let raDotnorm = dot(this.p5, rAPper, norm);
       let rbDotnorm = dot(this.p5, rBPper, norm);
 
@@ -441,7 +450,7 @@ export class World {
       let bot = obj1.invMass + obj2.invMass + (raDotnorm * raDotnorm) * obj1.invInertia + (rbDotnorm * rbDotnorm) * obj2.invInertia;
 
       let J = top / bot;
-      //J /= pointOfContacts.length;
+      //J = J / pointOfContacts.length;
 
       im.push(J);
       rs.push([rAPper, rBPper]);
@@ -453,6 +462,7 @@ export class World {
 
       obj1.angVel = obj1.angVel + J * obj1.invInertia * dot(this.p5, rs[idx][0], norm);
       obj2.angVel = obj2.angVel - J * obj2.invInertia * dot(this.p5, rs[idx][1], norm);
+
     })
 
     return im;

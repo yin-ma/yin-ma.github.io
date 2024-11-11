@@ -52,7 +52,8 @@ function initSceneOne(p, world) {
     world.objects[2].ang = 0.5;
   }
   
-  world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
+  world.add(new Circle(p, 0,  p.height/2, 40, 40*40, "green", true));
+  //world.add(new Rect(p, 0,  p.height/2, 40, 40, 40*40, "green", true));
 
   for (let i=4; i<20; i++) {
     let obj = world.addRandomObject();
@@ -63,6 +64,7 @@ function initSceneOne(p, world) {
 
 
 function handleKeyPressed(key) {
+  if (world.objects.length < 4) return;
   let mag = 8;
   switch (key) {
     case "a":
@@ -77,12 +79,15 @@ function handleKeyPressed(key) {
     case "s":
       world.objects[3].vel.y -= mag;
       break;
+    case "c":
+      world.debug = !world.debug;
     default:
       break;
   }
 }
 
 function handleKeyReleased(key) {
+  if (world.objects.length < 4) return;
   switch (key) {
     case "a":
       world.objects[3].vel.x = 0;
