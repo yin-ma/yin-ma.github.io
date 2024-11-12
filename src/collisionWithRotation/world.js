@@ -596,4 +596,10 @@ export class World {
       obj.draw();
     })
   }
+
+  clear() {
+    for (let i=this.objects.length; i>2; i--) {
+      this.remove(i);
+    }
+  }
 }

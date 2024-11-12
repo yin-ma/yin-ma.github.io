@@ -31,7 +31,7 @@ const sketch = (p) => {
     world.handleClick();
   }
 
-    p.keyPressed = () => {
+  p.keyPressed = () => {
     handleKeyPressed(p.key);
   }
 
@@ -81,6 +81,9 @@ function handleKeyPressed(key) {
       break;
     case "c":
       world.debug = !world.debug;
+      break;
+    case "v":
+      world.clear();
     default:
       break;
   }
