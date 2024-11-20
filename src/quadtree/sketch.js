@@ -1,12 +1,15 @@
 import { Circle } from "./circle.js";
+import { QuadTree } from "./quad.js";
 
 let p5js;
 let circles = [];
 
-let numCircle = 200;
+let numCircle = 100;
 let maxRad = 2;
 let minRad = 2;
-let numGrid = 20; // no of grid per row/col
+let numGrid = 10; // no of grid per row/col
+let capacity = 4;
+let depth = 7;
 
 const sketch = (p) => {
 
@@ -30,7 +33,8 @@ const sketch = (p) => {
     checkBoundary(p);
     circles.forEach(c => c.update());
 
-    spatialHasing();
+    useQuadtree();
+    // spatialHasing();
     // naiveApproch();
     
     circles.forEach(c => c.draw());
@@ -38,9 +42,32 @@ const sketch = (p) => {
     printFPS();
   };
 
+
+  p.mouseDragged = () => {
+    handleDragged();
+  }
+
 };
 
 new p5(sketch);
+
+function useQuadtree() {
+  let qt = new QuadTree(-p5js.width/2, p5js.width/2, -p5js.height/2, p5js.height/2, depth, capacity);
+  circles.forEach(c => {
+    qt.add(c);
+  })
+  qt.draw(p5js);
+
+  circles.forEach(c => {
+    let mem = qt.get(c);
+
+    mem.forEach(m => {
+      if (m !== c) {
+        resolveCollision(c, m);
+      }
+    })
+  })
+}
 
 function spatialHasing() {
   let map = new Map();
@@ -68,7 +95,6 @@ function naiveApproch() {
   for (let i=0; i<numCircle-1; i++) {
     for (let j=i+1; j<numCircle; j++) {
       resolveCollision(circles[i], circles[j]);
-      num += 1;
     }
   }
 }
@@ -182,4 +208,12 @@ function randomBetween(min, max) {
 
 function randomColor(p) {
   return p.color(randomInt(0, 255), randomInt(0, 255), randomInt(0, 255));
+}
+
+
+function handleDragged() {
+  let x = p5js.mouseX - p5js.width/2;
+  let y = -p5js.mouseY + p5js.height/2;
+  let c = new Circle(p5js, x, y, randomBetween(minRad, maxRad), randomColor(p5js));
+  circles.push(c);
 }
