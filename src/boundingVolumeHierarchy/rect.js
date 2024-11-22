@@ -11,6 +11,8 @@ export class Rect{
     this.velx = 0;
     this.vely = 0;
 
+    this.activate = false;
+
     this.aabb = new AABB(x-w/2, x+w/2, y-h/2, y+h/2);
   }
 
@@ -25,7 +27,11 @@ export class Rect{
   }
 
   draw(p5) {
-    p5.fill(this.color);
+    if (this.activate) {
+      p5.fill(p5.color(255, 0, 0));
+    } else {
+      p5.fill(this.color);
+    }
     p5.rect(this.x, this.y, this.w, this.h);
     this.aabb.draw(p5);
   }

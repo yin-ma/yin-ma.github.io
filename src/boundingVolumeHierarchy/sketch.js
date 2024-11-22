@@ -9,6 +9,7 @@ let rects = [];
 let bvh;
 
 let region = new AABB(-100, 100, -100, 100);
+region.activate = false;
 
 const sketch = (p) => {
 
@@ -30,24 +31,20 @@ const sketch = (p) => {
 
     bvh = new BVH(rects);
 
-    let tempColor = [];
     let res = [];
-    rects.forEach(r => {
-      tempColor.push(r.color);
-    })
     bvh.query(bvh.root, region, res);
 
     res.forEach(r => {
-      r.color = p.color(255, 0, 0);
+      r.activate = true;
     })
+
     dfs(bvh.root);
 
-    region.draw2(p);
+    region.draw(p);
 
-    rects.forEach((r, idx) => {
-      r.color = tempColor[idx];
+    res.forEach(r => {
+      r.activate = false;
     })
-
 
     printFPS();
   };

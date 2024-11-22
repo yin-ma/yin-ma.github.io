@@ -4,6 +4,8 @@ export class AABB {
     this.x2 = x2;
     this.y1 = y1;
     this.y2 = y2;
+
+    this.activate = true;
   }
 
   contain(x, y) {
@@ -27,21 +29,11 @@ export class AABB {
     let h = this.y2 - this.y1;
 
     p5.strokeWeight(3);
-    p5.stroke(p5.color(212, 13, 16));
-    p5.fill(p5.color(0, 0, 0, 0));
-    p5.rect(x, y, w, h);
-    p5.stroke(p5.color(0));
-    p5.strokeWeight(1);
-  }
-
-  draw2(p5) {
-    let x = (this.x1 + this.x2) / 2;
-    let y = (this.y1 + this.y2) / 2;
-    let w = this.x2 - this.x1; 
-    let h = this.y2 - this.y1;
-
-    p5.strokeWeight(3);
-    p5.stroke(p5.color(0, 0, 255));
+    if (this.activate) {
+      p5.stroke(p5.color(212, 13, 16));
+    } else {
+      p5.stroke(p5.color(0, 0, 255));
+    }
     p5.fill(p5.color(0, 0, 0, 0));
     p5.rect(x, y, w, h);
     p5.stroke(p5.color(0));
