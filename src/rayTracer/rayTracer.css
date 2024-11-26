@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #171717;
+  color: white;
+  font-family: 'Segoe UI',Arial,'Microsoft Jhenghei',sans-serif;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.root h1 {
+  margin: 1rem;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+  background-color: #303134;
+  padding: 5rem;
+}
+
+
+.home-link {
+  cursor: pointer;
+  justify-self: center;
+  align-self: center;
+  font-size: 1.1rem;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.home-link span {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}
+
+.home-link:hover span {
+  transform: translateX(-1rem);
+}
+
+.canvas {
+  background-color: rgb(232, 232, 232);
+}
+
+.controller {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  left: 110%;
+}
+
+.controller-item {
+  width: 100%;
+}
+
+.item-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.controller-value {
+  margin-left: 1rem;
+}
