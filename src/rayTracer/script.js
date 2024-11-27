@@ -15,8 +15,95 @@ self.onmessage = (msg) => {
   let {canvasWidth, canvasHeight} = msg.data;
   let cam = new Camera(canvasWidth, canvasHeight);
 
-  scene2(cam);
+  scene5(cam);
   cam.render(world, self);
+}
+
+function scene5(cam) {
+  let red = new Lambertian(color(0.65, 0.05, 0.05));
+  let white = new Lambertian(color(0.73, 0.73, 0.73));
+  let green = new Lambertian(color(0.12, 0.45, 0.15));
+  let light = new DiffuseLight(color(15, 15, 15));
+
+  world.add(new Quad(vec3(555, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), green));
+  world.add(new Quad(vec3(0, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), red));
+  world.add(new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), light));
+  world.add(new Quad(vec3(0, 0, 0), vec3(555, 0, 0), vec3(0, 0, 555), white));
+  world.add(new Quad(vec3(555, 555, 555), vec3(-555, 0, 0), vec3(0, 0, -555), white));
+  world.add(new Quad(vec3(0, 0, 555), vec3(555, 0, 0), vec3(0, 555, 0), white));
+
+  let box1 = box(vec3(0, 0, 0), vec3(165, 330, 165), white);
+  let box2 = box(vec3(0, 0, 0), vec3(165, 165, 165), white);
+
+  box1.forEach(b => {
+    let temp = new RotateY(b, 15);
+    temp = new Translate(temp, vec3(265, 0, 295));
+    world.add(temp);
+  });
+  box2.forEach(b => {
+    let temp = new RotateY(b, -18);
+    temp = new Translate(temp, vec3(130, 0, 65));
+    world.add(temp);
+  });
+
+  cam.sample_per_pixel = 200;
+  cam.max_depth = 50;
+  cam.background = vec3(0, 0, 0);
+  cam.vfov = 40;
+  cam.lookfrom = vec3(278, 278, -800);
+  cam.lookat = vec3(278, 278, 0);
+  cam.vup = vec3(0, 1, 0);
+  cam.defocus_angle = 0;
+}
+
+function scene4(cam) {
+  let red = new Lambertian(color(0.65, 0.05, 0.05));
+  let white = new Lambertian(color(0.73, 0.73, 0.73));
+  let green = new Lambertian(color(0.12, 0.45, 0.15));
+  let light = new DiffuseLight(color(15, 15, 15));
+
+  world.add(new Quad(vec3(555, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), green));
+  world.add(new Quad(vec3(0, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), red));
+  world.add(new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), light));
+  world.add(new Quad(vec3(0, 0, 0), vec3(555, 0, 0), vec3(0, 0, 555), white));
+  world.add(new Quad(vec3(555, 555, 555), vec3(-555, 0, 0), vec3(0, 0, -555), white));
+  world.add(new Quad(vec3(0, 0, 555), vec3(555, 0, 0), vec3(0, 555, 0), white));
+
+  let box1 = box(vec3(130, 0, 65), vec3(295, 165, 230), white);
+  let box2 = box(vec3(265, 0, 295), vec3(430, 330, 460), white);
+
+  box1.forEach(b => world.add(b));
+  box2.forEach(b => world.add(b));
+
+  cam.sample_per_pixel = 200;
+  cam.max_depth = 50;
+  cam.background = vec3(0, 0, 0);
+  cam.vfov = 40;
+  cam.lookfrom = vec3(278, 278, -800);
+  cam.lookat = vec3(278, 278, 0);
+  cam.vup = vec3(0, 1, 0);
+  cam.defocus_angle = 0;
+}
+
+function scene3(cam) {
+  let red = new Lambertian(color(1.0, 0.2, 0.2));
+  let green = new Lambertian(color(0.2, 1.0, 0.2));
+
+  world.add(new Sphere(new Ray(vec3(0, -1000, 0), vec3(0, 0, 0)), 1000, red));
+  world.add(new Sphere(new Ray(vec3(0, 2, 0), vec3(0, 0, 0)), 2, green));
+
+  let difflight = new DiffuseLight(vec3(4, 4, 4));
+  world.add(new Quad(vec3(3, 1, -2), vec3(2, 0, 0), vec3(0, 2, 0), difflight));
+
+  cam.sample_per_pixel = 9;
+  cam.max_depth = 9;
+  cam.background = vec3(0, 0, 0);
+  cam.vfov = 20;
+  cam.lookfrom = vec3(26, 3, 6);
+  cam.lookat = vec3(0, 2, 0);
+  cam.vup = vec3(0, 1, 0);
+  cam.defocus_angle = 0;
+
 }
 
 function scene2(cam) {

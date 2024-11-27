@@ -12,6 +12,7 @@ class Camera {
     this.pixel_samples_scale = 1/this.sample_per_pixel;
     this.max_depth = 9;
     this.vfov = 90;
+    this.background = vec3(0, 0, 0);
 
     this.lookfrom = vec3(0, 0, 0);
     this.lookat = vec3(0, 0, -1);
@@ -78,16 +79,22 @@ class Camera {
     if (world.hit(r, 0.001, Infinity, rec)) {
       let scattered = new Ray(vec3(0, 0, 0), vec3(1, 1, 1));
       let attenuation = color(1, 1, 1);
+      let color_from_emission = rec.mat.emitted(rec.u, rec.v, rec.p);
 
-      if (rec.mat.scatter(r, rec, attenuation, scattered)) {
-        return Vec3.mul(this.ray_color(scattered, depth-1, world), attenuation);
-      } else {
-        return color(0, 0, 0);
-      }
+      if (!rec.mat.scatter(r, rec, attenuation, scattered)) {
+        return color_from_emission;
+      } 
+      
+      let color_from_scatter = Vec3.mul(this.ray_color(scattered, depth-1, world), attenuation);
+
+      return Vec3.add(color_from_emission, color_from_scatter);
+
     } else {
-      let unit_direction = Vec3.normalize(r.direction);
-      let a = 0.5 * (unit_direction.y + 1.0);
-      return Vec3.add(Vec3.scale(color(1.0, 1.0, 1.0), 1-a), Vec3.scale(color(0.5, 0.7, 1.0), a));
+      return this.background;
+      
+      //let unit_direction = Vec3.normalize(r.direction);
+      //let a = 0.5 * (unit_direction.y + 1.0);
+      //return Vec3.add(Vec3.scale(color(1.0, 1.0, 1.0), 1-a), Vec3.scale(color(0.5, 0.7, 1.0), a));
     }
   }
 

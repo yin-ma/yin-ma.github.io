@@ -2,6 +2,10 @@ class Material {
   scatter(r_in, rec, attenuation, scattered) {
     return false;
   }
+
+  emitted(u, v, p) {
+    return vec3(0, 0, 0);
+  }
 }
 
 
@@ -75,5 +79,17 @@ class Dielectric extends Material {
     let r0 = (1 - refraction_index) / (1 + refraction_index);
     r0 = r0 * r0;
     return r0 + (1 - r0) * Math.pow(1-cosine, 5);
+  }
+}
+
+
+class DiffuseLight extends Material {
+  constructor(emit) {
+    super();
+    this.tex = emit;
+  }
+
+  emitted(u, v, p) {
+    return this.tex;
   }
 }

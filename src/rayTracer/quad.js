@@ -49,3 +49,24 @@ class Quad extends Hittable {
     return true;
   }
 }
+
+
+function box(a, b, mat) {
+  let sides = [];
+
+  let min = vec3(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+  let max = vec3(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+
+  let dx = vec3(max.x - min.x, 0, 0);
+  let dy = vec3(0, max.y - min.y, 0);
+  let dz = vec3(0, 0, max.z - min.z);
+
+  sides.push(new Quad(vec3(min.x, min.y, max.z), dx, dy, mat));
+  sides.push(new Quad(vec3(max.x, min.y, max.z), Vec3.scale(dz, -1), dy, mat));
+  sides.push(new Quad(vec3(max.x, min.y, min.z), Vec3.scale(dx, -1), dy, mat));
+  sides.push(new Quad(vec3(min.x, min.y, min.z), dz, dy, mat));
+  sides.push(new Quad(vec3(min.x, max.y, max.z), dx, Vec3.scale(dz, -1), mat));
+  sides.push(new Quad(vec3(min.x, min.y, min.z), dx, dz, mat));
+
+  return sides;
+}
