@@ -8,12 +8,12 @@ class Camera {
     this.pixel_delta_u;
     this.pixel_delta_v;
 
-    this.sample_per_pixel = 40;
+    this.sample_per_pixel = 9;
     this.pixel_samples_scale = 1/this.sample_per_pixel;
-    this.max_depth = 40;
+    this.max_depth = 9;
   }
 
-  render(world, woker) {
+  render(world, worker) {
     this.initialize();
 
     let progress = 0;
@@ -29,7 +29,7 @@ class Camera {
         }
 
         pixel_color = Vec3.scale(pixel_color, this.pixel_samples_scale);
-        woker.postMessage({progress, i, j, pixel_color});
+        worker.postMessage({progress, i, j, pixel_color});
       }
     }
   }
@@ -70,7 +70,7 @@ class Camera {
 
   initialize() {
     this.center = vec3(0, 0, 0);
-
+    
     let focal_length = 1.0;
     let viewport_height = 2.0;
     let viewport_width = viewport_height * this.image_width / this.image_height;
@@ -86,5 +86,6 @@ class Camera {
     viewport_upper_left = Vec3.sub(viewport_upper_left, Vec3.scale(viewport_v, 0.5));
     
     this.pixel00_loc = Vec3.add(viewport_upper_left, Vec3.scale(Vec3.add(this.pixel_delta_u, this.pixel_delta_v), 0.5));
+    this.pixel_samples_scale = 1/this.sample_per_pixel;
   }
 }

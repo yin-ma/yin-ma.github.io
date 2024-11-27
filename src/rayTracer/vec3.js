@@ -89,3 +89,12 @@ function random_on_hemisphere(normal) {
 function reflect(v, n) {
   return Vec3.sub(v, Vec3.scale(n, Vec3.dot(v, n) * 2));
 }
+
+function refract(uv, n, etai_over_etat) {
+  let cos_theta = Math.min(Vec3.dot(Vec3.scale(uv, -1), n), 1.0);
+  let r_out_perp = Vec3.scale(Vec3.add(uv, Vec3.scale(n, cos_theta)), etai_over_etat);
+  let factor = -1 * Math.sqrt(Math.abs(1 - Vec3.length_squared(r_out_perp)));
+  let r_out_parallel = Vec3.scale(n, factor);
+
+  return Vec3.add(r_out_perp, r_out_parallel);
+}
