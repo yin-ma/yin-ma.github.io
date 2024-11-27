@@ -1,8 +1,9 @@
 class Sphere extends Hittable {
-  constructor(center, radius) {
+  constructor(center, radius, mat) {
     super();
     this.center = center;
     this.radius = radius;
+    this.mat = mat;
   }
 
   hit(r, ray_min, ray_max, rec) {
@@ -29,6 +30,7 @@ class Sphere extends Hittable {
     rec.p = r.at(rec.t);
     let outward_normal = Vec3.scale(Vec3.sub(rec.p, this.center), 1/this.radius);
     rec.set_face_normal(r, outward_normal);
+    rec.mat = this.mat;
     return true;
   }
 }

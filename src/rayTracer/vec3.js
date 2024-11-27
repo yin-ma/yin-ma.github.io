@@ -50,6 +50,11 @@ class Vec3 {
   static rand_between(min, max) {
     return Vec3.creatVector(rand_between(min, max), rand_between(min, max), rand_between(min, max));
   }
+
+  static near_zero(v) {
+    let s = 1e-8;
+    return Math.abs(v.x) < s && Math.abs(v.y) < s && Math.abs(v.z) < s;
+  }
 }
 
 function color(r, g, b) {
@@ -79,5 +84,8 @@ function random_on_hemisphere(normal) {
   } else {
     return Vec3.scale(on_unit_sphere, -1);
   }
+}
 
+function reflect(v, n) {
+  return Vec3.sub(v, Vec3.scale(n, Vec3.dot(v, n) * 2));
 }

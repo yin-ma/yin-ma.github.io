@@ -8,9 +8,9 @@ class Camera {
     this.pixel_delta_u;
     this.pixel_delta_v;
 
-    this.sample_per_pixel = 1;
+    this.sample_per_pixel = 40;
     this.pixel_samples_scale = 1/this.sample_per_pixel;
-    this.max_depth = 10;
+    this.max_depth = 40;
   }
 
   render(world, woker) {
@@ -51,10 +51,16 @@ class Camera {
     if (depth === 0) return color(0, 0, 0);
 
     let rec = new HitRecord;
-    if (world.hit(r, 0.001, Infinity, rec)) {
-      let direction = Vec3.add(rec.normal, random_unit_vector());
 
-      return Vec3.scale(this.ray_color(new Ray(rec.p, direction), depth-1, world), 0.5);
+    if (world.hit(r, 0.001, Infinity, rec)) {
+      let scattered = new Ray(vec3(0, 0, 0), vec3(1, 1, 1));
+      let attenuation = color(1, 1, 1);
+
+      if (rec.mat.scatter(r, rec, attenuation, scattered)) {
+        return Vec3.mul(this.ray_color(scattered, depth-1, world), attenuation);
+      } else {
+        return color(0, 0, 0);
+      }
     } else {
       let unit_direction = Vec3.normalize(r.direction);
       let a = 0.5 * (unit_direction.y + 1.0);

@@ -1,5 +1,5 @@
 let aspect_ratio = 4 / 3;
-let canvasWidth = 100;
+let canvasWidth = 400;
 let canvasHeight = Math.floor(canvasWidth / aspect_ratio);
 
 let progressBar = document.querySelector(".progress-bar");

@@ -1,9 +1,10 @@
 class HitRecord {
   constructor() {
-    this.p = null;
-    this.normal = null;
-    this.t = null;
-    this.front_face = null;
+    this.p;
+    this.normal;
+    this.t;
+    this.front_face;
+    this.mat;
   }
 
   set_face_normal(r, outward_normal) {
