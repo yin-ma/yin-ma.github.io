@@ -43,3 +43,11 @@ class Vec3 {
     return Vec3.scale(a, 1/Vec3.length(a));
   }
 }
+
+function color(r, g, b) {
+  return Vec3.creatVector(r, g, b);
+}
+
+function vec3(x, y, z) {
+  return Vec3.creatVector(x, y, z);
+}
