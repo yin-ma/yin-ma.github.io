@@ -18,7 +18,7 @@ class Lambertian extends Material {
     if (Vec3.near_zero(scatter_direction)) {
       scatter_direction = rec.normal;
     }
-    Object.assign(scattered, new Ray(rec.p, scatter_direction));
+    Object.assign(scattered, new Ray(rec.p, scatter_direction, r_in.time));
     Object.assign(attenuation, this.albedo);
     return true;
   }
@@ -36,7 +36,7 @@ class Metal extends Material {
     let reflected = reflect(r_in.direction, rec.normal);
     reflected = Vec3.add(Vec3.normalize(reflected), Vec3.scale(random_unit_vector(), this.fuzz));
 
-    Object.assign(scattered, new Ray(rec.p, reflected));
+    Object.assign(scattered, new Ray(rec.p, reflected, r_in.time));
     Object.assign(attenuation, this.albedo);
     return Vec3.dot(scattered.direction, rec.normal) > 0;
   }
@@ -67,7 +67,7 @@ class Dielectric extends Material {
       direction = refract(unit_direction, rec.normal, ri);
     }
 
-    Object.assign(scattered, new Ray(rec.p, direction));
+    Object.assign(scattered, new Ray(rec.p, direction, r_in.time));
     return true;
   }
 

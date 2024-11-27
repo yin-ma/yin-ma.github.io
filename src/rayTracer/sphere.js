@@ -7,7 +7,8 @@ class Sphere extends Hittable {
   }
 
   hit(r, ray_min, ray_max, rec) {
-    let oc = Vec3.sub(this.center, r.origin);
+    let current_center = this.center.at(r.time);
+    let oc = Vec3.sub(current_center, r.origin);
     let a = Vec3.length_squared(r.direction);
     let h = Vec3.dot(r.direction, oc);
     let c = Vec3.length_squared(oc) - this.radius*this.radius;
@@ -28,7 +29,7 @@ class Sphere extends Hittable {
 
     rec.t = root;
     rec.p = r.at(rec.t);
-    let outward_normal = Vec3.scale(Vec3.sub(rec.p, this.center), 1/this.radius);
+    let outward_normal = Vec3.scale(Vec3.sub(rec.p, current_center), 1/this.radius);
     rec.set_face_normal(r, outward_normal);
     rec.mat = this.mat;
     return true;

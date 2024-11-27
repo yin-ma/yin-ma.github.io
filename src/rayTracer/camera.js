@@ -32,19 +32,18 @@ class Camera {
     this.initialize();
 
     let progress = 0;
+    let progress_scale = 1 / this.image_height * 1 / this.sample_per_pixel;
 
-    for (let j=0; j<this.image_height; j++) {
-      progress = (j+1)/this.image_height*100;
-      for (let i=0; i<this.image_width; i++) {
-        let pixel_color = color(0, 0, 0);
-
-        for (let sample=0; sample<this.sample_per_pixel; sample++) {
+    for (let sample=0; sample<this.sample_per_pixel; sample++) {
+      progress = sample/this.sample_per_pixel*100;
+      for (let j=0; j<this.image_height; j++) {
+        progress += progress_scale * 100;
+        for (let i=0; i<this.image_width; i++) {
           let r = this.get_ray(i, j);
-          pixel_color = Vec3.add(pixel_color, this.ray_color(r, this.max_depth, world));
-        }
+          let pixel_color = this.ray_color(r, this.max_depth, world);
 
-        pixel_color = Vec3.scale(pixel_color, this.pixel_samples_scale);
-        worker.postMessage({progress, i, j, pixel_color});
+          worker.postMessage({progress, i, j, pixel_color, sample});
+        }
       }
     }
   }
@@ -54,8 +53,9 @@ class Camera {
     let pixel_sample = Vec3.add(this.pixel00_loc, Vec3.add(Vec3.scale(this.pixel_delta_u, i+offset.x), Vec3.scale(this.pixel_delta_v, j+offset.y)));
     let ray_origin = this.defocus_angle <= 0 ? this.center : this.defocus_disk_sample();
     let ray_direction = Vec3.sub(pixel_sample, ray_origin);
+    let ray_time = Math.random();
 
-    return new Ray(ray_origin, ray_direction);
+    return new Ray(ray_origin, ray_direction, ray_time);
   }
 
   sample_square() {
@@ -94,7 +94,6 @@ class Camera {
   initialize() {
     this.center = this.lookfrom;
     
-    //let focal_length = Vec3.length(Vec3.sub(this.lookfrom, this.lookat));
     let theta = degrees_to_radians(this.vfov);
     let h = Math.tan(theta / 2);
   

@@ -5,6 +5,8 @@ class HitRecord {
     this.t;
     this.front_face;
     this.mat;
+    this.u;
+    this.v;
   }
 
   set_face_normal(r, outward_normal) {

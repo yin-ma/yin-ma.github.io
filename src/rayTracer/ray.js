@@ -1,7 +1,8 @@
 class Ray {
-  constructor(origin, direction) {
+  constructor(origin, direction, time=0) {
     this.origin = origin;
     this.direction = direction;
+    this.time = time;
   }
 
   at(t) {

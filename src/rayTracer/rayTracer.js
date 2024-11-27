@@ -24,9 +24,9 @@ renderBtn.addEventListener("click", event => {
 })
 
 worker.onmessage = (msg) => {
-  let {progress, i, j, pixel_color} = msg.data;
+  let {progress, i, j, pixel_color, sample} = msg.data;
 
-  setPixelColor(i, j, pixel_color);
+  setPixelColor(i, j, pixel_color, sample);
   progressBar.innerHTML = `${progress.toFixed(2)}%`;
 }
 
@@ -40,12 +40,20 @@ function linear_to_gamma(linear_component) {
 }
 
 
-function setPixelColor(x, y, color) {
+function setPixelColor(x, y, color, sample) {
   const imgData = ctx.getImageData(x, y, x+1, y+1);
   const data = imgData.data;
-  data[0] = linear_to_gamma(color.x) * 255;
-  data[1] = linear_to_gamma(color.y) * 255;
-  data[2] = linear_to_gamma(color.z) * 255;
-  data[3] = 255;
+
+  if (sample === 0) {
+    data[0] = linear_to_gamma(color.x) * 255;
+    data[1] = linear_to_gamma(color.y) * 255;
+    data[2] = linear_to_gamma(color.z) * 255;
+    data[3] = 255;
+  } else {
+    data[0] = linear_to_gamma((sample * Math.pow((data[0] / 255), 2) + color.x) / (sample+1)) * 255;
+    data[1] = linear_to_gamma((sample * Math.pow((data[1] / 255), 2) + color.y) / (sample+1)) * 255;
+    data[2] = linear_to_gamma((sample * Math.pow((data[2] / 255), 2) + color.z) / (sample+1)) * 255;
+    data[3] = 255;
+  }
   ctx.putImageData(imgData, x, y);
 }
