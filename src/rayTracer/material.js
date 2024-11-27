@@ -25,7 +25,7 @@ class Lambertian extends Material {
 }
 
 
-class Matel extends Material {
+class Metal extends Material {
   constructor(albedo, fuzz) {
     super();
     this.albedo = albedo;

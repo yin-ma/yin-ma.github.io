@@ -98,3 +98,12 @@ function refract(uv, n, etai_over_etat) {
 
   return Vec3.add(r_out_perp, r_out_parallel);
 }
+
+function random_in_unit_disk() {
+  while (true) {
+    let p = vec3(rand_between(-1, 1), rand_between(-1, 1), 0);
+    if (Vec3.length_squared(p) < 1) {
+      return p;
+    }
+  }
+}

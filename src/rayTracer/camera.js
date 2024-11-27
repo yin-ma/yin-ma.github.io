@@ -11,6 +11,21 @@ class Camera {
     this.sample_per_pixel = 9;
     this.pixel_samples_scale = 1/this.sample_per_pixel;
     this.max_depth = 9;
+    this.vfov = 90;
+
+    this.lookfrom = vec3(0, 0, 0);
+    this.lookat = vec3(0, 0, -1);
+    this.vup = vec3(0, 1, 0);
+
+    this.defocus_angle = 0;
+    this.focus_dist = 10;
+
+    this.defocus_disk_u;
+    this.defocus_disk_v;
+
+    this.u;
+    this.v;
+    this.w;
   }
 
   render(world, worker) {
@@ -37,7 +52,7 @@ class Camera {
   get_ray(i, j) {
     let offset = this.sample_square();
     let pixel_sample = Vec3.add(this.pixel00_loc, Vec3.add(Vec3.scale(this.pixel_delta_u, i+offset.x), Vec3.scale(this.pixel_delta_v, j+offset.y)));
-    let ray_origin = this.center;
+    let ray_origin = this.defocus_angle <= 0 ? this.center : this.defocus_disk_sample();
     let ray_direction = Vec3.sub(pixel_sample, ray_origin);
 
     return new Ray(ray_origin, ray_direction);
@@ -45,6 +60,14 @@ class Camera {
 
   sample_square() {
     return vec3(Math.random() - 0.5, Math.random() - 0.5, 0);
+  }
+
+  defocus_disk_sample() {
+    let p = random_in_unit_disk();
+    let res = this.center;
+    res = Vec3.add(res, Vec3.scale(this.defocus_disk_u, p.x));
+    res = Vec3.add(res, Vec3.scale(this.defocus_disk_v, p.y));
+    return res;
   }
 
   ray_color(r, depth, world) {
@@ -69,23 +92,35 @@ class Camera {
   }
 
   initialize() {
-    this.center = vec3(0, 0, 0);
+    this.center = this.lookfrom;
     
-    let focal_length = 1.0;
-    let viewport_height = 2.0;
+    //let focal_length = Vec3.length(Vec3.sub(this.lookfrom, this.lookat));
+    let theta = degrees_to_radians(this.vfov);
+    let h = Math.tan(theta / 2);
+  
+    let viewport_height = 2 * h * this.focus_dist;
     let viewport_width = viewport_height * this.image_width / this.image_height;
+
+    this.w = Vec3.normalize(Vec3.sub(this.lookfrom, this.lookat));
+    this.u = Vec3.normalize(Vec3.cross(this.vup, this.w));
+    this.v = Vec3.cross(this.w, this.u);
     
-    let viewport_u = vec3(viewport_width, 0, 0);
-    let viewport_v = vec3(0, -viewport_height, 0);
+    let viewport_u = Vec3.scale(this.u, viewport_width);
+    let viewport_v = Vec3.scale(Vec3.scale(this.v, -1), viewport_height);
     
     this.pixel_delta_u = Vec3.scale(viewport_u, 1/this.image_width);
     this.pixel_delta_v = Vec3.scale(viewport_v, 1/this.image_height);
-    
-    let viewport_upper_left = Vec3.sub(this.center, vec3(0, 0, focal_length));
+
+    let viewport_upper_left = this.center;
+    viewport_upper_left = Vec3.sub(viewport_upper_left, Vec3.scale(this.w, this.focus_dist));
     viewport_upper_left = Vec3.sub(viewport_upper_left, Vec3.scale(viewport_u, 0.5));
     viewport_upper_left = Vec3.sub(viewport_upper_left, Vec3.scale(viewport_v, 0.5));
     
     this.pixel00_loc = Vec3.add(viewport_upper_left, Vec3.scale(Vec3.add(this.pixel_delta_u, this.pixel_delta_v), 0.5));
     this.pixel_samples_scale = 1/this.sample_per_pixel;
+
+    let defocus_radius = this.focus_dist * Math.tan(degrees_to_radians(this.defocus_angle / 2));
+    this.defocus_disk_u = Vec3.scale(this.u, defocus_radius);
+    this.defocus_disk_v = Vec3.scale(this.v, defocus_radius);
   }
 }
