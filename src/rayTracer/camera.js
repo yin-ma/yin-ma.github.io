@@ -7,6 +7,10 @@ class Camera {
     this.pixel00_loc;
     this.pixel_delta_u;
     this.pixel_delta_v;
+
+    this.sample_per_pixel = 1;
+    this.pixel_samples_scale = 1/this.sample_per_pixel;
+    this.max_depth = 10;
   }
 
   render(world, woker) {
@@ -17,21 +21,40 @@ class Camera {
     for (let j=0; j<this.image_height; j++) {
       progress = (j+1)/this.image_height*100;
       for (let i=0; i<this.image_width; i++) {
-        let pixel_center = Vec3.add(this.pixel00_loc, Vec3.add(Vec3.scale(this.pixel_delta_u, i), Vec3.scale(this.pixel_delta_v, j)));
-        let ray_direction = Vec3.sub(pixel_center, this.center);
-        let r = new Ray(this.center, ray_direction);
-        let color = this.ray_color(r, world);
-        
-        woker.postMessage({progress, i, j, color});
+        let pixel_color = color(0, 0, 0);
+
+        for (let sample=0; sample<this.sample_per_pixel; sample++) {
+          let r = this.get_ray(i, j);
+          pixel_color = Vec3.add(pixel_color, this.ray_color(r, this.max_depth, world));
+        }
+
+        pixel_color = Vec3.scale(pixel_color, this.pixel_samples_scale);
+        woker.postMessage({progress, i, j, pixel_color});
       }
     }
   }
 
-  ray_color(r, world) {
+  get_ray(i, j) {
+    let offset = this.sample_square();
+    let pixel_sample = Vec3.add(this.pixel00_loc, Vec3.add(Vec3.scale(this.pixel_delta_u, i+offset.x), Vec3.scale(this.pixel_delta_v, j+offset.y)));
+    let ray_origin = this.center;
+    let ray_direction = Vec3.sub(pixel_sample, ray_origin);
+
+    return new Ray(ray_origin, ray_direction);
+  }
+
+  sample_square() {
+    return vec3(Math.random() - 0.5, Math.random() - 0.5, 0);
+  }
+
+  ray_color(r, depth, world) {
+    if (depth === 0) return color(0, 0, 0);
+
     let rec = new HitRecord;
-    if (world.hit(r, 0, 100, rec)) {
-      let N = rec.normal;
-      return Vec3.scale(color(N.x+1, N.y+1, N.z+1), 0.5);
+    if (world.hit(r, 0.001, Infinity, rec)) {
+      let direction = Vec3.add(rec.normal, random_unit_vector());
+
+      return Vec3.scale(this.ray_color(new Ray(rec.p, direction), depth-1, world), 0.5);
     } else {
       let unit_direction = Vec3.normalize(r.direction);
       let a = 0.5 * (unit_direction.y + 1.0);

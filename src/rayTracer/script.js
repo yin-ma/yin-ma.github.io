@@ -1,3 +1,4 @@
+importScripts("util.js");
 importScripts("vec3.js");
 importScripts("ray.js");
 importScripts("hittable.js");

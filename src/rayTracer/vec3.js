@@ -42,6 +42,14 @@ class Vec3 {
   static normalize(a) {
     return Vec3.scale(a, 1/Vec3.length(a));
   }
+
+  static random() {
+    return Vec3.creatVector(Math.random(), Math.random(), Math.random());
+  }
+
+  static rand_between(min, max) {
+    return Vec3.creatVector(rand_between(min, max), rand_between(min, max), rand_between(min, max));
+  }
 }
 
 function color(r, g, b) {
@@ -50,4 +58,26 @@ function color(r, g, b) {
 
 function vec3(x, y, z) {
   return Vec3.creatVector(x, y, z);
+}
+
+function random_unit_vector() {
+  while (true) {
+    let p = Vec3.rand_between(-1, 1);
+    let lensq = Vec3.length_squared(p);
+
+    if (lensq <= 1 && lensq > 1e-160) {
+      return Vec3.scale(p, 1/Math.sqrt(lensq));
+    }
+  }
+}
+
+function random_on_hemisphere(normal) {
+  let on_unit_sphere = random_unit_vector();
+
+  if (Vec3.dot(on_unit_sphere, normal) > 0.0) {
+    return on_unit_sphere;
+  } else {
+    return Vec3.scale(on_unit_sphere, -1);
+  }
+
 }

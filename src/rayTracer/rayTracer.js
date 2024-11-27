@@ -24,19 +24,28 @@ renderBtn.addEventListener("click", event => {
 })
 
 worker.onmessage = (msg) => {
-  let {progress, i, j, color} = msg.data;
+  let {progress, i, j, pixel_color} = msg.data;
 
-  setPixelColor(i, j, color);
+  setPixelColor(i, j, pixel_color);
   progressBar.innerHTML = `${progress.toFixed(2)}%`;
+}
+
+
+function linear_to_gamma(linear_component) {
+  if (linear_component > 0) {
+    return Math.sqrt(linear_component);
+  } else {
+    return 0;
+  }
 }
 
 
 function setPixelColor(x, y, color) {
   const imgData = ctx.getImageData(x, y, x+1, y+1);
   const data = imgData.data;
-  data[0] = color.x * 255;
-  data[1] = color.y * 255;
-  data[2] = color.z * 255;
+  data[0] = linear_to_gamma(color.x) * 255;
+  data[1] = linear_to_gamma(color.y) * 255;
+  data[2] = linear_to_gamma(color.z) * 255;
   data[3] = 255;
   ctx.putImageData(imgData, x, y);
 }
