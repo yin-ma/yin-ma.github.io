@@ -91,14 +91,11 @@ class Camera {
 
     } else {
       return this.background;
-      
-      //let unit_direction = Vec3.normalize(r.direction);
-      //let a = 0.5 * (unit_direction.y + 1.0);
-      //return Vec3.add(Vec3.scale(color(1.0, 1.0, 1.0), 1-a), Vec3.scale(color(0.5, 0.7, 1.0), a));
     }
   }
 
   initialize() {
+    this.aspect_ratio = this.image_width / this.image_height;
     this.center = this.lookfrom;
     
     let theta = degrees_to_radians(this.vfov);
