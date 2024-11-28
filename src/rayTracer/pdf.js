@@ -57,3 +57,23 @@ class HittablePDF extends PDF {
     return this.objects.random(this.origin);
   }
 }
+
+
+class MixturePDF extends PDF {
+  constructor(p0, p1) {
+    super();
+    this.p = [p0, p1];
+  }
+
+  value(direction) {
+    return 0.5 * this.p[0].value(direction) + 0.5 * this.p[1].value(direction);
+  }
+
+  generate() {
+    if (Math.random() < 0.5) {
+      return this.p[0].generate();
+    } else {
+      return this.p[1].generate();
+    }
+  }
+}

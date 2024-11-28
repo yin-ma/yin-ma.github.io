@@ -76,31 +76,34 @@ class Camera {
 
     let rec = new HitRecord;
 
-    if (world.hit(r, 0.001, Infinity, rec)) {
-      let scattered = new Ray(vec3(0, 0, 0), vec3(1, 1, 1));
-      let attenuation = color(1, 1, 1);
-      let pdf = {pdf_value: 0};
-      let color_from_emission = rec.mat.emitted(rec.u, rec.v, rec.p, rec);
-
-      if (!rec.mat.scatter(r, rec, attenuation, scattered, pdf)) {
-        return color_from_emission;
-      } 
-      
-      let light_pdf = new HittablePDF(lights, rec.p);
-      scattered = new Ray(rec.p, light_pdf.generate(), r.time);
-      pdf.pdf_value = light_pdf.value(scattered.direction);
-
-      let scattering_pdf = rec.mat.scattering_pdf(r, rec, scattered);
-
-      let sample_color = this.ray_color(scattered, depth-1, world, lights);
-      let color_from_scatter = Vec3.mul(sample_color, attenuation);
-      color_from_scatter = Vec3.scale(color_from_scatter, scattering_pdf / pdf.pdf_value);
-
-      return Vec3.add(color_from_emission, color_from_scatter);
-
-    } else {
+    if (!world.hit(r, 0.001, Infinity, rec)) {
       return this.background;
     }
+
+    let srec = new ScatterRecord;
+    let color_from_emission = rec.mat.emitted(rec.u, rec.v, rec.p, rec);
+
+    if (!rec.mat.scatter(r, rec, srec)) {
+      return color_from_emission;
+    } 
+
+    if (srec.skip_pdf) {
+      return Vec3.mul(srec.attenuation, this.ray_color(srec.skip_pdf_ray, depth-1, world, lights));
+    }
+
+    let light_ptr = new HittablePDF(lights, rec.p);
+    let p = new MixturePDF(light_ptr, srec.pdf_ptr);
+    
+    let scattered = new Ray(rec.p, p.generate(), r.time);
+    let pdf_value = p.value(scattered.direction);
+
+    let scattering_pdf = rec.mat.scattering_pdf(r, rec, scattered);
+    let sample_color = this.ray_color(scattered, depth-1, world, lights);
+
+    let color_from_scatter = Vec3.mul(sample_color, srec.attenuation);
+    color_from_scatter = Vec3.scale(color_from_scatter, scattering_pdf / pdf_value);
+
+    return Vec3.add(color_from_emission, color_from_scatter);
   }
 
   initialize() {

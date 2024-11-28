@@ -1,5 +1,15 @@
+class ScatterRecord {
+  constructor() {
+    this.attenuation;
+    this.pdf_ptr;
+    this.skip_pdf;
+    this.skip_pdf_ray;
+  }
+}
+
+
 class Material {
-  scatter(r_in, rec, attenuation, scattered, pdf) {
+  scatter(r_in, rec, srec) {
     return false;
   }
 
@@ -20,15 +30,10 @@ class Lambertian extends Material {
 
   }
 
-  scatter(r_in, rec, attenuation, scattered, pdf) {
-
-    let uvw = new ONB(rec.normal);
-    let scatter_direction = uvw.transform(random_cosine_direction());
-
-    Object.assign(scattered, new Ray(rec.p, Vec3.normalize(scatter_direction), r_in.time));
-    Object.assign(attenuation, this.albedo);
-
-    pdf.pdf_value = Vec3.dot(uvw.axis[2], scatter_direction) / Math.PI;
+  scatter(r_in, rec, srec) {
+    srec.attenuation = this.albedo;
+    srec.pdf_ptr = new CosinePDF(rec.normal);
+    srec.skip_pdf = false;
     return true;
   }
 
@@ -45,10 +50,10 @@ class Isotropic extends Material {
     this.albedo = albedo;
   }
 
-  scatter(r_in, rec, attenuation, scattered, pdf) {
-    Object.assign(scattered, new Ray(rec.p, random_unit_vector(), r_in.time));
-    Object.assign(attenuation, this.albedo);
-    pdf.pdf_value = 1 / (4 * Math.PI);
+  scatter(r_in, rec, srec) {
+    srec.attenuation = this.albedo;
+    srec.pdf_ptr = new SpherePDF();
+    srec.skip_pdf = false;
     return true;
   }
 
@@ -67,13 +72,16 @@ class Metal extends Material {
     this.fuzz = fuzz;
   }
 
-  scatter(r_in, rec, attenuation, scattered, pdf) {
+  scatter(r_in, rec, srec) {
     let reflected = reflect(r_in.direction, rec.normal);
     reflected = Vec3.add(Vec3.normalize(reflected), Vec3.scale(random_unit_vector(), this.fuzz));
 
-    Object.assign(scattered, new Ray(rec.p, reflected, r_in.time));
-    Object.assign(attenuation, this.albedo);
-    return Vec3.dot(scattered.direction, rec.normal) > 0;
+    srec.attenuation = this.albedo;
+    srec.pdf_ptr = null;
+    srec.skip_pdf = true;
+    srec.skip_pdf_ray = new Ray(rec.p, reflected, r_in.time);
+
+    return true;
   }
 }
 
@@ -84,8 +92,10 @@ class Dielectric extends Material {
     this.refraction_index = refraction_index;
   }
 
-  scatter(r_in, rec, attenuation, scattered, pdf) {
-    Object.assign(attenuation, color(1, 1, 1));
+  scatter(r_in, rec, srec) {
+    srec.attenuation = color(1.0, 1.0, 1.0);
+    srec.pdf_ptr = null;
+    srec.skip_pdf = true;
 
     let ri = rec.front_face ? (1.0 / this.refraction_index) : this.refraction_index;
     let unit_direction = Vec3.normalize(r_in.direction);
@@ -102,7 +112,8 @@ class Dielectric extends Material {
       direction = refract(unit_direction, rec.normal, ri);
     }
 
-    Object.assign(scattered, new Ray(rec.p, direction, r_in.time));
+    srec.skip_pdf_ray = new Ray(rec.p, direction, r_in.time);
+    
     return true;
   }
 

@@ -28,4 +28,21 @@ class HittableList extends Hittable {
 
     return hit_anything;
   }
+
+  pdf_value(origin, direction) {
+    let weight = 1 / this.objects.length;
+    let sum = 0.0;
+
+    this.objects.forEach(object => {
+      sum += weight * object.pdf_value(origin, direction);
+    })
+
+    return sum;
+  }
+
+  random(origin) {
+    let int_size = this.objects.length;
+
+    return this.objects[randInt(0, int_size-1)].random(origin);
+  }
 }

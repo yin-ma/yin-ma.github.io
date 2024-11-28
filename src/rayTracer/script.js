@@ -12,15 +12,54 @@ importScripts("material.js");
 
 
 let world = new HittableList;
-let lights;
+let lights = new HittableList;
 
 self.onmessage = (msg) => {
   let {canvasWidth, canvasHeight} = msg.data;
   let cam = new Camera(canvasWidth, canvasHeight);
 
-  scene6(cam);
+  scene7(cam);
 
   cam.render(world, lights, self);
+}
+
+
+function scene7(cam) {
+  let red = new Lambertian(color(0.65, 0.05, 0.05));
+  let white = new Lambertian(color(0.73, 0.73, 0.73));
+  let green = new Lambertian(color(0.12, 0.45, 0.15));
+  let light = new DiffuseLight(color(15, 15, 15));
+
+  world.add(new Quad(vec3(555, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), green));
+  world.add(new Quad(vec3(0, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), red));
+  world.add(new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), light));
+  world.add(new Quad(vec3(0, 0, 0), vec3(555, 0, 0), vec3(0, 0, 555), white));
+  world.add(new Quad(vec3(555, 555, 555), vec3(-555, 0, 0), vec3(0, 0, -555), white));
+  world.add(new Quad(vec3(0, 0, 555), vec3(555, 0, 0), vec3(0, 555, 0), white));
+
+  let aluminum = new Metal(vec3(0.8, 0.85, 0.88), 0.0);
+  
+  let box1 = box(vec3(0, 0, 0), vec3(165, 330, 165), white);
+  box1.forEach(b => {
+    let temp = new RotateY(b, 15);
+    temp = new Translate(temp, vec3(265, 0, 295));
+    world.add(temp);
+  });
+  
+
+  let glass = new Dielectric(1.5);
+  world.add(new Sphere(new Ray(vec3(190, 90, 190), vec3(0, 0, 0)), 90, glass));
+  lights.add(new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), null));
+  lights.add(new Sphere(new Ray(vec3(190, 90, 190), vec3(0, 0, 0)), 90, null));
+
+  cam.sample_per_pixel = 10;
+  cam.max_depth = 50;
+  cam.background = vec3(0, 0, 0);
+  cam.vfov = 40;
+  cam.lookfrom = vec3(278, 278, -800);
+  cam.lookat = vec3(278, 278, 0);
+  cam.vup = vec3(0, 1, 0);
+  cam.defocus_angle = 0;
 }
 
 
