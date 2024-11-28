@@ -8,11 +8,13 @@ class Quad extends Hittable {
     this.normal;
     this.D;
     this.w;
+    this.area;
 
     let n = Vec3.cross(u, v);
     this.normal = Vec3.normalize(n);
     this.D = Vec3.dot(this.normal, this.Q);
     this.w = Vec3.scale(n, 1 / Vec3.dot(n, n));
+    this.area = Vec3.length(n);
   }
 
   hit(r, ray_min, ray_max, rec) {
@@ -47,6 +49,24 @@ class Quad extends Hittable {
     rec.u = a;
     rec.v = b;
     return true;
+  }
+
+  pdf_value(origin, direction) {
+    let rec = new HitRecord;
+    if (!this.hit(new Ray(origin, direction), 0.001, Infinity, rec)) {
+      return 0;
+    }
+
+    let distance_squared = rec.t * rec.t * Vec3.length_squared(direction);
+    let cosine = Math.abs(Vec3.dot(direction, rec.normal)) / Vec3.length(direction);
+
+    return distance_squared / (cosine * this.area);
+  }
+
+  random(origin) {
+    let p = Vec3.add(Vec3.scale(this.u, Math.random()), Vec3.scale(this.v, Math.random()));
+    p = Vec3.add(p, this.Q);
+    return Vec3.sub(p, origin);
   }
 }
 

@@ -20,6 +20,14 @@ class Hittable {
   hit(r, ray_min, ray_max, rec) {
     return 0;
   }
+
+  pdf_value(origin, direction) {
+    return 0;
+  }
+
+  random(origin) {
+    return vec3(1, 0, 0);
+  }
 }
 
 

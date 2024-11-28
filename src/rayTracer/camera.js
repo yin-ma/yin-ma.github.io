@@ -29,7 +29,7 @@ class Camera {
     this.w;
   }
 
-  render(world, worker) {
+  render(world, lights, worker) {
     this.initialize();
 
     let progress = 0;
@@ -41,7 +41,7 @@ class Camera {
         progress += progress_scale * 100;
         for (let i=0; i<this.image_width; i++) {
           let r = this.get_ray(i, j);
-          let pixel_color = this.ray_color(r, this.max_depth, world);
+          let pixel_color = this.ray_color(r, this.max_depth, world, lights);
 
           worker.postMessage({progress, i, j, pixel_color, sample});
         }
@@ -71,7 +71,7 @@ class Camera {
     return res;
   }
 
-  ray_color(r, depth, world) {
+  ray_color(r, depth, world, lights) {
     if (depth === 0) return color(0, 0, 0);
 
     let rec = new HitRecord;
@@ -79,13 +79,22 @@ class Camera {
     if (world.hit(r, 0.001, Infinity, rec)) {
       let scattered = new Ray(vec3(0, 0, 0), vec3(1, 1, 1));
       let attenuation = color(1, 1, 1);
-      let color_from_emission = rec.mat.emitted(rec.u, rec.v, rec.p);
+      let pdf = {pdf_value: 0};
+      let color_from_emission = rec.mat.emitted(rec.u, rec.v, rec.p, rec);
 
-      if (!rec.mat.scatter(r, rec, attenuation, scattered)) {
+      if (!rec.mat.scatter(r, rec, attenuation, scattered, pdf)) {
         return color_from_emission;
       } 
       
-      let color_from_scatter = Vec3.mul(this.ray_color(scattered, depth-1, world), attenuation);
+      let light_pdf = new HittablePDF(lights, rec.p);
+      scattered = new Ray(rec.p, light_pdf.generate(), r.time);
+      pdf.pdf_value = light_pdf.value(scattered.direction);
+
+      let scattering_pdf = rec.mat.scattering_pdf(r, rec, scattered);
+
+      let sample_color = this.ray_color(scattered, depth-1, world, lights);
+      let color_from_scatter = Vec3.mul(sample_color, attenuation);
+      color_from_scatter = Vec3.scale(color_from_scatter, scattering_pdf / pdf.pdf_value);
 
       return Vec3.add(color_from_emission, color_from_scatter);
 

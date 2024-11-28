@@ -107,3 +107,15 @@ function random_in_unit_disk() {
     }
   }
 }
+
+function random_cosine_direction() {
+  let r1 = Math.random();
+  let r2 = Math.random();
+
+  let phi = 2 * Math.PI * r1;
+  let x = Math.cos(phi) * Math.sqrt(r2);
+  let y = Math.sin(phi) * Math.sqrt(r2);
+  let z = Math.sqrt(1 - r2);
+
+  return vec3(x, y, z);
+}

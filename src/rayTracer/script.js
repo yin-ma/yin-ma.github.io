@@ -1,6 +1,8 @@
 importScripts("util.js");
 importScripts("vec3.js");
 importScripts("ray.js");
+importScripts("onb.js");
+importScripts("pdf.js");
 importScripts("hittable.js");
 importScripts("sphere.js");
 importScripts("quad.js");
@@ -10,14 +12,57 @@ importScripts("material.js");
 
 
 let world = new HittableList;
+let lights;
 
 self.onmessage = (msg) => {
   let {canvasWidth, canvasHeight} = msg.data;
   let cam = new Camera(canvasWidth, canvasHeight);
 
-  scene5(cam);
-  cam.render(world, self);
+  scene6(cam);
+
+  cam.render(world, lights, self);
 }
+
+
+function scene6(cam) {
+  let red = new Lambertian(color(0.65, 0.05, 0.05));
+  let white = new Lambertian(color(0.73, 0.73, 0.73));
+  let green = new Lambertian(color(0.12, 0.45, 0.15));
+  let light = new DiffuseLight(color(15, 15, 15));
+
+  world.add(new Quad(vec3(555, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), green));
+  world.add(new Quad(vec3(0, 0, 0), vec3(0, 555, 0), vec3(0, 0, 555), red));
+  world.add(new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), light));
+  world.add(new Quad(vec3(0, 0, 0), vec3(555, 0, 0), vec3(0, 0, 555), white));
+  world.add(new Quad(vec3(555, 555, 555), vec3(-555, 0, 0), vec3(0, 0, -555), white));
+  world.add(new Quad(vec3(0, 0, 555), vec3(555, 0, 0), vec3(0, 555, 0), white));
+
+  let box1 = box(vec3(0, 0, 0), vec3(165, 330, 165), white);
+  let box2 = box(vec3(0, 0, 0), vec3(165, 165, 165), white);
+
+  box1.forEach(b => {
+    let temp = new RotateY(b, 15);
+    temp = new Translate(temp, vec3(265, 0, 295));
+    world.add(temp);
+  });
+  box2.forEach(b => {
+    let temp = new RotateY(b, -18);
+    temp = new Translate(temp, vec3(130, 0, 65));
+    world.add(temp);
+  });
+
+  lights = new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), null);
+
+  cam.sample_per_pixel = 10;
+  cam.max_depth = 50;
+  cam.background = vec3(0, 0, 0);
+  cam.vfov = 40;
+  cam.lookfrom = vec3(278, 278, -800);
+  cam.lookat = vec3(278, 278, 0);
+  cam.vup = vec3(0, 1, 0);
+  cam.defocus_angle = 0;
+}
+
 
 function scene5(cam) {
   let red = new Lambertian(color(0.65, 0.05, 0.05));
@@ -45,6 +90,9 @@ function scene5(cam) {
     temp = new Translate(temp, vec3(130, 0, 65));
     world.add(temp);
   });
+
+  let empty_material = new Material;
+  lights = new Quad(vec3(343, 554, 332), vec3(-130, 0, 0), vec3(0, 0, -105), empty_material);
 
   cam.sample_per_pixel = 200;
   cam.max_depth = 50;
@@ -119,6 +167,7 @@ function scene2(cam) {
   world.add(new Quad(vec3(-2, 3, 1), vec3(4, 0, 0), vec3(0, 0, 4), upper_orange));
   world.add(new Quad(vec3(-2, -3, 5), vec3(4, 0, 0), vec3(0, 0, -4), lower_teal));
 
+  cam.background = vec3(1, 1, 1);
   cam.sample_per_pixel = 1;
   cam.max_depth = 9;
   cam.lookfrom = vec3(0, 0, 9);
@@ -129,6 +178,7 @@ function scene2(cam) {
 }
 
 function scene1(cam) {
+  cam.background = vec3(1, 1, 1);
   cam.sample_per_pixel = 9;
   cam.max_depth = 9;
   cam.lookfrom = vec3(13, 2, 3);

@@ -1,10 +1,14 @@
 class Material {
-  scatter(r_in, rec, attenuation, scattered) {
+  scatter(r_in, rec, attenuation, scattered, pdf) {
     return false;
   }
 
-  emitted(u, v, p) {
+  emitted(u, v, p, rec) {
     return vec3(0, 0, 0);
+  }
+
+  scattering_pdf(r_in, rec, scattered) {
+    return 0;
   }
 }
 
@@ -16,17 +20,44 @@ class Lambertian extends Material {
 
   }
 
-  scatter(r_in, rec, attenuation, scattered) {
-    let scatter_direction = Vec3.add(rec.normal, random_unit_vector());
+  scatter(r_in, rec, attenuation, scattered, pdf) {
 
-    if (Vec3.near_zero(scatter_direction)) {
-      scatter_direction = rec.normal;
-    }
-    Object.assign(scattered, new Ray(rec.p, scatter_direction, r_in.time));
+    let uvw = new ONB(rec.normal);
+    let scatter_direction = uvw.transform(random_cosine_direction());
+
+    Object.assign(scattered, new Ray(rec.p, Vec3.normalize(scatter_direction), r_in.time));
     Object.assign(attenuation, this.albedo);
+
+    pdf.pdf_value = Vec3.dot(uvw.axis[2], scatter_direction) / Math.PI;
     return true;
   }
+
+  scattering_pdf(r_in, rec, scattered) {
+    let cos_theta = Vec3.dot(rec.normal, Vec3.normalize(scattered.direction));
+    return cos_theta < 0 ? 0 : cos_theta / Math.PI;
+  }
 }
+
+
+class Isotropic extends Material {
+  constructor(albedo) {
+    super();
+    this.albedo = albedo;
+  }
+
+  scatter(r_in, rec, attenuation, scattered, pdf) {
+    Object.assign(scattered, new Ray(rec.p, random_unit_vector(), r_in.time));
+    Object.assign(attenuation, this.albedo);
+    pdf.pdf_value = 1 / (4 * Math.PI);
+    return true;
+  }
+
+  scattering_pdf(r_in, rec, scattered) {
+    return 1 / (4 * Math.PI);
+  }
+}
+
+
 
 
 class Metal extends Material {
@@ -36,7 +67,7 @@ class Metal extends Material {
     this.fuzz = fuzz;
   }
 
-  scatter(r_in, rec, attenuation, scattered) {
+  scatter(r_in, rec, attenuation, scattered, pdf) {
     let reflected = reflect(r_in.direction, rec.normal);
     reflected = Vec3.add(Vec3.normalize(reflected), Vec3.scale(random_unit_vector(), this.fuzz));
 
@@ -53,7 +84,7 @@ class Dielectric extends Material {
     this.refraction_index = refraction_index;
   }
 
-  scatter(r_in, rec, attenuation, scattered) {
+  scatter(r_in, rec, attenuation, scattered, pdf) {
     Object.assign(attenuation, color(1, 1, 1));
 
     let ri = rec.front_face ? (1.0 / this.refraction_index) : this.refraction_index;
@@ -89,7 +120,8 @@ class DiffuseLight extends Material {
     this.tex = emit;
   }
 
-  emitted(u, v, p) {
+  emitted(u, v, p, rec) {
+    if (!rec.front_face) return vec3(0, 0, 0);
     return this.tex;
   }
 }
