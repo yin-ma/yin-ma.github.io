@@ -41,8 +41,6 @@ class HittableList extends Hittable {
   }
 
   random(origin) {
-    let int_size = this.objects.length;
-
-    return this.objects[randInt(0, int_size-1)].random(origin);
+    return this.objects[randInt(0, this.objects.length)].random(origin);
   }
 }

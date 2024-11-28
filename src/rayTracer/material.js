@@ -63,8 +63,6 @@ class Isotropic extends Material {
 }
 
 
-
-
 class Metal extends Material {
   constructor(albedo, fuzz) {
     super();
@@ -74,7 +72,11 @@ class Metal extends Material {
 
   scatter(r_in, rec, srec) {
     let reflected = reflect(r_in.direction, rec.normal);
-    reflected = Vec3.add(Vec3.normalize(reflected), Vec3.scale(random_unit_vector(), this.fuzz));
+    if (this.fuzz === 0) {
+      reflected = Vec3.normalize(reflected);
+    } else {
+      reflected = Vec3.add(Vec3.normalize(reflected), Vec3.scale(random_unit_vector(), this.fuzz));
+    }
 
     srec.attenuation = this.albedo;
     srec.pdf_ptr = null;

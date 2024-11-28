@@ -55,6 +55,13 @@ class Vec3 {
     let s = 1e-8;
     return Math.abs(v.x) < s && Math.abs(v.y) < s && Math.abs(v.z) < s;
   }
+
+  static clamp(v, a, b) {
+    let x = clamp(v.x, a, b);
+    let y = clamp(v.y, a, b);
+    let z = clamp(v.z, a, b);
+    return vec3(x, y, z);
+  }
 }
 
 function color(r, g, b) {

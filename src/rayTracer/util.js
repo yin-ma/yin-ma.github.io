@@ -7,7 +7,18 @@ function rand_between(min, max) {
 }
 
 function randInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(rand_between(min, max));
 }
+
+function clamp(x, a, b) {
+  return Math.min(b, Math.max(a, x));
+}
+
+function linear_to_gamma(linear_component) {
+  if (linear_component > 0) {
+    return Math.sqrt(linear_component);
+  } else {
+    return 0;
+  }
+}
+

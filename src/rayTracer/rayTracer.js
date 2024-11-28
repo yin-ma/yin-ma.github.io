@@ -30,19 +30,11 @@ worker.onmessage = (msg) => {
   progressBar.innerHTML = `${progress.toFixed(2)}%`;
 }
 
-
-function linear_to_gamma(linear_component) {
-  if (linear_component > 0) {
-    return Math.sqrt(linear_component);
-  } else {
-    return 0;
-  }
-}
-
-
 function setPixelColor(x, y, color, sample) {
   const imgData = ctx.getImageData(x, y, x+1, y+1);
   const data = imgData.data;
+
+  color = Vec3.clamp(color, 0.0, 1.0);
 
   if (sample === 0) {
     data[0] = linear_to_gamma(color.x) * 255;

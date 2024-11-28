@@ -18,7 +18,6 @@ class Quad extends Hittable {
   }
 
   hit(r, ray_min, ray_max, rec) {
-
     let denom = Vec3.dot(this.normal, r.direction);
     if (Math.abs(denom) < 1e-8) return false;
 
