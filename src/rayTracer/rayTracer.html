@@ -3,19 +3,417 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ray Tracer</title>
+  <title>Cpu Ray Tracer</title>
   <link rel="stylesheet" href="rayTracer.css">
   <script src="util.js" defer></script>
   <script src="vec3.js" defer></script>
+  <script src="layout.js" defer></script>
   <script src="rayTracer.js" defer></script>
 </head>
 <body>
   <div class="root">
-    <h1>Ray Tracer</h1>
+    <h1>Cpu Ray Tracer</h1>
+    <div class="controller">
+      <div class="selector">
+        <div class="objects">
+          <label for="objects">objects</label>
+          <select size="8" name="objects" class="objects">
+            <option value="quad">quad</option>
+            <option value="sphere">sphere</option>
+            <option value="box">box</option>
+            <option value="triangle">triangle</option>
+          </select>
+          <button class="add-object-btn">add</button>
+        </div>
+        <div class="world">
+          <label for="world">world</label>
+          <select size="8" name="world" class="world">
+            <option class="camera-option" selected="selected">camera</option>
+          </select>
+          <div class="btn-row">
+            <button class="commit-change-btn" style="width: 50%;">commit change</button>
+            <button class="remove-object-btn" style="width: 50%;">remove</button>
+          </div>
+        </div>
+      </div>
+      <div class="editor">
+        <form class="camera-setting setting" style="display: none;">
+          <input type="text" name="type" value="camera" style="display: none;">
+          <div>
+            <label>image width</label>
+            <input type="number" min="10" max="800" value="400" name="width">
+            <label>image height</label>
+            <input type="number" min="10" max="800" value="300"name="height">
+          </div>
+          <label>center</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="x" value="0">
+            <label>y</label>
+            <input type="number" name="y" value="0">
+            <label>z</label>
+            <input type="number" name="z" value="-1">
+          </div>
+          <label>lookat</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="dx" value="0">
+            <label>y</label>
+            <input type="number" name="dy" value="0">
+            <label>z</label>
+            <input type="number" name="dz" value="1">
+          </div>
+          <label>background color</label>
+          <div>
+            <label>r</label>
+            <input type="number" name="r" value="0">
+            <label>g</label>
+            <input type="number" name="g" value="0">
+            <label>b</label>
+            <input type="number" name="b" value="0">
+          </div>
+          <label>sample per pixel</label>
+          <input type="number" name="samplePerPixel"  value="4">
+          <label>max depth</label>
+          <input type="number" name="maxDepth" value="4">
+          <label>vfov</label>
+          <input type="number" name="vfov" value="20">
+          <label>defocus angle</label>
+          <input type="number" name="defocusAngle" value="0">
+          <label>focus distance</label>
+          <input type="number" name="focusDist" value="10">
+        </form>
+      
+        <form class="quad-setting setting" style="display: none;">
+          <input type="text" name="type" value="quad" style="display: none;">
+          <lable>name</lable>
+          <input type="text" name="name" value="quad">
+          <label>top left corner</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="x" value="0">
+            <label>y</label>
+            <input type="number" name="y" value="0">
+            <label>z</label>
+            <input type="number" name="z" value="0">
+          </div>
+          <label>u</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="ux" value="1">
+            <label>y</label>
+            <input type="number" name="uy" value="0">
+            <label>z</label>
+            <input type="number" name="uz" value="0">
+          </div>
+          <label>v</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="vx" value="0">
+            <label>y</label>
+            <input type="number" name="vy" value="1">
+            <label>z</label>
+            <input type="number" name="vz" value="0">
+          </div>
+          <label>rotate</label>
+          <input type="number" name="angle" value="0">
+          <label>material</label>
+          <select size="4" name="material" class="material-select">
+            <option selected="selected">lambertian</option>
+            <option>isotropic</option>
+            <option>metal</option>
+            <option>dielectric</option>
+            <option>light</option>
+          </select>
+
+          <label class="mat-detail lambertian">albedo</label>
+          <div class="mat-detail lambertian">
+            <label class="mat-detail lambertian">r</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <label class="mat-detail lambertian">g</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <label class="mat-detail lambertian">b</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+          </div>
+
+          <label class="mat-detail isotropic">albedo</label>
+          <div class="mat-detail isotropic">
+            <label class="mat-detail isotropic">r</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <label class="mat-detail isotropic">g</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <label class="mat-detail isotropic">b</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+          </div>
+
+          <label class="mat-detail metal">albedo</label>
+          <div class="mat-detail metal">
+            <label class="mat-detail metal">r</label>
+            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <label class="mat-detail metal">g</label>
+            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <label class="mat-detail metal">b</label>
+            <input class="mat-detail metal" type="number" name="metalB" value="0">
+          </div>
+          <label class="mat-detail metal">fuzz</label>
+          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+
+          <label class="mat-detail dielectric">refraction index</label>
+          <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
+
+          <label class="mat-detail light">albedo</label>
+          <div class="mat-detail light">
+            <label class="mat-detail light">r</label>
+            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <label class="mat-detail light">g</label>
+            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <label class="mat-detail light">b</label>
+            <input class="mat-detail light" type="number" name="lightB" value="0">
+          </div>
+        </form>
+
+        <form class="sphere-setting setting" style="display: none;">
+          <input type="text" name="type" value="sphere" style="display: none;">
+          <lable>name</lable>
+          <input type="text" name="name" value="sphere">
+          <label>center</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="x" value="0">
+            <label>y</label>
+            <input type="number" name="y" value="0">
+            <label>z</label>
+            <input type="number" name="z" value="0">
+          </div>
+          <label>radius</label>
+          <input type="number" name="radius" value="1">
+          <label>material</label>
+          <select size="4" name="material" class="material-select">
+            <option selected="selected">lambertian</option>
+            <option>isotropic</option>
+            <option>metal</option>
+            <option>dielectric</option>
+            <option>light</option>
+          </select>
+
+          <label class="mat-detail lambertian">albedo</label>
+          <div class="mat-detail lambertian">
+            <label class="mat-detail lambertian">r</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <label class="mat-detail lambertian">g</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <label class="mat-detail lambertian">b</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+          </div>
+
+          <label class="mat-detail isotropic">albedo</label>
+          <div class="mat-detail isotropic">
+            <label class="mat-detail isotropic">r</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <label class="mat-detail isotropic">g</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <label class="mat-detail isotropic">b</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+          </div>
+
+          <label class="mat-detail metal">albedo</label>
+          <div class="mat-detail metal">
+            <label class="mat-detail metal">r</label>
+            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <label class="mat-detail metal">g</label>
+            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <label class="mat-detail metal">b</label>
+            <input class="mat-detail metal" type="number" name="metalB" value="0">
+          </div>
+          <label class="mat-detail metal">fuzz</label>
+          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+
+          <label class="mat-detail dielectric">refraction index</label>
+          <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
+
+          <label class="mat-detail light">albedo</label>
+          <div class="mat-detail light">
+            <label class="mat-detail light">r</label>
+            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <label class="mat-detail light">g</label>
+            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <label class="mat-detail light">b</label>
+            <input class="mat-detail light" type="number" name="lightB" value="0">
+          </div>
+        </form>
+
+        <form class="box-setting setting" style="display: none;">
+          <input type="text" name="type" value="box" style="display: none;">
+          <lable>name</lable>
+          <input type="text" name="name" value="box">
+          <label>center</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="x" value="0">
+            <label>y</label>
+            <input type="number" name="y" value="0">
+            <label>z</label>
+            <input type="number" name="z" value="0">
+          </div>
+          <label>size</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="sizeX" value="1">
+            <label>y</label>
+            <input type="number" name="sizeY" value="1">
+            <label>z</label>
+            <input type="number" name="sizeZ" value="1">
+          </div>
+          <label>rotate</label>
+          <input type="number" name="angle" value="0">
+          <label>material</label>
+          <select size="4" name="material" class="material-select">
+            <option selected="selected">lambertian</option>
+            <option>isotropic</option>
+            <option>metal</option>
+            <option>dielectric</option>
+            <option>light</option>
+          </select>
+
+          <label class="mat-detail lambertian">albedo</label>
+          <div class="mat-detail lambertian">
+            <label class="mat-detail lambertian">r</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <label class="mat-detail lambertian">g</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <label class="mat-detail lambertian">b</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+          </div>
+
+          <label class="mat-detail isotropic">albedo</label>
+          <div class="mat-detail isotropic">
+            <label class="mat-detail isotropic">r</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <label class="mat-detail isotropic">g</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <label class="mat-detail isotropic">b</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+          </div>
+
+          <label class="mat-detail metal">albedo</label>
+          <div class="mat-detail metal">
+            <label class="mat-detail metal">r</label>
+            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <label class="mat-detail metal">g</label>
+            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <label class="mat-detail metal">b</label>
+            <input class="mat-detail metal" type="number" name="metalB" value="0">
+          </div>
+          <label class="mat-detail metal">fuzz</label>
+          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+
+          <label class="mat-detail dielectric">refraction index</label>
+          <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
+
+          <label class="mat-detail light">albedo</label>
+          <div class="mat-detail light">
+            <label class="mat-detail light">r</label>
+            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <label class="mat-detail light">g</label>
+            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <label class="mat-detail light">b</label>
+            <input class="mat-detail light" type="number" name="lightB" value="0">
+          </div>
+        </form>
+
+        <form class="triangle-setting setting" style="display: none;">
+          <input type="text" name="type" value="triangle" style="display: none;">
+          <lable>name</lable>
+          <input type="text" name="name" value="triangle">
+          <label>top corner</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="x" value="0">
+            <label>y</label>
+            <input type="number" name="y" value="0">
+            <label>z</label>
+            <input type="number" name="z" value="0">
+          </div>
+          <label>u</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="ux" value="1">
+            <label>y</label>
+            <input type="number" name="uy" value="-1">
+            <label>z</label>
+            <input type="number" name="uz" value="0">
+          </div>
+          <label>v</label>
+          <div>
+            <label>x</label>
+            <input type="number" name="vx" value="-1">
+            <label>y</label>
+            <input type="number" name="vy" value="-1">
+            <label>z</label>
+            <input type="number" name="vz" value="0">
+          </div>
+          <label>rotate</label>
+          <input type="number" name="angle" value="0">
+          <label>material</label>
+          <select size="4" name="material" class="material-select">
+            <option selected="selected">lambertian</option>
+            <option>isotropic</option>
+            <option>metal</option>
+            <option>dielectric</option>
+            <option>light</option>
+          </select>
+
+          <label class="mat-detail lambertian">albedo</label>
+          <div class="mat-detail lambertian">
+            <label class="mat-detail lambertian">r</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <label class="mat-detail lambertian">g</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <label class="mat-detail lambertian">b</label>
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+          </div>
+
+          <label class="mat-detail isotropic">albedo</label>
+          <div class="mat-detail isotropic">
+            <label class="mat-detail isotropic">r</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <label class="mat-detail isotropic">g</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <label class="mat-detail isotropic">b</label>
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+          </div>
+
+          <label class="mat-detail metal">albedo</label>
+          <div class="mat-detail metal">
+            <label class="mat-detail metal">r</label>
+            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <label class="mat-detail metal">g</label>
+            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <label class="mat-detail metal">b</label>
+            <input class="mat-detail metal" type="number" name="metalB" value="0">
+          </div>
+          <label class="mat-detail metal">fuzz</label>
+          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+
+          <label class="mat-detail dielectric">refraction index</label>
+          <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
+
+          <label class="mat-detail light">albedo</label>
+          <div class="mat-detail light">
+            <label class="mat-detail light">r</label>
+            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <label class="mat-detail light">g</label>
+            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <label class="mat-detail light">b</label>
+            <input class="mat-detail light" type="number" name="lightB" value="0">
+          </div>
+        </form>
+      </div>
+      <button class="render-btn">render</button>
+    </div>
     <canvas class="canvas"></canvas>
-    <button class="render">render</button>
     <div class="progress-bar">0%</div>
-    <div>note: this implementation do not have spatial acceleration, do not have gpu rendering</div>
+    <div>note: this implementation do not have spatial acceleration</div>
   </div>
   <footer class="footer">
     <a class="home-link" onclick="history.back()"><span>←</span>back </a>

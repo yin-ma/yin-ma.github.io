@@ -61,19 +61,6 @@ body {
   background-color: rgb(232, 232, 232);
 }
 
-.controller {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  height: 100%;
-  left: 110%;
-}
-
-.controller-item {
-  width: 100%;
-}
 
 .item-row {
   display: flex;
@@ -88,6 +75,71 @@ body {
   position: relative;
 }
 
-.controller-value {
-  margin-left: 1rem;
+.controller {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  margin: 3rem;
+  width: 60%;
+  background: #bbb;
+}
+
+.selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.editor {
+  width: 80%;
+  min-height: 350px;
+}
+
+div.objects {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+div.world {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.setting {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  gap: 0.2rem;
+}
+
+
+.render-btn {
+  justify-self: flex-end;
+  align-self: center;
+  margin: 1rem;
+  width: 75%;
+  height: 3rem;
+}
+
+
+input {
+  width: 80px;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-detail {
+  display: none;
 }
