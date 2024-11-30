@@ -1,3 +1,6 @@
+let sceneSelectList = document.querySelector(".scene-select");
+let loadSceneBtn = document.querySelector(".load-scene-btn");
+
 let worldSelectList = document.querySelector("div.world > select.world");
 let objectSelectList = document.querySelector("div.objects > select.objects");
 let cameraOption = document.querySelector(".camera-option");
@@ -19,11 +22,40 @@ let object_prev_option;
 let world_prev_option;
 let world_is_focus = false;
 let objects = [];
-addForm(getForm(worldSelectList.value)); // add camera
+objects.push(getFormToObject(worldSelectList.value)); // add camera
+
+
+loadSceneBtn.addEventListener("click", event => {
+  clearFromAndWorld();
+
+  switch (sceneSelectList.value) {
+    case "custom scene":
+      break;
+    case "cornell box":
+      objects = getCornellBox();
+      break;
+    case "marbles world":
+      objects = getMarblesWorld();
+      break;
+    case "pyramid":
+      objects = getPyramid();
+      break;
+    default:
+      break;
+  }
+
+  objects.forEach((obj, idx) => {
+    if (idx === 0) return;
+    let opt = document.createElement("option");
+    opt.text = obj["name"];
+    worldSelectList.add(opt);
+  })
+
+})
 
 commitChangeBtn.addEventListener("click", event => {
   if (world_is_focus) {
-    objects[worldSelectList.selectedIndex] = getForm(objects[worldSelectList.selectedIndex]["type"]);
+    objects[worldSelectList.selectedIndex] = getFormToObject(objects[worldSelectList.selectedIndex]["type"]);
 
     if (worldSelectList.selectedIndex !== 0) {
       worldSelectList.options[worldSelectList.selectedIndex].text = objects[worldSelectList.selectedIndex]["name"];
@@ -43,16 +75,6 @@ matSelect.forEach((matSel, idx) => {
     })
   })
 })
-// matSelect.forEach(matsel => matsel.addEventListener("click", event => {
-//   matSetting.forEach(m => {
-//     if (m.classList.contains(matSelect.value)) {
-//       m.style.display = "block";
-//     } else {
-//       m.style.display = "none";
-//     }
-//   })
-//   })
-// )
 
 addObjectBtn.addEventListener("click", () => {
   let data = getFormData(objectSelectList.value);
@@ -61,7 +83,7 @@ addObjectBtn.addEventListener("click", () => {
   opt.text = data.get("name");
   worldSelectList.add(opt);
 
-  addForm(getForm(objectSelectList.value));
+  objects.push(getFormToObject(objectSelectList.value));
 })
 
 removeObjectBtn.addEventListener("click", () => {
@@ -73,10 +95,22 @@ removeObjectBtn.addEventListener("click", () => {
   if (idx === worldSelectList.length) {
     idx -= 1;
   }
+
   worldSelectList.options[idx].selected = true;
   showOption(worldSelectList.value);
-
 })
+
+function clearFromAndWorld() {
+  resetForm("quad");
+  resetForm("sphere");
+  resetForm("box");
+  resetForm("triangle");
+
+  for (let i=objects.length-1; i>0; i--) {
+    worldSelectList.remove(i);
+    objects.splice(i, 1);
+  }
+}
 
 function resetForm(opt) {
   let layout;
@@ -137,7 +171,7 @@ function formHtmlElement(opt) {
   return setting;
 }
 
-function getForm(value) {
+function getFormToObject(value) {
   let data = getFormData(value);
   let temp = {};
   data.entries().forEach(d => {
@@ -145,10 +179,6 @@ function getForm(value) {
     temp[key] = value;
   })
   return temp;
-}
-
-function addForm(data) {
-  objects.push(data);
 }
 
 function showOption(opt) {

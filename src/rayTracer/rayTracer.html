@@ -14,6 +14,14 @@
   <div class="root">
     <h1>Cpu Ray Tracer</h1>
     <div class="controller">
+      <div class="scene">
+        <select class="scene-select">
+          <option selected="selected">custom scene</option>
+          <option>cornell box</option>
+          <option>marbles world</option>
+        </select>
+        <button class="load-scene-btn">load</button>
+      </div>
       <div class="selector">
         <div class="objects">
           <label for="objects">objects</label>
@@ -41,9 +49,9 @@
           <input type="text" name="type" value="camera" style="display: none;">
           <div>
             <label>image width</label>
-            <input type="number" min="10" max="800" value="400" name="width">
+            <input type="number" min="10" max="800" value="200" name="width">
             <label>image height</label>
-            <input type="number" min="10" max="800" value="300"name="height">
+            <input type="number" min="10" max="800" value="150" name="height">
           </div>
           <label>center</label>
           <div>
@@ -52,7 +60,7 @@
             <label>y</label>
             <input type="number" name="y" value="0">
             <label>z</label>
-            <input type="number" name="z" value="-1">
+            <input type="number" name="z" value="-3">
           </div>
           <label>lookat</label>
           <div>
@@ -66,18 +74,18 @@
           <label>background color</label>
           <div>
             <label>r</label>
-            <input type="number" name="r" value="0">
+            <input type="number" name="r" value="0.0" step="0.01">
             <label>g</label>
-            <input type="number" name="g" value="0">
+            <input type="number" name="g" value="0.0" step="0.01">
             <label>b</label>
-            <input type="number" name="b" value="0">
+            <input type="number" name="b" value="0.0" step="0.01">
           </div>
           <label>sample per pixel</label>
           <input type="number" name="samplePerPixel"  value="4">
           <label>max depth</label>
           <input type="number" name="maxDepth" value="4">
           <label>vfov</label>
-          <input type="number" name="vfov" value="20">
+          <input type="number" name="vfov" value="90">
           <label>defocus angle</label>
           <input type="number" name="defocusAngle" value="0">
           <label>focus distance</label>
@@ -129,34 +137,34 @@
           <label class="mat-detail lambertian">albedo</label>
           <div class="mat-detail lambertian">
             <label class="mat-detail lambertian">r</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0.73" step="0.01">
             <label class="mat-detail lambertian">g</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0.73" step="0.01">
             <label class="mat-detail lambertian">b</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0.73" step="0.01">
           </div>
 
           <label class="mat-detail isotropic">albedo</label>
           <div class="mat-detail isotropic">
             <label class="mat-detail isotropic">r</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0.73" step="0.01">
             <label class="mat-detail isotropic">g</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0.73" step="0.01">
             <label class="mat-detail isotropic">b</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0.73" step="0.01">
           </div>
 
           <label class="mat-detail metal">albedo</label>
           <div class="mat-detail metal">
             <label class="mat-detail metal">r</label>
-            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <input class="mat-detail metal" type="number" name="metalR" value="0.73" step="0.01">
             <label class="mat-detail metal">g</label>
-            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <input class="mat-detail metal" type="number" name="metalG" value="0.73" step="0.01">
             <label class="mat-detail metal">b</label>
-            <input class="mat-detail metal" type="number" name="metalB" value="0">
+            <input class="mat-detail metal" type="number" name="metalB" value="0.73" step="0.01">
           </div>
           <label class="mat-detail metal">fuzz</label>
-          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+          <input class="mat-detail metal" type="number" name="fuzz" value="0" step="0.01">
 
           <label class="mat-detail dielectric">refraction index</label>
           <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
@@ -164,11 +172,11 @@
           <label class="mat-detail light">albedo</label>
           <div class="mat-detail light">
             <label class="mat-detail light">r</label>
-            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <input class="mat-detail light" type="number" name="lightR" value="11" step="0.01">
             <label class="mat-detail light">g</label>
-            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <input class="mat-detail light" type="number" name="lightG" value="11" step="0.01">
             <label class="mat-detail light">b</label>
-            <input class="mat-detail light" type="number" name="lightB" value="0">
+            <input class="mat-detail light" type="number" name="lightB" value="11" step="0.01">
           </div>
         </form>
 
@@ -199,34 +207,34 @@
           <label class="mat-detail lambertian">albedo</label>
           <div class="mat-detail lambertian">
             <label class="mat-detail lambertian">r</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0.15" step="0.01">
             <label class="mat-detail lambertian">g</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0.45" step="0.01">
             <label class="mat-detail lambertian">b</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0.15" step="0.01">
           </div>
 
           <label class="mat-detail isotropic">albedo</label>
           <div class="mat-detail isotropic">
             <label class="mat-detail isotropic">r</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0.15" step="0.01">
             <label class="mat-detail isotropic">g</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0.45" step="0.01">
             <label class="mat-detail isotropic">b</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0.15" step="0.01">
           </div>
 
           <label class="mat-detail metal">albedo</label>
           <div class="mat-detail metal">
             <label class="mat-detail metal">r</label>
-            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <input class="mat-detail metal" type="number" name="metalR" value="0.15" step="0.01">
             <label class="mat-detail metal">g</label>
-            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <input class="mat-detail metal" type="number" name="metalG" value="0.45" step="0.01">
             <label class="mat-detail metal">b</label>
-            <input class="mat-detail metal" type="number" name="metalB" value="0">
+            <input class="mat-detail metal" type="number" name="metalB" value="0.15" step="0.01">
           </div>
           <label class="mat-detail metal">fuzz</label>
-          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+          <input class="mat-detail metal" type="number" name="fuzz" value="0" step="0.01">
 
           <label class="mat-detail dielectric">refraction index</label>
           <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
@@ -234,11 +242,11 @@
           <label class="mat-detail light">albedo</label>
           <div class="mat-detail light">
             <label class="mat-detail light">r</label>
-            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <input class="mat-detail light" type="number" name="lightR" value="11" step="0.01">
             <label class="mat-detail light">g</label>
-            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <input class="mat-detail light" type="number" name="lightG" value="11" step="0.01">
             <label class="mat-detail light">b</label>
-            <input class="mat-detail light" type="number" name="lightB" value="0">
+            <input class="mat-detail light" type="number" name="lightB" value="11" step="0.01">
           </div>
         </form>
 
@@ -278,34 +286,34 @@
           <label class="mat-detail lambertian">albedo</label>
           <div class="mat-detail lambertian">
             <label class="mat-detail lambertian">r</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0.75" step="0.01">
             <label class="mat-detail lambertian">g</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0.75" step="0.01">
             <label class="mat-detail lambertian">b</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0.75" step="0.01">
           </div>
 
           <label class="mat-detail isotropic">albedo</label>
           <div class="mat-detail isotropic">
             <label class="mat-detail isotropic">r</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0.75" step="0.01">
             <label class="mat-detail isotropic">g</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0.75" step="0.01">
             <label class="mat-detail isotropic">b</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0.75" step="0.01">
           </div>
 
           <label class="mat-detail metal">albedo</label>
           <div class="mat-detail metal">
             <label class="mat-detail metal">r</label>
-            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <input class="mat-detail metal" type="number" name="metalR" value="0.75" step="0.01">
             <label class="mat-detail metal">g</label>
-            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <input class="mat-detail metal" type="number" name="metalG" value="0.75" step="0.01">
             <label class="mat-detail metal">b</label>
-            <input class="mat-detail metal" type="number" name="metalB" value="0">
+            <input class="mat-detail metal" type="number" name="metalB" value="0.75" step="0.01">
           </div>
           <label class="mat-detail metal">fuzz</label>
-          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+          <input class="mat-detail metal" type="number" name="fuzz" value="0" step="0.01">
 
           <label class="mat-detail dielectric">refraction index</label>
           <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
@@ -313,11 +321,11 @@
           <label class="mat-detail light">albedo</label>
           <div class="mat-detail light">
             <label class="mat-detail light">r</label>
-            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <input class="mat-detail light" type="number" name="lightR" value="11" step="0.01">
             <label class="mat-detail light">g</label>
-            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <input class="mat-detail light" type="number" name="lightG" value="11" step="0.01">
             <label class="mat-detail light">b</label>
-            <input class="mat-detail light" type="number" name="lightB" value="0">
+            <input class="mat-detail light" type="number" name="lightB" value="11" step="0.01">
           </div>
         </form>
 
@@ -366,34 +374,34 @@
           <label class="mat-detail lambertian">albedo</label>
           <div class="mat-detail lambertian">
             <label class="mat-detail lambertian">r</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianR" value="0.75" step="0.01">
             <label class="mat-detail lambertian">g</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianG" value="0.75" step="0.01">
             <label class="mat-detail lambertian">b</label>
-            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0">
+            <input class="mat-detail lambertian" type="number" name="lambertianB" value="0.75" step="0.01">
           </div>
 
           <label class="mat-detail isotropic">albedo</label>
           <div class="mat-detail isotropic">
             <label class="mat-detail isotropic">r</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicR" value="0.75" step="0.01">
             <label class="mat-detail isotropic">g</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicG" value="0.75" step="0.01">
             <label class="mat-detail isotropic">b</label>
-            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0">
+            <input class="mat-detail isotropic" type="number" name="isotropicB" value="0.75" step="0.01">
           </div>
 
           <label class="mat-detail metal">albedo</label>
           <div class="mat-detail metal">
             <label class="mat-detail metal">r</label>
-            <input class="mat-detail metal" type="number" name="metalR" value="0">
+            <input class="mat-detail metal" type="number" name="metalR" value="0.75" step="0.01">
             <label class="mat-detail metal">g</label>
-            <input class="mat-detail metal" type="number" name="metalG" value="0">
+            <input class="mat-detail metal" type="number" name="metalG" value="0.75" step="0.01">
             <label class="mat-detail metal">b</label>
-            <input class="mat-detail metal" type="number" name="metalB" value="0">
+            <input class="mat-detail metal" type="number" name="metalB" value="0.75" step="0.01">
           </div>
           <label class="mat-detail metal">fuzz</label>
-          <input class="mat-detail metal" type="number" name="fuzz" value="0">
+          <input class="mat-detail metal" type="number" name="fuzz" value="0" step="0.01">
 
           <label class="mat-detail dielectric">refraction index</label>
           <input class="mat-detail dielectric" type="number" name="refractionIndex" step=0.01 value="1.5">
@@ -401,11 +409,11 @@
           <label class="mat-detail light">albedo</label>
           <div class="mat-detail light">
             <label class="mat-detail light">r</label>
-            <input class="mat-detail light" type="number" name="lightR" value="0">
+            <input class="mat-detail light" type="number" name="lightR" value="11" step="0.01">
             <label class="mat-detail light">g</label>
-            <input class="mat-detail light" type="number" name="lightG" value="0">
+            <input class="mat-detail light" type="number" name="lightG" value="11" step="0.01">
             <label class="mat-detail light">b</label>
-            <input class="mat-detail light" type="number" name="lightB" value="0">
+            <input class="mat-detail light" type="number" name="lightB" value="11" step="0.01">
           </div>
         </form>
       </div>

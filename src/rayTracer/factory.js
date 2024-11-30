@@ -1,15 +1,15 @@
 class CameraFactory {
   static getCamera(setting) {
-    let cam = new Camera(parseInt(setting["width"]), parseInt(setting["height"]));
+    let cam = new Camera(parseFloat(setting["width"]), parseFloat(setting["height"]));
 
-    cam.defocus_angle = parseInt(setting["defocusAngle"]);
-    cam.lookat = vec3(parseInt(setting["dx"]), parseInt(setting["dy"]), parseInt(setting["dz"]));
-    cam.focus_dist = parseInt(setting["focusDist"]);
-    cam.max_depth = parseInt(setting["maxDepth"]);
-    cam.sample_per_pixel = parseInt(setting["samplePerPixel"]);
-    cam.vfov = parseInt(setting["vfov"]);
-    cam.lookfrom = vec3(parseInt(setting["x"]), parseInt(setting["y"]), parseInt(setting["z"]));
-    cam.background = vec3(parseInt(setting["r"]), parseInt(setting["g"]), parseInt(setting["b"]));
+    cam.defocus_angle = parseFloat(setting["defocusAngle"]);
+    cam.lookat = vec3(parseFloat(setting["dx"]), parseFloat(setting["dy"]), parseFloat(setting["dz"]));
+    cam.focus_dist = parseFloat(setting["focusDist"]);
+    cam.max_depth = parseFloat(setting["maxDepth"]);
+    cam.sample_per_pixel = parseFloat(setting["samplePerPixel"]);
+    cam.vfov = parseFloat(setting["vfov"]);
+    cam.lookfrom = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
+    cam.background = vec3(parseFloat(setting["r"]), parseFloat(setting["g"]), parseFloat(setting["b"]));
 
     return cam;
   }
@@ -18,19 +18,30 @@ class CameraFactory {
 
 class QuadFactory {
   static getQuad(setting) {
-    let Q = vec3(parseInt(setting["x"]), parseInt(setting["y"]), parseInt(setting["z"]));
-    let u = vec3(parseInt(setting["ux"]), parseInt(setting["uy"]), parseInt(setting["uz"]));
-    let v = vec3(parseInt(setting["vx"]), parseInt(setting["vy"]), parseInt(setting["vz"]));
-    let mat = MaterialFactory.getMaterial(setting);
-    return new Quad(Q, u, v, mat);
+    if (parseFloat(setting["angle"]) === 0) {
+      let Q = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
+      let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
+      let v = vec3(parseFloat(setting["vx"]), parseFloat(setting["vy"]), parseFloat(setting["vz"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      return new Quad(Q, u, v, mat);
+    } else {
+      let Q = vec3(0, 0, 0);
+      let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
+      let v = vec3(parseFloat(setting["vx"]), parseFloat(setting["vy"]), parseFloat(setting["vz"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      let res = new Quad(Q, u, v, mat);
+      res = new RotateY(res, parseFloat(setting["angle"]));
+      res = new Translate(res, vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"])));
+      return res;
+    }
   }
 }
 
 
 class SphereFactory {
   static getSphere(setting) {
-    let center = vec3(parseInt(setting["x"]), parseInt(setting["y"]), parseInt(setting["z"]));
-    let radius = parseInt(setting["radius"]);
+    let center = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
+    let radius = parseFloat(setting["radius"]);
     let mat = MaterialFactory.getMaterial(setting);
     return new Sphere(new Ray(center, vec3(0, 0, 0)), radius, mat);
   }
@@ -39,22 +50,50 @@ class SphereFactory {
 
 class BoxFactory {
   static getBox(setting) {
-    let center = vec3(parseInt(setting["x"]), parseInt(setting["y"]), parseInt(setting["z"]));
-    let size = vec3(parseInt(setting["sizeX"]), parseInt(setting["sizeY"]), parseInt(setting["sizeZ"]));
-    let mat = MaterialFactory.getMaterial(setting);
+    if (parseFloat(setting["angle"]) === 0) {
+      let center = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
+      let size = vec3(parseFloat(setting["sizeX"]), parseFloat(setting["sizeY"]), parseFloat(setting["sizeZ"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      return box(center, size, mat);
+    }
 
-    return box(center, size, mat);
+    else {
+      let center = vec3(0, 0, 0);
+      let size = vec3(parseFloat(setting["sizeX"]), parseFloat(setting["sizeY"]), parseFloat(setting["sizeZ"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      let res = box(center, size, mat);
+
+      res = res.map(b => {
+        let temp = new RotateY(b, parseFloat(setting["angle"]));
+        temp = new Translate(temp, vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"])));
+        return temp;
+      })
+
+      return res;
+    }
+
   }
 }
 
 
 class TriangleFactory {
   static getTriangle(setting) {
-    let Q = vec3(parseInt(setting["x"]), parseInt(setting["y"]), parseInt(setting["z"]));
-    let u = vec3(parseInt(setting["ux"]), parseInt(setting["uy"]), parseInt(setting["uz"]));
-    let v = vec3(parseInt(setting["vx"]), parseInt(setting["vy"]), parseInt(setting["vz"]));
-    let mat = MaterialFactory.getMaterial(setting);
-    return new Triangle(Q, u, v, mat);
+    if (parseFloat(setting["angle"]) === 0) {
+      let Q = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
+      let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
+      let v = vec3(parseFloat(setting["vx"]), parseFloat(setting["vy"]), parseFloat(setting["vz"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      return new Triangle(Q, u, v, mat);
+    } else {
+      let Q = vec3(0, 0, 0);
+      let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
+      let v = vec3(parseFloat(setting["vx"]), parseFloat(setting["vy"]), parseFloat(setting["vz"]));
+      let mat = MaterialFactory.getMaterial(setting);
+      let res = new Triangle(Q, u, v, mat);
+      res = new RotateY(res, parseFloat(setting["angle"]));
+      res = new Translate(res, vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"])));
+      return res;
+    }
   }
 }
 
@@ -63,15 +102,15 @@ class MaterialFactory {
   static getMaterial(setting) {
     switch (setting["material"]) {
       case "lambertian":
-        return new Lambertian(vec3(parseInt(setting["lambertianR"]), parseInt(setting["lambertianG"]), parseInt(setting["lambertianB"])));
+        return new Lambertian(vec3(parseFloat(setting["lambertianR"]), parseFloat(setting["lambertianG"]), parseFloat(setting["lambertianB"])));
       case "isotropic":
-        return new Isotropic(vec3(parseInt(setting["isotropicR"]), parseInt(setting["isotropicG"]), parseInt(setting["isotropicB"])));
+        return new Isotropic(vec3(parseFloat(setting["isotropicR"]), parseFloat(setting["isotropicG"]), parseFloat(setting["isotropicB"])));
       case "metal":
-        return new Metal(vec3(parseInt(setting["metalR"]), parseInt(setting["metalG"]), parseInt(setting["metalB"])));
+        return new Metal(vec3(parseFloat(setting["metalR"]), parseFloat(setting["metalG"]), parseFloat(setting["metalB"])), parseFloat(setting["fuzz"]));
       case "dielectric":
         return new Dielectric(parseFloat(setting["refractionIndex"]));
       case "light":
-        return new DiffuseLight(vec3(parseInt(setting["lightR"]), parseInt(setting["lightG"]), parseInt(setting["lightB"])));
+        return new DiffuseLight(vec3(parseFloat(setting["lightR"]), parseFloat(setting["lightG"]), parseFloat(setting["lightB"])));
       default:
         break;
     }

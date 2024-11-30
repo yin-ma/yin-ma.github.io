@@ -91,9 +91,15 @@ class Camera {
       return Vec3.mul(srec.attenuation, this.ray_color(srec.skip_pdf_ray, depth-1, world, lights));
     }
 
-    let light_ptr = new HittablePDF(lights, rec.p);
-    let p = new MixturePDF(light_ptr, srec.pdf_ptr);
-    
+    let p;
+
+    if (lights.objects.length === 0) {
+      p = srec.pdf_ptr;      
+    } else {
+      let light_ptr = new HittablePDF(lights, rec.p);
+      p = new MixturePDF(light_ptr, srec.pdf_ptr);
+    }
+
     let scattered = new Ray(rec.p, p.generate(), r.time);
     let pdf_value = p.value(scattered.direction);
 

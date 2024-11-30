@@ -143,3 +143,12 @@ input {
 .mat-detail {
   display: none;
 }
+
+.scene {
+  display: flex;
+  margin: 1rem;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
