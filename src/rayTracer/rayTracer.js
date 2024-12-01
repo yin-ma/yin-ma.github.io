@@ -38,7 +38,7 @@ loadSceneBtn.addEventListener("click", event => {
       objects = getMarblesWorld();
       break;
     case "pyramid":
-      objects = getPyramid();
+      objects = getPyramidWorld();
       break;
     default:
       break;
