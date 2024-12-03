@@ -20,41 +20,32 @@ self.onmessage = (msg) => {
 
   world = new HittableList;
   lights = new HittableList;
-  let cam = CameraFactory.getCamera(msg.data[0]);
-
+  let cam = CameraFactory.get(msg.data[0]);
+  
   msg.data.forEach(primitive_data => {
+    if (primitive_data["type"] === "camera") return;
+
+    let fact;
+
     switch (primitive_data["type"]) {
       case "quad":
-        world.add(QuadFactory.getQuad(primitive_data));
-        if (primitive_data["material"] === "light") {
-          lights.add(QuadFactory.getQuad(primitive_data));
-        }
+        fact = QuadFactory;
         break;
       case "sphere":
-        world.add(SphereFactory.getSphere(primitive_data));
-        if (primitive_data["material"] === "light") {
-          lights.add(SphereFactory.getSphere(primitive_data));
-        }
+        fact = SphereFactory;
         break;
       case "box":
-        BoxFactory.getBox(primitive_data).forEach(b => {
-          world.add(b);
-
-          if (primitive_data["material"] === "light") {
-            lights.add(b);
-          }
-
-        })
+        fact = BoxFactory;
         break;
       case "triangle":
-        world.add(TriangleFactory.getTriangle(primitive_data));
-        if (primitive_data["material"] === "light") {
-          lights.add(TriangleFactory.getTriangle(primitive_data));
-        }
+        fact = TriangleFactory;
         break;
       default:
         break;
     }
+
+    let obj = fact.get(primitive_data);
+    fact.add(obj, world, lights);
 
   })
 

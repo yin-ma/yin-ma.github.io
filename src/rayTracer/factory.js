@@ -1,5 +1,5 @@
 class CameraFactory {
-  static getCamera(setting) {
+  static get(setting) {
     let cam = new Camera(parseFloat(setting["width"]), parseFloat(setting["height"]));
 
     cam.defocus_angle = parseFloat(setting["defocusAngle"]);
@@ -17,7 +17,7 @@ class CameraFactory {
 
 
 class QuadFactory {
-  static getQuad(setting) {
+  static get(setting) {
     if (parseFloat(setting["angle"]) === 0) {
       let Q = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
       let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
@@ -35,21 +35,39 @@ class QuadFactory {
       return res;
     }
   }
+
+  static add(primitive, world, lights) {
+    if (!primitive instanceof Quad) return;
+    world.add(primitive);
+
+    if (primitive.mat instanceof DiffuseLight) {
+      lights.add(primitive);
+    }
+  }
 }
 
 
 class SphereFactory {
-  static getSphere(setting) {
+  static get(setting) {
     let center = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
     let radius = parseFloat(setting["radius"]);
     let mat = MaterialFactory.getMaterial(setting);
     return new Sphere(new Ray(center, vec3(0, 0, 0)), radius, mat);
   }
+
+  static add(primitive, world, lights) {
+    if (!primitive instanceof Sphere) return;
+    world.add(primitive);
+
+    if (primitive.mat instanceof DiffuseLight) {
+      lights.add(primitive);
+    }
+  }
 }
 
 
 class BoxFactory {
-  static getBox(setting) {
+  static get(setting) {
     if (parseFloat(setting["angle"]) === 0) {
       let center = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
       let size = vec3(parseFloat(setting["sizeX"]), parseFloat(setting["sizeY"]), parseFloat(setting["sizeZ"]));
@@ -71,13 +89,22 @@ class BoxFactory {
 
       return res;
     }
+  }
 
+  static add(primitive, world, lights) {
+    if (!primitive instanceof Box) return;
+    primitive.forEach(b => {
+      world.add(b);
+      if (b.mat instanceof DiffuseLight) {
+        lights.add(b);
+      }
+    });
   }
 }
 
 
 class TriangleFactory {
-  static getTriangle(setting) {
+  static get(setting) {
     if (parseFloat(setting["angle"]) === 0) {
       let Q = vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"]));
       let u = vec3(parseFloat(setting["ux"]), parseFloat(setting["uy"]), parseFloat(setting["uz"]));
@@ -93,6 +120,15 @@ class TriangleFactory {
       res = new RotateY(res, parseFloat(setting["angle"]));
       res = new Translate(res, vec3(parseFloat(setting["x"]), parseFloat(setting["y"]), parseFloat(setting["z"])));
       return res;
+    }
+  }
+
+  static add(primitive, world, lights) {
+    if (!primitive instanceof Triangle) return;
+    world.add(primitive);
+
+    if (primitive.mat instanceof DiffuseLight) {
+      lights.add(primitive);
     }
   }
 }
