@@ -272,20 +272,15 @@ worker.onmessage = (msg) => {
 function setPixelColor(x, y, color, sample) {
   const imgData = ctx.getImageData(x, y, x+1, y+1);
   const data = imgData.data;
-  let old_color = vec3(data[0], data[1], data[2]);
-
-  color = Vec3.clamp(color, 0.0, 1.0);
-  color.x = linear_to_gamma(color.x);
-  color.y = linear_to_gamma(color.y);
-  color.z = linear_to_gamma(color.z);
-  color = Vec3.scale(color, 255);
+  let old_color = vec3(data[0]*data[0], data[1]*data[1], data[2]*data[2]);
+  old_color = Vec3.scale(old_color, 1/(255*255));
 
   let weight = 1 / (sample+1);
   let new_color = mix3d(old_color, color, weight);
 
-  data[0] = new_color.x;
-  data[1] = new_color.y;
-  data[2] = new_color.z;
+  data[0] = linear_to_gamma(new_color.x) * 255;
+  data[1] = linear_to_gamma(new_color.y) * 255;
+  data[2] = linear_to_gamma(new_color.z) * 255;
   data[3] = 255;
 
   ctx.putImageData(imgData, x, y);
