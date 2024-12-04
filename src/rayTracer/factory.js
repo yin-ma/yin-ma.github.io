@@ -92,8 +92,8 @@ class BoxFactory {
   }
 
   static add(primitive, world, lights) {
-    if (!primitive instanceof Box) return;
     primitive.forEach(b => {
+      if (!primitive instanceof Quad) return;
       world.add(b);
       if (b.mat instanceof DiffuseLight) {
         lights.add(b);
