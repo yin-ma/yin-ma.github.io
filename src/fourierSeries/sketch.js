@@ -54,6 +54,7 @@ const sketch = (p) => {
   };
 
   p.mousePressed = () => {
+    if (p.mouseX < 0 || p.mouseX > p.width || p.mouseY < 0 || p.mouseY > p.height) return;
     drawing = true;
     time = 0;
     points = [];

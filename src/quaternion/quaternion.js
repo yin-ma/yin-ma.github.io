@@ -137,3 +137,21 @@ pointZ.addEventListener("input", event => {
 angleInput.addEventListener("input", event => {
   angle = parseFloat(event.target.value);
 })
+
+initEquation()
+
+function initEquation() {
+  let eq1 = document.querySelector(".equation1");
+  let eq2 = document.querySelector(".equation2");
+  let eq3 = document.querySelector(".equation3");
+  let eq4 = document.querySelector(".equation4");
+  let eq5 = document.querySelector(".equation5");
+
+  eq1.innerHTML = `rotation formula`;
+  eq2.innerHTML = `$$v'=qvq*=qvq^{-1}$$`;
+  eq3.innerHTML = `$$where\\;v=[0,\\; x\\overrightarrow{i},\\; y\\overrightarrow{j},\\;z\\overrightarrow{k}]$$`;
+  eq4.innerHTML = `$$q = [\\cos(\\frac{\\theta}{2}), \\sin(\\frac{\\theta}{2})\\overrightarrow{u}]$$`;
+  eq5.innerHTML = `$$\\overrightarrow{u}\\;is\\;normalized\\;quaternion\\;of\\;axis$$`
+
+  MathJax.typesetPromise();
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometric Algebra</title>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://www.desmos.com/api/v1.11/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+  <link rel="stylesheet" href="./geometricAlgebra.css">
+  <script src="./util.js" defer></script>
+  <script src="./geometricAlgebra.js" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Geometric Algebra</h1>
+    <p class="equation"></p>
+    <p class="equation2"></p>
+    <p class="equation3"></p>
+    <div class="control">
+      <div class="l-control">
+        <div id="calculator" style="width: 600px; height: 400px;"></div>
+      </div>
+      <div class="r-control">
+        <form class="points-info">
+          <label>x</label>
+          <input type="number" name="x" value=2>
+          <label>y</label>
+          <input type="number" name="y" value=2>
+          <label>z</label>
+          <input type="number" name="z" value=6>
+          <label>nx</label>
+          <input type="number" name="nx" value=2>
+          <label>ny</label>
+          <input type="number" name="ny" value=4>
+          <label>nz</label>
+          <input type="number" name="nz" value=3>
+        </form>
+        <button class="draw-btn">draw</button>
+      </div>
+    </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
