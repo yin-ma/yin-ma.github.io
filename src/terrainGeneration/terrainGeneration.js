@@ -48,6 +48,16 @@ function init() {
 
 	stats = new Stats();
 	document.body.appendChild( stats.dom );
+	
+	const axesHelper = new THREE.AxesHelper(100);
+	axesHelper.name = 'axesHelper';
+	scene.add(axesHelper);
+	axesHelper.visible = false;
+
+	const gridHelper = new THREE.GridHelper(100, 5);
+	gridHelper.name = 'gridHelper';
+	gridHelper.visible = false;
+	scene.add(gridHelper);
 }
 
 
@@ -163,19 +173,14 @@ gui.add(options, 'seed', 0, 100000, 1).onChange((value) => {
 })
 
 gui.add(options, 'helper').onChange((value) => {
+	const axesHelper = scene.getObjectByName('axesHelper');
+	const gridHelper = scene.getObjectByName('gridHelper');
 	if (value === true) {
-		const axesHelper = new THREE.AxesHelper(100);
-		axesHelper.name = 'axesHelper';
-		scene.add(axesHelper);
-	
-		const gridHelper = new THREE.GridHelper(100, 5);
-		gridHelper.name = 'gridHelper';
-		scene.add(gridHelper);
+		axesHelper.visible = true;
+		gridHelper.visible = true;
 	} else {
-		const axesHelper = scene.getObjectByName('axesHelper');
-		const gridHelper = scene.getObjectByName('gridHelper');
-		scene.remove(axesHelper);
-		scene.remove(gridHelper);
+		axesHelper.visible = false;
+		gridHelper.visible = false;
 	}
 });
 
