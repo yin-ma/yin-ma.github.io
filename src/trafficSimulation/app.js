@@ -9,7 +9,7 @@ import config from './config.js';
 
 export class App {
   constructor() {
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.camera = new CustomCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
     this.orbit = new OrbitControls(this.camera, this.renderer.domElement);
     this.scene = new CustomSence();
