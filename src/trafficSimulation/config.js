@@ -1,3 +1,3 @@
 export default {
-  mapSize: 20
+  mapSize: 20,
 }

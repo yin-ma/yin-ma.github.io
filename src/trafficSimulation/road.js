@@ -159,6 +159,19 @@ export class RoadNode extends THREE.Mesh {
     this.name = 'roadnode';
     this.next = [];
   }
+
+  disconnect() {
+    this.next = [];
+  }
+
+  getRandomNode() {
+    if (this.next.length === 0) return null;
+    return this.next[RoadNode.randint(0, this.next.length)];
+  }
+
+  static randint(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
 }
 
 
@@ -175,7 +188,23 @@ export class Road extends THREE.Group {
     this.top = {in: null, out: null};
     this.bot = {in: null, out: null};
     this.nodes = new THREE.Group();
+    this.edgesMesh = [];
     this.nodes.position.set(x, 1.0, y);
+  }
+
+  disconnect() {
+    this.left = {in: null, out: null};
+    this.right = {in: null, out: null};
+    this.top = {in: null, out: null};
+    this.bot = {in: null, out: null};
+  }
+
+  getRandomNode() {
+    let arr = [];
+    this.nodes.children.forEach(n => arr.push(n));
+
+    if (arr.length === 0) return null;
+    return arr[Road.randint(0, arr.length)];
   }
 
   rotate(ang) {
@@ -192,7 +221,6 @@ export class Road extends THREE.Group {
     this.nodes.rotation.y = ang;
 
     if (Road.almostEqual(ang, 0)) {
-      return;
     } else if (Road.almostEqual(ang, Math.PI/2)) {
       let temp = this.left;
       this.left = this.top;
@@ -221,6 +249,10 @@ export class Road extends THREE.Group {
 
   static almostEqual(a, b, thethold=0.01) {
     return Math.abs(a-b) < thethold ? true : false;
+  }
+
+  static randint(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
   }
 
 }

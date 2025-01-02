@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import config from './config.js';
 import { TextureManager } from './TextureManager.js';
-import { getURoadTexture, getLRoadTexture, getIRoadTexture, getTRoadTexture, getXRoadTexture, RoadFactory } from './road.js';
+import { getURoadTexture, getLRoadTexture, getIRoadTexture, getTRoadTexture, getXRoadTexture, RoadFactory, Road } from './road.js';
+import { CarFactory } from './car.js';
 
 
 export class CustomSence extends THREE.Scene {
@@ -19,8 +20,8 @@ export class CustomSence extends THREE.Scene {
     this.roadHelperMesh = new Array(config.mapSize).fill(null).map(r => new Array(config.mapSize).fill([]));
     this.#init();
 
-    this.t = 0;
-
+    this.carCount = 0;
+    this.roadCount = 0;
   }
 
   #init() {
@@ -53,16 +54,26 @@ export class CustomSence extends THREE.Scene {
     this.textureManager.addTextureByName('xroad', getXRoadTexture());
   }
 
+  addNewCar() {
+    let car = CarFactory.getCar();
+    this.add(car);
+
+    let node = this.road.children[Road.randint(0, this.road.children.length)].getRandomNode();
+    let nodePosition = new THREE.Vector3();
+    node.getWorldPosition(nodePosition);
+    car.position.x = nodePosition.x;
+    car.position.z = nodePosition.z;
+
+    car.destination = node.next[Road.randint(0, node.next.length)];
+    car.setOrientation();
+  }
+
   addRoadTile(x, y) {
     if (this.sceneData[x][y] !== null) {
-      // console.log(this.sceneData[x][y]);
-      // this.removeRoadTile(x, y);
-      // let temp = this.roadFactory.getTRoad(x, y);
-      // this.sceneData[x][y] = temp;
-      // this.road.add(temp);
-      // this.roadHelper.add(this.sceneData[x][y].nodes);
       return;
     }
+
+    this.roadCount += 1;
 
     // place a block
     let road = this.roadFactory.getIRoad(x, y);
@@ -70,17 +81,103 @@ export class CustomSence extends THREE.Scene {
     this.road.add(road);
 
     // renew the block and its neighbour
+    this.removeConnection(x, y); // mid
+    this.removeConnection(x, y-1); // left
+    this.removeConnection(x, y+1); // right
+    this.removeConnection(x+1, y); // top
+    this.removeConnection(x-1, y); // bot
+
     this.renewTile(x, y); // mid
     this.renewTile(x, y-1); // left
     this.renewTile(x, y+1); // right
     this.renewTile(x+1, y); // top
     this.renewTile(x-1, y); // bot
 
-    this.renewConnection(x, y);
-    this.renewConnection(x, y-1);
-    this.renewConnection(x, y+1);
-    this.renewConnection(x+1, y);
-    this.renewConnection(x-1, y);
+    //this.renewConnection(x, y); // mid
+    this.renewConnection(x, y-1); //left
+    this.renewConnection(x, y+1); // right
+    this.renewConnection(x+1, y); // top
+    this.renewConnection(x-1, y); // bot
+
+    this.addConnectionMesh(x, y);
+    this.addConnectionMesh(x, y-1);
+    this.addConnectionMesh(x, y+1);
+    this.addConnectionMesh(x+1, y);
+    this.addConnectionMesh(x-1, y);
+  }
+
+  removeConnection(x, y) {
+    let left = this.getTile(x, y-1);
+    let right = this.getTile(x, y+1);
+    let top = this.getTile(x+1, y);
+    let bot = this.getTile(x-1, y);
+    let curr = this.getTile(x, y);
+
+    if (left && curr && left.right.out && curr.left.in) {
+      left.right.out.next = left.right.out.next.filter(node => {
+        if (node.uuid === curr.left.in.uuid) return false;
+        return true;
+      })
+
+      left.edgesMesh.forEach(mesh => {
+        this.roadHelper.remove(mesh)
+      })
+
+      left.edgesMesh = [];
+      this.addConnectionMesh(x, y-1);
+    }
+
+    if (right && curr && right.left.out && curr.right.in) {
+      right.left.out.next = right.left.out.next.filter(node => {
+        if (node.uuid === curr.right.in.uuid) return false;
+        return true;
+      })
+
+      right.edgesMesh.forEach(mesh => {
+        this.roadHelper.remove(mesh)
+      })
+
+      right.edgesMesh = [];
+      this.addConnectionMesh(x, y+1);
+    }
+
+    if (top && curr && top.bot.out && curr.top.in) {
+      top.bot.out.next = top.bot.out.next.filter(node => {
+        if (node.uuid === curr.top.in.uuid) return false;
+        return true;
+      })
+
+      top.edgesMesh.forEach(mesh => {
+        this.roadHelper.remove(mesh)
+      })
+
+      top.edgesMesh = [];
+      this.addConnectionMesh(x+1, y);
+    }
+
+    if (bot && curr && bot.top.out && curr.bot.in) {
+      bot.top.out.next = bot.top.out.next.filter(node => {
+        if (node.uuid === curr.bot.in.uuid) return false;
+        return true;
+      })
+
+      bot.edgesMesh.forEach(mesh => {
+        this.roadHelper.remove(mesh)
+      })
+
+      bot.edgesMesh = [];
+      this.addConnectionMesh(x-1, y);
+    }
+
+    
+    if (curr) {
+      curr.edgesMesh.forEach(cone => {
+        this.roadHelper.remove(cone);
+      })
+
+      curr.edgesMesh = [];
+    }
+
   }
 
   renewTile(x, y) {
@@ -140,45 +237,38 @@ export class CustomSence extends THREE.Scene {
 
     this.sceneData[x][y] = road;
     this.road.add(road);
-
-    // add note to helepr
     this.roadHelper.add(this.sceneData[x][y].nodes);
   }
 
   renewConnection(x, y) {
-    if (!this.hasTile(x, y)) return;
+    let curr = this.getTile(x, y);
+    if (!curr) return;
+    let left = this.getTile(x, y-1);
+    let right = this.getTile(x, y+1);
+    let top = this.getTile(x+1, y);
+    let bot = this.getTile(x-1, y);
 
-    let left = this.hasTile(x, y-1);
-    let right = this.hasTile(x, y+1);
-    let top = this.hasTile(x+1, y);
-    let bot = this.hasTile(x-1, y);
     // connect road blocks
-    let road = this.sceneData[x][y];
     if (left) {
-      let leftRoad = this.getTile(x, y-1);
-      leftRoad.right.out.next.push(road.left.in);
-      road.left.out.next.push(leftRoad.right.in);
+      curr.left.out.next.push(left.right.in);
+      left.right.out.next.push(curr.left.in);
       this.addConnectionMesh(x, y-1);
     }
     if (right) {
-      let rightRoad = this.getTile(x, y+1);
-      road.right.out.next.push(rightRoad.left.in);
-      rightRoad.left.out.next.push(road.right.in);
+      curr.right.out.next.push(right.left.in);
+      right.left.out.next.push(curr.right.in);
       this.addConnectionMesh(x, y+1);
     }
     if (top) {
-      let topRoad = this.getTile(x+1, y);
-      road.top.out.next.push(topRoad.bot.in);
-      topRoad.bot.out.next.push(road.top.in);
+      curr.top.out.next.push(top.bot.in);
+      top.bot.out.next.push(curr.top.in);
       this.addConnectionMesh(x+1, y);
     }
     if (bot) {
-      let botRoad = this.getTile(x-1, y);
-      road.bot.out.next.push(botRoad.top.in);
-      botRoad.top.out.next.push(road.bot.in);
+      curr.bot.out.next.push(bot.top.in);
+      bot.top.out.next.push(curr.bot.in);
       this.addConnectionMesh(x-1, y);
     }
-    this.addConnectionMesh(x, y);
   }
 
   addConnectionMesh(x, y) {
@@ -193,6 +283,7 @@ export class CustomSence extends THREE.Scene {
         let coneGeo = new THREE.ConeGeometry(0.03, nodePosition.distanceTo(nextNodePosition)-0.1, 7);
         let coneMat = new THREE.MeshBasicMaterial({ color: 0x00ffff });
         let cone = new THREE.Mesh(coneGeo, coneMat);
+        cone.name = 'cone';
 
         let axis = nextNodePosition.clone().sub(nodePosition).normalize();
         let quaternion = new THREE.Quaternion();
@@ -202,15 +293,13 @@ export class CustomSence extends THREE.Scene {
         cone.position.set((nodePosition.x + nextNodePosition.x) / 2, (nodePosition.y + nextNodePosition.y) / 2, (nodePosition.z + nextNodePosition.z) / 2);
 
         this.roadHelper.add(cone);
-
         this.roadHelperMesh[x][y].push(cone);
+        this.sceneData[x][y].edgesMesh.push(cone);
       })
     })
   }
 
   removeRoadTile(x, y) {
-    this.road.remove(this.sceneData[x][y]);
-
     this.roadHelper.remove(this.sceneData[x][y].nodes);
     this.roadHelperMesh[x][y].forEach(m => {
       this.roadHelper.remove(m);
@@ -235,6 +324,8 @@ export class CustomSence extends THREE.Scene {
         });
       }
     });
+
+    this.road.remove(this.sceneData[x][y]);
     this.sceneData[x][y] = null;
     this.roadHelperMesh[x][y] = [];
   }
@@ -260,12 +351,27 @@ export class CustomSence extends THREE.Scene {
   }
 
   update() {
-    // if (this.sceneData[1][1] === null) return;
+    this.children.forEach(c => {
+      if (typeof c.update === 'function') {
+        c.update();
 
-    // this.sceneData[1][1].nodes.children.forEach(c => {
-    //   c.rotation.set(0, 0, 0);
-    //   c.rotation.y = this.t;
-    // })
-    // this.t += 0.01;
+        if (!c.destination) {
+          this.remove(c);
+        }
+      }
+    })
+
+    // handle the population of cars.
+    if (this.roadCount < 4) {
+      if (this.carCount !== this.roadCount) {
+        this.addNewCar();
+        this.carCount += 1;
+      }
+    } else {
+      if (this.roadCount * 0.5 > this.carCount) {
+        this.addNewCar();
+        this.carCount += 1;
+      }
+    }
   }
 }

@@ -16,17 +16,21 @@ export class App {
     this.gui = new GUI();
     this.stats = new Stats();
     this.raycaster = new THREE.Raycaster();
+    this.options = {
+      helper: true
+    }
     
     this.#init();
   }
 
   #init() {
+    // setup attributes
     this.renderer.setSize(window.innerWidth, innerHeight);
     this.orbit.update();
     document.body.appendChild(this.renderer.domElement);
     document.body.appendChild(this.stats.domElement);
 
-    // window resize
+    // window resize event
     window.addEventListener('resize', () => {
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
@@ -50,6 +54,13 @@ export class App {
         this.scene.addRoadTile(x, y);
       }
     })
+
+    // setup gui
+    this.gui.add(this.options, 'helper').name('show helper').onChange(value => {
+      this.scene.roadHelper.visible = value;
+      this.scene.axisHelper.visible = value;
+      this.scene.gridHelper.visible = value;
+    });
   }
 
   run() {
