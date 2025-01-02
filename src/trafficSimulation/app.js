@@ -19,6 +19,7 @@ export class App {
     this.options = {
       helper: true
     }
+    this.lastObjId = null;
     
     this.#init();
   }
@@ -49,9 +50,25 @@ export class App {
         const instanceId = intersects[0].instanceId;
         let x = instanceId % config.mapSize;
         let y = Math.floor(instanceId / config.mapSize);
-        intersects[0].object.setColorAt(instanceId, new THREE.Color(0.1, 0.25, 0.1));
-        intersects[0].object.instanceColor.needsUpdate = true;
         this.scene.addRoadTile(x, y);
+      }
+    })
+
+    document.addEventListener('pointermove', (event) => {
+      let mousePos = new THREE.Vector2();
+      mousePos.x = (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1;
+      mousePos.y = -(event.clientY / this.renderer.domElement.clientHeight) * 2 + 1;
+      this.raycaster.setFromCamera(mousePos, this.camera);
+      const intersects = this.raycaster.intersectObjects(this.scene.ground.children);
+      if(intersects.length > 0 ){
+        const instanceId = intersects[0].instanceId;
+        let x = instanceId % config.mapSize;
+        let y = Math.floor(instanceId / config.mapSize);
+
+        intersects[0].object.setColorAt(this.lastObjId, new THREE.Color(68/255, 153/255, 68/255));
+        intersects[0].object.setColorAt(instanceId, new THREE.Color(0.7, 0.95, 0.7));
+        intersects[0].object.instanceColor.needsUpdate = true;
+        this.lastObjId = instanceId;
       }
     })
 
