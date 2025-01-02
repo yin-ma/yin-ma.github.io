@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import config from './config.js';
-import { TextureManager } from './TextureManager.js';
 import { getURoadTexture, getLRoadTexture, getIRoadTexture, getTRoadTexture, getXRoadTexture, RoadFactory, Road } from './road.js';
 import { CarFactory } from './car.js';
+import { TextureManager } from './TextureManager.js';
 
 
 export class CustomSence extends THREE.Scene {
