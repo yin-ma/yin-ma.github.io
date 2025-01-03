@@ -103,6 +103,7 @@ export class RoadFactory {
     node1.next.push(node4);
     node4.next.push(node3);
     node3.next.push(node2);
+    node2.next.push(node1);
 
     road.bot.in = node1;
     road.bot.out = node2;

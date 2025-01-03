@@ -357,6 +357,7 @@ export class CustomSence extends THREE.Scene {
 
         if (!c.destination) {
           this.remove(c);
+          this.carCount -= 1;
         }
       }
     })

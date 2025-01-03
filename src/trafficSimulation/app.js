@@ -62,9 +62,6 @@ export class App {
       const intersects = this.raycaster.intersectObjects(this.scene.ground.children);
       if(intersects.length > 0 ){
         const instanceId = intersects[0].instanceId;
-        let x = instanceId % config.mapSize;
-        let y = Math.floor(instanceId / config.mapSize);
-
         intersects[0].object.setColorAt(this.lastObjId, new THREE.Color(68/255, 153/255, 68/255));
         intersects[0].object.setColorAt(instanceId, new THREE.Color(0.7, 0.95, 0.7));
         intersects[0].object.instanceColor.needsUpdate = true;
