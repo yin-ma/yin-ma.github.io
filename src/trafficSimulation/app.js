@@ -52,7 +52,11 @@ export class App {
         const instanceId = intersects[0].instanceId;
         let x = instanceId % config.mapSize;
         let y = Math.floor(instanceId / config.mapSize);
-        this.scene.addRoadTile(x, y);
+        if (!this.scene.hasTile(x, y)) {
+          this.scene.addRoadTile(x, y);
+        } else {
+          this.scene.deleteRoadTile(x, y);
+        }
       }
     })
 

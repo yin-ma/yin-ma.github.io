@@ -23,7 +23,6 @@ export class CustomSence extends THREE.Scene {
     this.roadCount = 0;
     this.lightHelper;
     this.shadowHelper;
-
   }
 
   #init() {
@@ -137,6 +136,7 @@ export class CustomSence extends THREE.Scene {
     this.addConnectionMesh(x, y+1);
     this.addConnectionMesh(x+1, y);
     this.addConnectionMesh(x-1, y);
+
   }
 
   removeConnection(x, y) {
@@ -210,7 +210,38 @@ export class CustomSence extends THREE.Scene {
 
       curr.edgesMesh = [];
     }
+  }
 
+  deleteRoadTile(x, y) {
+    if (this.sceneData[x][y] === null) {
+      return;
+    }
+
+    this.roadCount -= 1;
+
+    this.removeRoadTile(x, y);
+
+    // renew the block and its neighbour
+    this.removeConnection(x, y); // mid
+    this.removeConnection(x, y-1); // left
+    this.removeConnection(x, y+1); // right
+    this.removeConnection(x+1, y); // top
+    this.removeConnection(x-1, y); // bot
+
+    this.renewTile(x, y-1); // left
+    this.renewTile(x, y+1); // right
+    this.renewTile(x+1, y); // top
+    this.renewTile(x-1, y); // bot
+
+    this.renewConnection(x, y-1); //left
+    this.renewConnection(x, y+1); // right
+    this.renewConnection(x+1, y); // top
+    this.renewConnection(x-1, y); // bot
+
+    this.addConnectionMesh(x, y-1);
+    this.addConnectionMesh(x, y+1);
+    this.addConnectionMesh(x+1, y);
+    this.addConnectionMesh(x-1, y);
   }
 
   renewTile(x, y) {
@@ -389,6 +420,19 @@ export class CustomSence extends THREE.Scene {
         c.update();
 
         if (!c.destination) {
+          this.remove(c);
+          this.carCount -= 1;
+        }
+
+        // optimize later...
+        let temp = [];
+        this.road.children.forEach(r => {
+          r.nodes.children.forEach(n => {
+            temp.push(n);
+          })
+        })
+
+        if (!temp.includes(c.destination)) {
           this.remove(c);
           this.carCount -= 1;
         }
