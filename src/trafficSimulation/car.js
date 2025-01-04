@@ -28,11 +28,17 @@ export class Car extends THREE.Group {
   }
 
   init() {
-    const main = new THREE.Mesh(new THREE.BoxGeometry(60, 15, 30), new THREE.MeshBasicMaterial({ color: new THREE.Color(Math.random(), Math.random(), Math.random()) }));
+    const main = new THREE.Mesh(
+      new THREE.BoxGeometry(60, 15, 30), 
+      new THREE.MeshStandardMaterial({ color: new THREE.Color(Math.random(), Math.random(), Math.random()), metalness: 0.5, roughness: 1.0 }));
     main.position.y = 12;
     this.add(main);
+    main.castShadow = true;
+    main.receiveShadow = true;
 
-    const cabin = new THREE.Mesh(new THREE.BoxGeometry(40, 12, 24), new THREE.MeshBasicMaterial({ color: 0x222222 }));
+    const cabin = new THREE.Mesh(
+      new THREE.BoxGeometry(40, 12, 24), 
+      new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.5, roughness: 1.0 }));
     cabin.position.x = -6;
     cabin.position.y = 25.5;
     this.add(cabin);
@@ -78,6 +84,5 @@ export class Car extends THREE.Group {
     let dir = targetPosition.sub(currPosition).normalize();
     this.position.x += this.velocity * dir.x;
     this.position.z += this.velocity * dir.z;
-
   }
 }

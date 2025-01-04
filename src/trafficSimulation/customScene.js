@@ -19,9 +19,11 @@ export class CustomSence extends THREE.Scene {
     this.roadFactory = new RoadFactory(this.textureManager);
     this.roadHelperMesh = new Array(config.mapSize).fill(null).map(r => new Array(config.mapSize).fill([]));
     this.#init();
-
     this.carCount = 0;
     this.roadCount = 0;
+    this.lightHelper;
+    this.shadowHelper;
+
   }
 
   #init() {
@@ -31,9 +33,39 @@ export class CustomSence extends THREE.Scene {
     this.add(this.gridHelper);
     this.add(this.roadHelper);
 
+    // add lights
+    let light = new THREE.DirectionalLight(0xffffff, 6.0);
+    this.add(light);
+    light.position.set(-40, 40, config.mapSize);
+    light.castShadow = true;
+    light.shadow.camera.right = 40;
+    light.shadow.camera.top = 40;
+    light.shadow.camera.bottom = -40;
+    light.shadow.camera.left = -40;
+    light.shadow.camera.near = 40;
+    light.shadow.camera.far = 100;
+    light.shadow.mapSize.width = 2048;
+    light.shadow.mapSize.height = 2048;
+    let lightHelper = new THREE.DirectionalLightHelper(light, 4);
+    this.add(lightHelper);
+    let shadowHelper = new THREE.CameraHelper(light.shadow.camera);
+    this.add(shadowHelper);
+    let ambientLight = new THREE.AmbientLight(new THREE.Color(0.1, 0.9, 0.9), 0.15);
+    this.add(ambientLight);
+    let backlight = new THREE.DirectionalLight(new THREE.Color(0.1, 0.8, 0.25), 0.2);
+    backlight.position.set(-10, 10, config.mapSize/2);
+    this.add(backlight);
+
+    this.lightHelper = lightHelper;
+    this.shadowHelper = shadowHelper;
+
     // add ground instance
     let mat4 = new THREE.Matrix4();
-    const groundMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xffffff }), config.mapSize*config.mapSize);
+    const groundMesh = new THREE.InstancedMesh(
+      new THREE.BoxGeometry(1, 1, 1), 
+      new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.1, roughness: 1.0 }),
+      config.mapSize*config.mapSize
+    );
     groundMesh.name = 'ground';
     let count = 0;
     for (let y=0; y<config.mapSize; y++) {
@@ -55,6 +87,7 @@ export class CustomSence extends THREE.Scene {
   }
 
   addNewCar() {
+    if (this.road.children.length <= 0) return;
     let car = CarFactory.getCar();
     this.add(car);
 
@@ -352,7 +385,7 @@ export class CustomSence extends THREE.Scene {
 
   update() {
     this.children.forEach(c => {
-      if (typeof c.update === 'function') {
+      if (c.name === 'car') {
         c.update();
 
         if (!c.destination) {
@@ -362,7 +395,7 @@ export class CustomSence extends THREE.Scene {
       }
     })
 
-    // handle the population of cars.
+    //handle the population of cars.
     if (this.roadCount < 4) {
       if (this.carCount !== this.roadCount) {
         this.addNewCar();

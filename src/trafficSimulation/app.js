@@ -20,12 +20,14 @@ export class App {
       helper: true
     }
     this.lastObjId = null;
-    
     this.#init();
   }
 
   #init() {
     // setup attributes
+    this.renderer.shadowMap.enabled = true;
+    //this.renderer.shadowMapSoft = true;
+    this.renderer.shadowMap.type = THREE.VSMShadowMap;
     this.renderer.setSize(window.innerWidth, innerHeight);
     this.orbit.update();
     document.body.appendChild(this.renderer.domElement);
@@ -74,6 +76,8 @@ export class App {
       this.scene.roadHelper.visible = value;
       this.scene.axisHelper.visible = value;
       this.scene.gridHelper.visible = value;
+      this.scene.shadowHelper.visible = value;
+      this.scene.lightHelper.visible = value;
     });
   }
 

@@ -8,7 +8,12 @@ import * as THREE from 'three';
   X - cross road
 */
 
-const baseColor = new THREE.MeshBasicMaterial({ color: new THREE.Color(68/255, 153/255, 68/255) });
+
+const baseColor = new THREE.MeshStandardMaterial({ 
+  color: new THREE.Color(68/255, 153/255, 68/255), 
+  metalness: 0.1, 
+  roughness: 1.0 
+});
 
 export class RoadFactory {
   constructor(textureManager) {
@@ -146,7 +151,10 @@ export class RoadFactory {
   }
 
   getRoadNode(x, y) {
-    let node = new RoadNode(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({ color: 0x0000ff }));
+    let node = new RoadNode(
+      new THREE.BoxGeometry(0.1, 0.1, 0.1), 
+      new THREE.MeshStandardMaterial({ color: 0x0000ff, metalness: 0.1, roughness:1.0 })
+    );
     node.position.x -= x;
     node.position.z -= y;
     return node;
@@ -181,7 +189,16 @@ export class Road extends THREE.Group {
     super();
     this.roadMesh = new THREE.Mesh();
     this.roadMesh.geometry = new THREE.BoxGeometry(1, 0.05, 1);
-    this.roadMesh.material = [baseColor, baseColor, new THREE.MeshBasicMaterial({ map: material }), baseColor, baseColor, baseColor];
+    this.roadMesh.material = [
+      baseColor, 
+      baseColor, 
+      new THREE.MeshStandardMaterial({ map: material, metalness:0.1, roughness:1.0 }), 
+      baseColor, 
+      baseColor, 
+      baseColor
+    ];
+    this.roadMesh.receiveShadow = true;
+    this.roadMesh.castShadow = true;
     this.add(this.roadMesh);
     this.position.set(x, 0.525, y);
     this.left = {in: null, out: null};
