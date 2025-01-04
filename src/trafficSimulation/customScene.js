@@ -422,6 +422,7 @@ export class CustomSence extends THREE.Scene {
         if (!c.destination) {
           this.remove(c);
           this.carCount -= 1;
+          return;
         }
 
         // optimize later...
@@ -435,6 +436,7 @@ export class CustomSence extends THREE.Scene {
         if (!temp.includes(c.destination)) {
           this.remove(c);
           this.carCount -= 1;
+          return;
         }
       }
     })
