@@ -40,6 +40,13 @@ class Block {
     })
   }
 
+  moveUp() {
+    this.cells.forEach(c => {
+      c.moveUp();
+    })
+    this.origin.i -= 1;    
+  }
+
   moveDown() {
     this.cells.forEach(c => {
       c.moveDown();

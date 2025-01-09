@@ -8,23 +8,13 @@ game.run();
 document.addEventListener('keydown', event => {
   if (event.key === 'w') {
     game.rotateBlock();
-  }
-  else if (event.key === 'a') {
-    if (game.canMoveLeft()) {
-      game.moveBlockLeft();
-    }
-  }
-  else if (event.key === 'd') {
-    if (game.canMoveRight()) {
-      game.moveBlockRight();
-    }
-  }
-  else if (event.key === 's') {
-    if (game.canMoveDown()) {
-      game.moveBlockDown();
-    }
-  }
-  else if (event.key === 'r') {
+  } else if (event.key === 'a') {
+    game.moveBlockLeft();
+  } else if (event.key === 'd') {
+    game.moveBlockRight();
+  } else if (event.key === 's') {
+    game.moveBlockDown();
+  } else if (event.key === 'r') {
     game.restart();
   }
 })

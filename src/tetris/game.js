@@ -1,5 +1,4 @@
 import { IBlock, LBlock, OBlock, RBlock, SBlock, TBlock, ZBlock } from "./block.js";
-import { Cell } from "./cell.js";
 import config from "./config.js";
 
 
@@ -9,6 +8,7 @@ export class Game {
     this.grids = Array(config.numRows).fill(null).map(r => Array(config.numCols).fill(null));
     this.id = 0;
     this.currentBlock = null;
+    this.speed = 200;
     this.init();
   }
 
@@ -29,7 +29,7 @@ export class Game {
   run() {
     setInterval(() => {
       this.update();
-    }, 200);
+    }, this.speed);
   }
 
   update() {
@@ -68,27 +68,20 @@ export class Game {
   clearLine() {
     let offset = 0;
     for (let i=config.numRows-1; i>=0; i--) {
-      let isFull = true;
-      for (let j=0; j<config.numCols; j++) {
-        if (this.grids[i][j] === null) {
-          isFull = false;
-        }
-      }
+      let isFull = !this.grids[i].some(c => c === null)
 
       if (isFull) {
         offset += 1;
-        for (let j=0; j<config.numCols; j++) {
-          this.removeCell(i, j);
-        }
+        this.grids[i].forEach((c, j) => this.removeCell(i, j));        
       } else {
         if (offset !== 0) {
-          for (let j=0; j<config.numCols; j++) {
-            if (this.grids[i][j] !== null) {
+          this.grids[i].forEach((c, j) => {
+            if (c !== null) {
               this.grids[i][j].setPosition(i+offset, j);
               this.grids[i+offset][j] = this.grids[i][j];
               this.grids[i][j] = null;
             }
-          }
+          })
         }
       }
     }
@@ -96,15 +89,7 @@ export class Game {
 
   canRotateBlock() {
     this.currentBlock.rotate();
-    let canRotate = true;
-    this.currentBlock.cells.forEach(c => {
-      if (c.i < 0 || c.i > config.numRows-1 || c.j < 0 || c.j > config.numCols-1) {
-        canRotate = false;
-      }
-      else if (this.grids[c.i][c.j] !== null && this.grids[c.i][c.j].id !== c.id) {
-        canRotate = false;
-      }
-    })
+    let canRotate = this.validBlock(this.currentBlock);
     this.currentBlock.invRotate();
     return canRotate;
   }
@@ -124,49 +109,57 @@ export class Game {
   }
 
   moveBlockDown() {
+    if (this.currentBlock === null) return;
+    this.currentBlock.moveDown();
+    if (!this.validBlock(this.currentBlock)) {
+      this.currentBlock.moveUp();
+      return;
+    }
+
+    this.currentBlock.moveUp();
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = null;
     })
-
     this.currentBlock.moveDown();
-
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = c;
     })
-    
   }
 
   moveBlockLeft() {
+    if (this.currentBlock === null) return;
+    this.currentBlock.moveLeft();
+    if (!this.validBlock(this.currentBlock)) {
+      this.currentBlock.moveRight();
+      return;
+    }
+
+    this.currentBlock.moveRight();
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = null;
     })
-
     this.currentBlock.moveLeft();
-
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = c;
     })
-    
   }
 
   moveBlockRight() {
+    if (this.currentBlock === null) return;
+    this.currentBlock.moveRight();
+    if (!this.validBlock(this.currentBlock)) {
+      this.currentBlock.moveLeft();
+      return;
+    }
+
+    this.currentBlock.moveLeft();
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = null;
     })
-
     this.currentBlock.moveRight();
-
     this.currentBlock.cells.forEach(c => {
       this.grids[c.i][c.j] = c;
     })
-    
-  }
-
-  addNewCell(i, j, color) {
-    let cell = new Cell(i, j, color);
-    this.addCell(cell);
-    cell.id = this.id;
-    this.id += 1;
   }
 
   addBlock(block) {
@@ -181,56 +174,18 @@ export class Game {
   }
 
   spawnBlock() {
-    //  IBlock, LBlock, OBlock, SBlock, TBlock, ZBlock, RBlock
-
-    let rand = Math.floor(Math.random() * 7);
-    let block;
-    switch (rand) {
-      case 0:
-        block = new IBlock();
-        break;
-      case 1:
-        block = new LBlock();
-        break;
-      case 2:
-        block = new OBlock();
-        break;
-      case 3:
-        block = new SBlock();
-        break;
-      case 4:
-        block = new TBlock();
-        break;
-      case 5:
-        block = new ZBlock();
-        break;
-      case 6:
-        block = new RBlock();
-      default:
-        break;
-    }
-
-    this.currentBlock = block;
+    const blocks = [IBlock, LBlock, OBlock, SBlock, TBlock, ZBlock, RBlock];
+    this.currentBlock = new blocks[Math.floor(Math.random() * 7)]();
     
-    if (!this.canSpawnBlock()) {
+    if (!this.validBlock(this.currentBlock)) {
       this.currentBlock = null;
       return false;
-    };
+    }
     
-    this.addBlock(block);
-    block.setID(this.id);
+    this.addBlock(this.currentBlock);
+    this.currentBlock.setID(this.id);
     this.id += 1;
     return true;
-  }
-
-  canSpawnBlock() {
-    let canSpawn = true;
-    this.currentBlock.cells.forEach(c => {
-      if (this.grids[c.i][c.j] !== null) {
-        canSpawn = false;
-      }
-    })
-    return canSpawn;
   }
 
   removeCell(i, j) {
@@ -240,51 +195,22 @@ export class Game {
     }
   }
 
+  validBlock(block) {
+    // if block is out of gameboard || collide with other block => invalid move
+    return !block.cells.some(c => {
+      if (c.i < 0 || c.i >= config.numRows || c.j < 0 || c.j >= config.numCols) return true;
+      if (this.grids[c.i][c.j] !== null && this.grids[c.i][c.j].id !== c.id) return true;
+      return false;
+    })
+  }
+
   canMoveDown() {
     if (this.currentBlock === null) return;
-    let canMoveDown = true;
-    this.currentBlock.cells.forEach(c => {
-      if (c.i === config.numRows-1) {
-        canMoveDown = false;
-      }
-      else if (this.grids[c.i+1][c.j] !== null && this.grids[c.i+1][c.j].id !== c.id) {
-        canMoveDown = false;
-      }
+    // if cell is last row || its bottom side has other block => cannot move downward
+    return !this.currentBlock.cells.some(c => {
+      if (c.i === config.numRows - 1) return true;
+      else if (this.grids[c.i+1][c.j] !== null && this.grids[c.i+1][c.j].id !== c.id) return true;
+      return false;
     })
-
-    if (!canMoveDown) {
-      this.currentBlock.setMovable(false);
-    }
-    return canMoveDown;
-  }
-
-  canMoveLeft() {
-    if (this.currentBlock === null) return;
-    let canMoveLeft = true;
-    this.currentBlock.cells.forEach(c => {
-      if (c.j === 0) {
-        canMoveLeft = false;
-      }
-      else if (this.grids[c.i][c.j-1] !== null && this.grids[c.i][c.j-1].id !== c.id) {
-        canMoveLeft = false;
-      }
-    })
-
-    return canMoveLeft;
-  }
-
-  canMoveRight() {
-    if (this.currentBlock === null) return;
-    let canMoveRight= true;
-    this.currentBlock.cells.forEach(c => {
-      if (c.j === config.numCols-1) {
-        canMoveRight = false;
-      }
-      else if (this.grids[c.i][c.j+1] !== null && this.grids[c.i][c.j+1].id !== c.id) {
-        canMoveRight = false;
-      }
-    })
-
-    return canMoveRight;
   }
 }

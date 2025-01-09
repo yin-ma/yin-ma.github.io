@@ -1,5 +1,3 @@
-import config from "./config.js";
-
 export class Cell {
   constructor(i, j, color) {
     this.htmlElement;
@@ -26,23 +24,26 @@ export class Cell {
     this.htmlElement.style.setProperty('--x', this.j);
   }
 
+  moveUp() {
+    if(!this.movable) return;
+    this.i -= 1;
+    this.htmlElement.style.setProperty('--y', this.i);
+  }
+
   moveDown() {
     if(!this.movable) return;
-    if(this.i === config.numRows-1) return;
     this.i += 1;
     this.htmlElement.style.setProperty('--y', this.i);
   }
 
   moveLeft() {
     if(!this.movable) return;
-    if(this.j === 0) return;
     this.j -= 1;
     this.htmlElement.style.setProperty('--x', this.j);
   }
 
   moveRight() {
     if(!this.movable) return;
-    if (this.j === config.numCols-1) return;
     this.j += 1;
     this.htmlElement.style.setProperty('--x', this.j);
   }
