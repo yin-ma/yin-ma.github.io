@@ -166,6 +166,8 @@ export class Game {
     block.cells.forEach(c => {
       this.addCell(c);
     })
+    block.setID(this.id);
+    this.id += 1;
   }
 
   addCell(cell) {
@@ -183,8 +185,6 @@ export class Game {
     }
     
     this.addBlock(this.currentBlock);
-    this.currentBlock.setID(this.id);
-    this.id += 1;
     return true;
   }
 
@@ -206,11 +206,9 @@ export class Game {
 
   canMoveDown() {
     if (this.currentBlock === null) return;
-    // if cell is last row || its bottom side has other block => cannot move downward
-    return !this.currentBlock.cells.some(c => {
-      if (c.i === config.numRows - 1) return true;
-      else if (this.grids[c.i+1][c.j] !== null && this.grids[c.i+1][c.j].id !== c.id) return true;
-      return false;
-    })
+    this.currentBlock.moveDown();
+    let result = this.validBlock(this.currentBlock);
+    this.currentBlock.moveUp();
+    return result;
   }
 }
