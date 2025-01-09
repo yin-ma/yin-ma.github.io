@@ -98,7 +98,10 @@ export class Game {
     this.currentBlock.rotate();
     let canRotate = true;
     this.currentBlock.cells.forEach(c => {
-      if (this.grids[c.i][c.j] !== null && this.grids[c.i][c.j].id !== c.id) {
+      if (c.i < 0 || c.i > config.numRows-1 || c.j < 0 || c.j > config.numCols-1) {
+        canRotate = false;
+      }
+      else if (this.grids[c.i][c.j] !== null && this.grids[c.i][c.j].id !== c.id) {
         canRotate = false;
       }
     })
