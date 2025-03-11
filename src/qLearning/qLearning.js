@@ -26,6 +26,12 @@ girdMap[2][7] = gridType.WALL
 girdMap[3][6] = gridType.WALL
 girdMap[4][5] = gridType.WALL
 girdMap[5][4] = gridType.WALL
+girdMap[5][3] = gridType.WALL
+girdMap[2][8] = gridType.WALL
+girdMap[2][9] = gridType.WALL
+girdMap[2][10] = gridType.WALL
+girdMap[5][2] = gridType.WALL
+girdMap[5][1] = gridType.WALL
 
 
 let currPosition = {row: 2, col: 2}
@@ -83,7 +89,6 @@ for (let i=0; i<nRow; i++) {
 gridElemet[currPosition.row][currPosition.col].className = "start"
 
 
-
 function updateGrid(i, j, a) {
   let text = ""
   if (a === action.UP) {
@@ -95,6 +100,7 @@ function updateGrid(i, j, a) {
   } else if (a === action.LEFT) {
     text += "l: "
   }
+
   text += qtable.get(i, j, a).toFixed(2)
   gridTextElemet[i][j][a].textContent = text
 }
@@ -226,6 +232,10 @@ trainBtn.addEventListener("click", () => {
   train()
 })
 
-testBtn.addEventListener("click", () => {
-  test()
+testBtn.addEventListener("click", async () => {
+  trainBtn.disabled = true
+  testBtn.disabled = true
+  await test()
+  trainBtn.disabled = false
+  testBtn.disabled = false
 })

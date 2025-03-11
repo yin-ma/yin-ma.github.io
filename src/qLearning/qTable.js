@@ -29,7 +29,7 @@ export class QTable {
     }
 
     if (isAllZero) {
-      action = this.randInt(0, this.nAction)
+      action = this.randInt(0, this.nAction-1)
     }
     return [action, currQ];
   }
