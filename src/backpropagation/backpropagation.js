@@ -12,10 +12,10 @@ let mseElement = document.querySelector(".mse");
 let trainBtn = document.querySelector(".train");
 let testBtn = document.querySelector(".test");
 
-let sizes = [1, 4, 8, 4, 1];
+let sizes = [1, 4, 4, 1];
 let model = new NeuralNetwork(sizes);
 let epochs = 5000;
-let batches = 8;
+let batches = 32;
 
 trainBtn.addEventListener("click", () => train())
 testBtn.addEventListener("click", () => test())
