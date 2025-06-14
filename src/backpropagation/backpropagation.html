@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backpropagation</title>
+  <link rel="stylesheet" href="backpropagation.css">
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="backpropagation.js" type="module" defer></script>
+</head>
+<body>
+  <div class="root">
+    <h1>Backpropagation</h1>
+    <p class="equation">
+      $$\delta^{L}=\triangledown_{a}C\otimes\sigma'(z^{L})$$
+    </p>
+    <p class="equation">
+      $$\delta^{l}=((W^{l+1})^{T}\delta^{l+1})\otimes\sigma'(z^{l})$$
+    </p>
+    <p class="equation">
+      $$\frac{\partial C}{\partial W^{l}}=\delta^{l}(a^{l-1})^{T}$$
+    </p>
+    <p class="equation">
+      $$\frac{\partial C}{\partial b^{l}}=\delta^{l}$$
+    </p>
+    <canvas class="canvas"></canvas>
+  </div>
+  <footer class="footer">
+    <a class="home-link" onclick="history.back()"><span>←</span>back </a>
+  </footer>
+</body>
+</html>
