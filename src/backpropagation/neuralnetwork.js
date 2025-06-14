@@ -47,8 +47,6 @@ export class NeuralNetwork {
     })
   }
 
-
-
   getWeight(l, i, j) {
     // idx of (l: layer, i: input neural, output: neural)
     return this.weights[l][j][i];
@@ -71,8 +69,8 @@ export class NeuralNetwork {
     return 1 / (1+Math.exp(-x));
   }
 
-  sigmoid_derivative(x) {
-    return x * (1-x);
+  sigmoid_derivative(a) {
+    return a * (1-a);
   }
 
   forward(a) {

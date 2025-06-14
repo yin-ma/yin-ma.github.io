@@ -8,32 +8,38 @@ canvas.width = 600;
 canvas.height = 450;
 
 
-let sizes = [1, 16, 16, 1];
+let sizes = [1, 4, 4, 1];
 let model = new NeuralNetwork(sizes);
+let epochs = 5000;
+let batches = 16;
+
 
 model.train();
-for (let epoch = 0; epoch < 5000; epoch++) {
+for (let e=0; e<epochs; e++) {
   model.zero_grad();
   
   let loss = 0;
+  for (let b=0; b<batches; b++) {
+    let x_train = Math.random(); // [0, 10]
+    let y_train = targetFunction(x_train);
 
-  for (let b=0; b<32; b++) {
-    let x = [[Math.random()*10]];
+    let x = [[x_train]];
     let y = model.forward(x);
-    let target = (x[0][0]) ** 3 / 1000;
-    loss += (y[0][0] - target) ** 2;
-    model.backward([[target]]);
+    loss += (y[0][0] - y_train) ** 2;
+    model.backward([[y_train]]);
   }
 
   model.step()
-  console.log(`Epoch ${epoch}, Loss: ${loss/8}`);
+  if (e % 100 === 0) {
+    console.log(`Epoch: ${e}, Loss: ${loss/batches}`);
+  } 
 }
 
 model.eval();
-for (let i= 0; i< 10; i++) {
-  let x = [[i]]; 
-  let y_test = model.forward(x);
-  console.log(`real output: ${(x[0][0]**3).toFixed(2)}, Test output: ${(y_test[0][0]*1000).toFixed(2)}`);
+for (let i=0; i<11; i++) {
+  let x_test = [[i*0.1]];
+  let y_test = model.forward(x_test);
+  console.log(`target: ${(targetFunction(x_test)).toFixed(2)}, predict: ${(y_test[0][0]).toFixed(2)}`);
 }
 
 
@@ -69,3 +75,7 @@ for (let l=0; l<sizes.length; l++) {
   }
 }
 
+
+function targetFunction(x) {
+  return x**2;
+}
