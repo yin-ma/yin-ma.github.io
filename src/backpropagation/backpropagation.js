@@ -23,7 +23,7 @@ testBtn.addEventListener("click", () => test())
 drawNetwork()
 
 function test() {
-  testBtndisabled = true;
+  testBtn.disabled = true;
   trainBtn.disabled = true;
   model.eval();
   let loss = 0;
@@ -36,14 +36,14 @@ function test() {
   }
 
   mseElement.innerHTML = `mse: ${(loss/10).toFixed(4)}`
-  testBtndisabled = false;
+  testBtn.disabled = false;
   trainBtn.disabled = false;
 
 }
 
 async function train() {
   trainBtn.disabled = true;
-  testBtndisabled = true;
+  testBtn.disabled = true;
   model.train();
   for (let e=0; e<epochs; e++) {
     model.zero_grad();
@@ -70,7 +70,7 @@ async function train() {
   }
   percentElement.innerHTML = "100%";
   trainBtn.disabled = false;
-  testBtndisabled = false;
+  testBtn.disabled = false;
 }
 
 
