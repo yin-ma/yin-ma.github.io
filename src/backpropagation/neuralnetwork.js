@@ -103,9 +103,7 @@ export class NeuralNetwork {
   }
 
   backward(t) {
-
     let deltas = []
-
     let gradient_C_a = utils.add(this.activation[this.activation.length-1], utils.mul(t, -1));
     let act_derivative_L = utils.map(this.activation[this.activation.length-1], this.sigmoid_derivative);
     let delta_L = utils._mul(gradient_C_a, act_derivative_L);
@@ -133,5 +131,6 @@ export class NeuralNetwork {
       this.biases_gard[l] = utils.add(this.biases_gard[l], deltas[l+1]);
     }
   }
+  
 }
 
