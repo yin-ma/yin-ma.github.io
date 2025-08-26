@@ -1,5 +1,5 @@
 let root = document.querySelector(":root");
-let title = document.querySelector(".primary-title");
+let title = document.querySelector(".hero");
 
 title.addEventListener("mousemove", event => {
   let w = title.getBoundingClientRect().width;
@@ -15,3 +15,15 @@ title.addEventListener("mousemove", event => {
   root.style.setProperty("--bgdeg", `${ang.toFixed(2)}deg`);
 
 })
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const viewWorkBtn = document.getElementById('view-work-btn');
+  const projectsSection = document.getElementById('projects');
+
+  if (viewWorkBtn && projectsSection) {
+    viewWorkBtn.addEventListener('click', () => {
+      projectsSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+});

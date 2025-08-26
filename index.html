@@ -4,86 +4,70 @@
     <meta charset="utf-8">
     <title>MyPage</title>
     <script src="redirect.js" type="text/javascript"></script>
-    <script src="script.js" defer></script>
+    <script src="script.js" async></script>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/src/home.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
 
   <body>
     <div id="root">
-      <header>
-        <nav class="header-container"> 
-          <a>Home</a>
-          <a href="/src/codeSample.html">Code Examples</a>
-          <a href="/src/about.html">About</a>
-        </nav>
-      </header>
-      <div id="main-page">
-        <div class="body-container">
-          <div class="primary-title">
-            <h1 class="home-title">Oh Hi!</h1>
-            <p class="home-content">learning everyday</p>
-            <div class="ani-text left">
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-            </div>
-            <div class="ani-text right">
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
-              <span>Hello World!</span>
+      <header id="main-header"></header>
+      <main id="main-page">
+        <section class="hero">
+          <div class="hero-content">
+            <h1 class="hero-title">Yin Ma's Portfolio</h1>
+            <p class="hero-subtitle">An interactive journey through algorithms and data structures.</p>
+            <a href="javascript:void(0)" id="view-work-btn" class="hero-cta">View Projects</a>
+          </div>
+        </section>
+
+        <section id="about-preview" class="about-preview-section">
+          <div class="about-preview-content">
+            <img src="assets/profile-pic.jpg" alt="Yin Ma" class="profile-pic">
+            <div class="about-preview-text">
+              <h2>About Me</h2>
+              <p>I am a self-taught programmer with a passion for creating interactive and educational visualizations. I believe that the best way to learn is by doing, and I enjoy building projects that challenge me and help others understand complex topics.</p>
+              <a href="src/about.html" class="btn">Read More</a>
             </div>
           </div>
-        
-          <div class="info">
-            <h2>Code Examples</h2>
-            <div class="info-grid">
-              <a class="info-box" href="/src/sortingVisualization/sortingVisualization.html" style="background-image: url('/assets/sortingVisualization.png');">
-                <div class="info-title" >Sorting Visualization</div>
-              </a>
+        </section>
 
-              <a class="info-box" href="/src/aStarAlgorithm/aStarAlgorithm.html" style="background-image: url('/assets/aStaralgo.png');">
-                <div class="info-title">A Star Algorithm</div>
-              </a>
+        <section id="projects" class="projects-section">
+          <h2 class="section-title">Featured Projects</h2>
+          <div class="projects-grid">
+            <a class="project-card" href="/src/sortingVisualization/sortingVisualization.html">
+              <img class="project-image" src="/assets/sortingVisualization.png" alt="Sorting Visualization">
+              <div class="project-info">
+                <h3 class="project-title">Sorting Visualization</h3>
+                <p class="project-description">Watch sorting algorithms in action.</p>
+              </div>
+            </a>
 
-              <a class="info-box" href="/src/fft/fft.html" style="background-image: url('/assets/fft.png');">
-                <div class="info-title">FFT</div>
-              </a>
-          
-              <a class="info-box" href="/src/minimax/minimax.html" style="background-image: url('/assets/connectFour.png');">
-                <div class="info-title">Minimax Algorithm</div>
-              </a>
+            <a class="project-card" href="/src/aStarAlgorithm/aStarAlgorithm.html">
+              <img class="project-image" src="/assets/aStaralgo.png" alt="A Star Algorithm">
+              <div class="project-info">
+                <h3 class="project-title">A* Algorithm</h3>
+                <p class="project-description">An interactive pathfinding visualizer.</p>
+              </div>
+            </a>
 
-              <a class="info-box" href="/src/collisionWithRotation/collisionWithRotation.html" style="background-image: url('/assets/collisionWithRotation.png');">
-                <div class="info-title">Collision With Rotation</div>
-              </a>
-
-              <a class="info-box" href="/src/rayTracer/rayTracer.html" style="background-image: url('/assets/rayTracer3.png');">
-                <div class="info-title">Cpu Ray Tracer</div>
-              </a>
-
-            </div>
+            <a class="project-card" href="/src/fft/fft.html">
+              <img class="project-image" src="/assets/fft.png" alt="FFT">
+              <div class="project-info">
+                <h3 class="project-title">FFT</h3>
+                <p class="project-description">Fast Fourier Transform visualization.</p>
+              </div>
+            </a>
           </div>
-          <a class="home-link" href="/src/codeSample.html">view more <span>→</span></a>
-        </div>
+          <div class="view-more-container">
+            <a class="view-more-link" href="/src/codeSample.html">View More<span>→</span></a>
+          </div>
+        </section>
       </div>
         
-      <footer id="footer">
-        <div class="footer footer-title">CONTACT</div>
-        <div class="footer footer-content">
-          <a href="https://github.com/yin-ma" target="_blank">
-            <img alt="gitgub-icon" width="30" height="30" loading="lazy" title="gitgub" src="assets/github-mark-white.png">
-          </a>
-        </div>
-      </footer>
+      <footer id="main-footer"></footer>
     </div>
+    <script src="/src/loader.js" defer></script>
   </body>
 </html>

@@ -1,181 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>MyPage</title>
-    <script src="../redirect.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="/src/codeSample.css" />
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="/src/codeSample.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="root">
+    <header id="main-header"></header>
 
-  <body>
-    <div id="root">
-      <header>
-        <nav class="header-container"> 
-          <a href="../index.html">Home</a>
-          <a>Code Examples</a>
-          <a href="/src/about.html">About</a>
-        </nav>
-      </header>
-      <div id="main-page">
-        <div class="info">
-          <h2>Code Examples</h2>
-          <div class="info-grid">
-            <a class="info-box" href="/src/backpropagation/backpropagation.html" style="background-image: url('/assets/backpropagation.png');">
-              <div class="info-title">Backpropagation</div>
-            </a>
+    <main id="main-page" class="cs-main">
+      <div class="cs-container">
+        <header class="cs-header">
+          <h1>Projects</h1>
+          <p>A collection of interactive projects and visualizations.</p>
+        </header>
 
-            <a class="info-box" href="/src/qLearning/qLearning.html" style="background-image: url('/assets/qLearning.png');">
-              <div class="info-title">Q Learning</div>
-            </a>
-
-            <a class="info-box" href="/src/tetris/tetris.html" style="background-image: url('/assets/tetris.png');">
-              <div class="info-title">Tetris</div>
-            </a>
-
-            <a class="info-box" href="/src/trafficSimulation/trafficSimulation.html" style="background-image: url('/assets/trafficSimulation.png');">
-              <div class="info-title">Traffic Simulation</div>
-            </a>
-
-            <a class="info-box" href="/src/terrainGeneration/terrainGeneration.html" style="background-image: url('/assets/terrainGeneration.png');">
-              <div class="info-title">Terrain Generation</div>
-            </a>
-
-            <a class="info-box" href="/src/geometricAlgebra/geometricAlgebra.html" style="background-image: url('/assets/geometricAlgebra.png');">
-              <div class="info-title">Geometric Algebra</div>
-            </a>
-
-            <a class="info-box" href="/src/fourierSeries/fourierSeries.html" style="background-image: url('/assets/fourierSeries.png');">
-              <div class="info-title">Fourier Series</div>
-            </a>
-
-            <a class="info-box" href="/src/bezierCurve/bezierCurve.html" style="background-image: url('/assets/bezierCurve.png');">
-              <div class="info-title">Bezier Curve</div>
-            </a>
-
-            <a class="info-box" href="/src/rayTracer/rayTracer.html" style="background-image: url('/assets/rayTracer3.png');">
-              <div class="info-title">Cpu Ray Tracer</div>
-            </a>
-
-            <a class="info-box" href="/src/boundingVolumeHierarchy/boundingVolumeHierarchy.html" style="background-image: url('/assets/boundingVolumeHierarchy.png');">
-              <div class="info-title">Bounding Volume Hierarchy</div>
-            </a>
-
-            <a class="info-box" href="/src/quadtree/quadtree.html" style="background-image: url('/assets/quadtree.png');">
-              <div class="info-title">Quadtree</div>
-            </a>
-
-            <a class="info-box" href="/src/spatialHashing/spatialHashing.html" style="background-image: url('/assets/spatialHashing.png');">
-              <div class="info-title">Spatial Hashing</div>
-            </a>
-
-            <a class="info-box" href="/src/collisionWithRotation/collisionWithRotation.html" style="background-image: url('/assets/collisionWithRotation.png');">
-              <div class="info-title">Collision With Rotation</div>
-            </a>
-
-            <a class="info-box" href="/src/elasticCollision/elasticCollision.html" style="background-image: url('/assets/elasticCollision.png');">
-              <div class="info-title">Elastic Collision</div>
-            </a>
-
-            <a class="info-box" href="/src/separateAxisTheorem/separateAxisTheorem.html" style="background-image: url('/assets/separateAxisTheorem2.png');">
-              <div class="info-title">Separate Axis Theorem</div>
-            </a>
-
-            <a class="info-box" href="/src/softBodyPhysics/softBodyPhysics.html" style="background-image: url('/assets/softBodyPhysics.png');">
-              <div class="info-title">Soft Body Physics</div>
-            </a>
-
-            <a class="info-box" href="/src/eulerLagrangeEquation/eulerLagrangeEquation.html" style="background-image: url('/assets/eulerLagrangeEquation.png');">
-              <div class="info-title">Euler-Lagrange Equation</div>
-            </a>
-
-            <a class="info-box" href="/src/matrixFactorization/matrixFactorization.html" style="background-image: url('/assets/matrixFactorization.png');">
-              <div class="info-title">Matrix Factorization</div>
-            </a>
-
-            <a class="info-box" href="/src/monteCarloIntegration/monteCarloIntegration.html" style="background-image: url('/assets/monteCarloIntegration.png');">
-              <div class="info-title">Monte Carlo Integration</div>
-            </a>
-
-            <a class="info-box" href="/src/schlickApproximation/schlickApproximation.html" style="background-image: url('/assets/schlickApproximation.png');">
-              <div class="info-title">Schlick Approximation</div>
-            </a>
-
-            <a class="info-box" href="/src/proceduralMapGeneration/proceduralMapGeneration.html" style="background-image: url('/assets/proceduralMapGeneration.png');">
-              <div class="info-title">Procedural Map Generation</div>
-            </a>
-
-            <a class="info-box" href="/src/quaternion/quaternion.html" style="background-image: url('/assets/quaternion.png');">
-              <div class="info-title">Quaternion</div>
-            </a>
-
-            <a class="info-box" href="/src/rubikCube/rubikCube.html" style="background-image: url('/assets/rubikCube.png');">
-              <div class="info-title">Rubik Cube</div>
-            </a>
-
-            <a class="info-box" href="/src/minimax/minimax.html" style="background-image: url('/assets/connectFour.png');">
-              <div class="info-title">Minimax Algorithm</div>
-            </a>
-
-            <a class="info-box" href="/src/threeDTransformation/threeDTransformation.html" style="background-image: url('/assets/threeDimTransform.png');">
-              <div class="info-title">3D Transformation</div>
-            </a>
-
-            <a class="info-box" href="/src/perspectiveProjection/perspectiveProjection.html" style="background-image: url('/assets/perspectiveProjection.png');">
-              <div class="info-title">Perspective Projection</div>
-            </a>
-
-            <a class="info-box" href="/src/twoDLinearTransformation/twoDLinearTransformation.html" style="background-image: url('/assets/2dlinetrans.png');">
-              <div class="info-title">2D Linear Transformation</div>
-            </a>
-
-            <a class="info-box" href="/src/fft/fft.html" style="background-image: url('/assets/fft.png');">
-              <div class="info-title">FFT</div>
-            </a>
-
-            <a class="info-box" href="/src/slidingPuzzle/slidingPuzzle.html" style="background-image: url('/assets/slidingPuzzle.png');">
-              <div class="info-title">Sliding Puzzle</div>
-            </a>
-
-            <a class="info-box" href="/src/aStarAlgorithm/aStarAlgorithm.html" style="background-image: url('/assets/aStaralgo.png');">
-              <div class="info-title">A Star Algorithm</div>
-            </a>
-
-            <a class="info-box" href="/src/rayCasting/rayCasting.html" style="background-image: url('/assets/rayCasting.png');">
-              <div class="info-title">Ray Casting</div>
-            </a>
-
-            <a class="info-box" href="/src/lineSegmentIntersection/lineSegmentIntersection.html" style="background-image: url('/assets/lineSegment.png');">
-              <div class="info-title">Line Segment Intersction</div>
-            </a>
-
-            <a class="info-box" href="/src/collisionDectection/collisionDectection.html" style="background-image: url('/assets/collisionDectection.png');">
-              <div class="info-title">Collision Dectection</div>
-            </a>
-
-            <a class="info-box" href="/src/pathFinding/pathfinding.html" style="background-image: url('/assets/pathfinding.png');">
-              <div class="info-title">Path Finding Visualization</div>
-            </a>
-
-            <a class="info-box" href="/src/sortingVisualization/sortingVisualization.html" style="background-image: url('/assets/sortingVisualization.png');">
-              <div class="info-title">Sorting Visualization</div>
-            </a>
-          </div>
-        </div>
-      </div>
-        
-      <footer id="footer">
-        <div class="footer footer-title">CONTACT</div>
-        <div class="footer footer-content">
-          <a href="https://github.com/yin-ma" target="_blank">
-            <img alt="gitgub-icon" width="30" height="30" loading="lazy" title="gitgub" src="../assets/github-mark-white.png">
+        <div class="project-grid">
+          <a href="/src/backpropagation/backpropagation.html" class="project-card">
+            <img src="/assets/backpropagation.png" alt="Backpropagation">
+            <div class="project-content">
+              <h3>Backpropagation</h3>
+              <p>An interactive visualization of the backpropagation algorithm in a neural network.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">AI</span><span class="tag">Neural Network</span></div>
+            </div>
+          </a>
+          <a href="/src/qLearning/qLearning.html" class="project-card">
+            <img src="/assets/qLearning.png" alt="Q-Learning">
+            <div class="project-content">
+              <h3>Q-Learning</h3>
+              <p>A simulation of an agent learning to navigate a maze using Q-learning.</p>
+              <div class="tags"><span class="tag">Reinforcement Learning</span><span class="tag">ML</span><span class="tag">AI</span></div>
+            </div>
+          </a>
+          <a href="/src/minimax/minimax.html" class="project-card">
+            <img src="/assets/connectFour.png" alt="Minimax Algorithm">
+            <div class="project-content">
+              <h3>Minimax Algorithm</h3>
+              <p>Play Connect Four against an AI that uses the Minimax algorithm to decide its moves.</p>
+              <div class="tags"><span class="tag">Game</span><span class="tag">AI</span></div>
+            </div>
+          </a>
+          <a href="/src/matrixFactorization/matrixFactorization.html" class="project-card">
+            <img src="/assets/matrixFactorization.png" alt="Matrix Factorization">
+            <div class="project-content">
+              <h3>Matrix Factorization</h3>
+              <p>A visual demonstration of how matrix factorization can be used for recommendations.</p>
+              <div class="tags"><span class="tag">Machine Learning</span><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/trafficSimulation/trafficSimulation.html" class="project-card">
+            <img src="/assets/trafficSimulation.png" alt="Traffic Simulation">
+            <div class="project-content">
+              <h3>Traffic Simulation</h3>
+              <p>A simple simulation of car traffic flow with basic physics and behaviors.</p>
+              <div class="tags"><span class="tag">Simulation</span><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/collisionWithRotation/collisionWithRotation.html" class="project-card">
+            <img src="/assets/collisionWithRotation.png" alt="Collision With Rotation">
+            <div class="project-content">
+              <h3>Collision With Rotation</h3>
+              <p>A physics simulation demonstrating collision detection and response between rotating objects.</p>
+              <div class="tags"><span class="tag">Physics Engine</span></div>
+            </div>
+          </a>
+          <a href="/src/elasticCollision/elasticCollision.html" class="project-card">
+            <img src="/assets/elasticCollision.png" alt="Elastic Collision">
+            <div class="project-content">
+              <h3>Elastic Collision</h3>
+              <p>A simulation of 2D elastic collisions between particles, conserving momentum and kinetic energy.</p>
+              <div class="tags"><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/softBodyPhysics/softBodyPhysics.html" class="project-card">
+            <img src="/assets/softBodyPhysics.png" alt="Soft Body Physics">
+            <div class="project-content">
+              <h3>Soft Body Physics</h3>
+              <p>A fun simulation of soft body dynamics using a mass-spring system.</p>
+              <div class="tags"><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/eulerLagrangeEquation/eulerLagrangeEquation.html" class="project-card">
+            <img src="/assets/eulerLagrangeEquation.png" alt="Euler-Lagrange Equation">
+            <div class="project-content">
+              <h3>Euler-Lagrange Equation</h3>
+              <p>Visualizing classical mechanics problems like pendulums using the Euler-Lagrange equation.</p>
+              <div class="tags"><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/terrainGeneration/terrainGeneration.html" class="project-card">
+            <img src="/assets/terrainGeneration.png" alt="Terrain Generation">
+            <div class="project-content">
+              <h3>Terrain Generation</h3>
+              <p>Procedural generation of 2D terrain using Perlin noise.</p>
+              <div class="tags"><span class="tag">three.js</span><span class="tag">Procedural Generation</span></div>
+            </div>
+          </a>
+          <a href="/src/geometricAlgebra/geometricAlgebra.html" class="project-card">
+            <img src="/assets/geometricAlgebra.png" alt="Geometric Algebra">
+            <div class="project-content">
+              <h3>Geometric Algebra</h3>
+              <p>An introduction to Geometric Algebra concepts and operations in 2D.</p>
+              <div class="tags"><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/fourierSeries/fourierSeries.html" class="project-card">
+            <img src="/assets/fourierSeries.png" alt="Fourier Series">
+            <div class="project-content">
+              <h3>Fourier Series</h3>
+              <p>Drawing with epicycles. A visualization of how Fourier series can approximate any 2D shape.</p>
+              <div class="tags"><span class="tag">Math</span><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/bezierCurve/bezierCurve.html" class="project-card">
+            <img src="/assets/bezierCurve.png" alt="Bezier Curve">
+            <div class="project-content">
+              <h3>Bézier Curve</h3>
+              <p>An interactive tool to create and understand how Bézier curves are constructed.</p>
+              <div class="tags"><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/rayTracer/rayTracer.html" class="project-card">
+            <img src="/assets/rayTracer3.png" alt="CPU Ray Tracer">
+            <div class="project-content">
+              <h3>CPU Ray Tracer</h3>
+              <p>A simple ray tracer built from scratch that renders shapes with lighting and shadows.</p>
+              <div class="tags"><span class="tag">Computer Graphics</span></div>
+            </div>
+          </a>
+          <a href="/src/schlickApproximation/schlickApproximation.html" class="project-card">
+            <img src="/assets/schlickApproximation.png" alt="Schlick Approximation">
+            <div class="project-content">
+              <h3>Schlick's Approximation</h3>
+              <p>A visualization of Schlick's approximation for calculating the Fresnel effect in rendering.</p>
+              <div class="tags"><span class="tag">Computer Graphics</span><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/quaternion/quaternion.html" class="project-card">
+            <img src="/assets/quaternion.png" alt="Quaternion">
+            <div class="project-content">
+              <h3>Quaternion</h3>
+              <p>Visualizing 3D rotations using Quaternions to avoid gimbal lock.</p>
+              <div class="tags"><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/threeDTransformation/threeDTransformation.html" class="project-card">
+            <img src="/assets/threeDimTransform.png" alt="3D Transformation">
+            <div class="project-content">
+              <h3>3D Transformation</h3>
+              <p>Interactive demonstration of 3D object transformations: translation, rotation, and scaling.</p>
+              <div class="tags"><span class="tag">Math</span><span class="tag">Linear Algebra</span></div>
+            </div>
+          </a>
+          <a href="/src/perspectiveProjection/perspectiveProjection.html" class="project-card">
+            <img src="/assets/perspectiveProjection.png" alt="Perspective Projection">
+            <div class="project-content">
+              <h3>Perspective Projection</h3>
+              <p>Understanding how a 3D scene is projected onto a 2D screen.</p>
+              <div class="tags"><span class="tag">Computer Graphics</span><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/twoDLinearTransformation/twoDLinearTransformation.html" class="project-card">
+            <img src="/assets/2dlinetrans.png" alt="2D Linear Transformation">
+            <div class="project-content">
+              <h3>2D Linear Transformation</h3>
+              <p>A visual playground for applying matrix transformations to 2D vectors.</p>
+              <div class="tags"><span class="tag">Math</span><span class="tag">Linear Algebra</span></div>
+            </div>
+          </a>
+          <a href="/src/rayCasting/rayCasting.html" class="project-card">
+            <img src="/assets/rayCasting.png" alt="Ray Casting">
+            <div class="project-content">
+              <h3>Ray Casting</h3>
+              <p>A 2D ray casting simulation to create a simple visibility effect in a maze.</p>
+              <div class="tags"><span class="tag">Computer Graphics</span><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/tetris/tetris.html" class="project-card">
+            <img src="/assets/tetris.png" alt="Tetris">
+            <div class="project-content">
+              <h3>Tetris</h3>
+              <p>The classic puzzle game, built from scratch.</p>
+              <div class="tags"><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/boundingVolumeHierarchy/boundingVolumeHierarchy.html" class="project-card">
+            <img src="/assets/boundingVolumeHierarchy.png" alt="Bounding Volume Hierarchy">
+            <div class="project-content">
+              <h3>Bounding Volume Hierarchy</h3>
+              <p>A data structure to accelerate collision detection and ray tracing by organizing objects in a tree.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">Data Structure</span></div>
+            </div>
+          </a>
+          <a href="/src/quadtree/quadtree.html" class="project-card">
+            <img src="/assets/quadtree.png" alt="Quadtree">
+            <div class="project-content">
+              <h3>Quadtree</h3>
+              <p>A visual explanation of the Quadtree data structure for partitioning a 2D space.</p>
+              <div class="tags"><span class="tag">Data Structure</span><span class="tag">Algorithm</span><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/spatialHashing/spatialHashing.html" class="project-card">
+            <img src="/assets/spatialHashing.png" alt="Spatial Hashing">
+            <div class="project-content">
+              <h3>Spatial Hashing</h3>
+              <p>An efficient technique for broad-phase collision detection in a uniform grid.</p>
+              <div class="tags"><span class="tag">Data Structure</span><span class="tag">Algorithm</span><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/separateAxisTheorem/separateAxisTheorem.html" class="project-card">
+            <img src="/assets/separateAxisTheorem2.png" alt="Separate Axis Theorem">
+            <div class="project-content">
+              <h3>Separate Axis Theorem</h3>
+              <p>An algorithm for detecting collisions between convex polygons.</p>
+              <div class="tags"><span class="tag">Collision Detection</span></div>
+            </div>
+          </a>
+          <a href="/src/monteCarloIntegration/monteCarloIntegration.html" class="project-card">
+            <img src="/assets/monteCarloIntegration.png" alt="Monte Carlo Integration">
+            <div class="project-content">
+              <h3>Monte Carlo Integration</h3>
+              <p>Approximating the value of Pi and other integrals using Monte Carlo methods.</p>
+              <div class="tags"><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/proceduralMapGeneration/proceduralMapGeneration.html" class="project-card">
+            <img src="/assets/proceduralMapGeneration.png" alt="Procedural Map Generation">
+            <div class="project-content">
+              <h3>Procedural Map Generation</h3>
+              <p>Generating random dungeon-like maps using a cellular automata approach.</p>
+              <div class="tags"><span class="tag">Game</span><span class="tag">Algorithm</span><span class="tag">Procedural Generation</span></div>
+            </div>
+          </a>
+          <a href="/src/rubikCube/rubikCube.html" class="project-card">
+            <img src="/assets/rubikCube.png" alt="Rubik's Cube">
+            <div class="project-content">
+              <h3>Rubik's Cube</h3>
+              <p>A fully interactive 3D Rubik's Cube simulation.</p>
+              <div class="tags"><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/fft/fft.html" class="project-card">
+            <img src="/assets/fft.png" alt="Fast Fourier Transform">
+            <div class="project-content">
+              <h3>Fast Fourier Transform</h3>
+              <p>A visualization of the FFT algorithm and its application in signal processing.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">Physics</span></div>
+            </div>
+          </a>
+          <a href="/src/slidingPuzzle/slidingPuzzle.html" class="project-card">
+            <img src="/assets/slidingPuzzle.png" alt="Sliding Puzzle">
+            <div class="project-content">
+              <h3>Sliding Puzzle</h3>
+              <p>The classic 8-puzzle game, also known as the sliding tile puzzle.</p>
+              <div class="tags"><span class="tag">Game</span></div>
+            </div>
+          </a>
+          <a href="/src/aStarAlgorithm/aStarAlgorithm.html" class="project-card">
+            <img src="/assets/aStaralgo.png" alt="A* Algorithm">
+            <div class="project-content">
+              <h3>A* Algorithm</h3>
+              <p>An interactive visualizer for the A* pathfinding algorithm on a grid.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">Pathfinding</span></div>
+            </div>
+          </a>
+          <a href="/src/lineSegmentIntersection/lineSegmentIntersection.html" class="project-card">
+            <img src="/assets/lineSegment.png" alt="Line Segment Intersection">
+            <div class="project-content">
+              <h3>Line Segment Intersection</h3>
+              <p>A tool to detect and visualize the intersection point of two line segments.</p>
+              <div class="tags"><span class="tag">Math</span></div>
+            </div>
+          </a>
+          <a href="/src/collisionDectection/collisionDectection.html" class="project-card">
+            <img src="/assets/collisionDectection.png" alt="Collision Detection">
+            <div class="project-content">
+              <h3>Collision Detection</h3>
+              <p>Basic collision detection algorithms for simple shapes like circles and rectangles.</p>
+              <div class="tags"><span class="tag">Collision Detection</span></div>
+            </div>
+          </a>
+          <a href="/src/pathFinding/pathfinding.html" class="project-card">
+            <img src="/assets/pathfinding.png" alt="Pathfinding Visualization">
+            <div class="project-content">
+              <h3>Pathfinding Visualization</h3>
+              <p>A sandbox to compare various pathfinding algorithms like Dijkstra, BFS, and DFS.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">Pathfinding</span></div>
+            </div>
+          </a>
+          <a href="/src/sortingVisualization/sortingVisualization.html" class="project-card">
+            <img src="/assets/sortingVisualization.png" alt="Sorting Visualization">
+            <div class="project-content">
+              <h3>Sorting Visualization</h3>
+              <p>Watch various sorting algorithms (like Bubble, Merge, Quick sort) in action.</p>
+              <div class="tags"><span class="tag">Algorithm</span><span class="tag">Sorting</span></div>
+            </div>
           </a>
         </div>
-      </footer>
-    </div>
-  </body>
+      </div>
+    </main>
+
+    <footer id="main-footer"></footer>
+  </div>
+  <script src="../script.js"></script>
+  <script src="/src/loader.js" defer></script>
+</body>
 </html>
-
-
-
-
