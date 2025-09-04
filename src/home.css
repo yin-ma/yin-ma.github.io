@@ -190,4 +190,10 @@
   .hero-subtitle {
     font-size: 1.2rem;
   }
+
+  .projects-section,
+  .about-preview-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
