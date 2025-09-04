@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 70vmin;
+  height: 100vmin;
   background: linear-gradient(var(--bgdeg), #2b5876, #4e4376);
   padding: 0 2rem;
   user-select: none;
@@ -191,9 +191,8 @@
     font-size: 1.2rem;
   }
 
-  .projects-section,
-  .about-preview-section {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .about-preview-content {
+    flex-direction: column;
   }
+
 }
