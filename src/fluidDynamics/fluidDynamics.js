@@ -14,22 +14,30 @@ class Fluid{
     this.diff = diffusion;
     this.visc = viscosity;
 
+    this.reset();
+  }
+
+  reset() {
     const N = this.size;
     const arraySize = N * N;
 
-    // init arrays
-    this.density = new Float32Array(arraySize).fill(0);
-    this.density0 = new Float32Array(arraySize).fill(0);
+    this.r = new Float32Array(arraySize).fill(0);
+    this.g = new Float32Array(arraySize).fill(0);
+    this.b = new Float32Array(arraySize).fill(0);
+    this.r0 = new Float32Array(arraySize).fill(0);
+    this.g0 = new Float32Array(arraySize).fill(0);
+    this.b0 = new Float32Array(arraySize).fill(0);
 
     this.Vx = new Float32Array(arraySize).fill(0);
     this.Vy = new Float32Array(arraySize).fill(0);
     this.Vx0 = new Float32Array(arraySize).fill(0);
     this.Vy0 = new Float32Array(arraySize).fill(0);
-
   }
 
-  addDensity(x, y, amount) {
-    this.density[IX(x, y, this.size)] += amount;
+  addDensity(x, y, r, g, b) {
+    this.r[IX(x, y, this.size)] += r;
+    this.g[IX(x, y, this.size)] += g;
+    this.b[IX(x, y, this.size)] += b;
   }
 
   addVelocity(x, y, amountX, amountY) {
@@ -46,16 +54,20 @@ class Fluid{
     diffuse(1, this.Vx0, this.Vx, visc, dt, 4, N);
     diffuse(2, this.Vy0, this.Vy, visc, dt, 4, N);
 
-    project(this.Vx0, this.Vy0, this.Vx, this.Vy, 4, N);
+    project(this.Vx0, this.Vy0, this.r0, this.g0, 4, N);
 
     advect(1, this.Vx, this.Vx0, this.Vx0, this.Vy0, dt, N);
     advect(2, this.Vy, this.Vy0, this.Vx0, this.Vy0, dt, N);
 
-    project(this.Vx, this.Vy, this.Vx0, this.Vy0, 4, N);
+    project(this.Vx, this.Vy, this.r0, this.g0, 4, N);
 
-    diffuse(0, this.density0, this.density, diff, dt, 4, N);
-    advect(0, this.density, this.density0, this.Vx, this.Vy, dt, N);
+    diffuse(0, this.r0, this.r, diff, dt, 4, N);
+    diffuse(0, this.g0, this.g, diff, dt, 4, N);
+    diffuse(0, this.b0, this.b, diff, dt, 4, N);
 
+    advect(0, this.r, this.r0, this.Vx, this.Vy, dt, N);
+    advect(0, this.g, this.g0, this.Vx, this.Vy, dt, N);
+    advect(0, this.b, this.b0, this.Vx, this.Vy, dt, N);
   }
 
   render(ctx) {
@@ -66,9 +78,13 @@ class Fluid{
 
     for (let j=0; j < N; j++) {
       for (let i=0; i < N; i++) {
-        const d = this.density[IX(i, j, N)];
-        const c = Math.min(255, Math.max(0, d*255));
-        ctx.fillStyle = `rgb(${c}, ${c}, ${c})`;
+        const x = this.r[IX(i, j, N)];
+        const y = this.g[IX(i, j, N)];
+        const z = this.b[IX(i, j, N)];
+        const r = Math.min(255, Math.max(0, x*255));
+        const g = Math.min(255, Math.max(0, y*255));
+        const b = Math.min(255, Math.max(0, z*255));
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
         ctx.fillRect(i*cellWidth, j*cellHeight, cellWidth, cellHeight);
       }
     }
@@ -151,8 +167,7 @@ function advect(b, d, d0, velocX, velocY, dt, N) {
       const t1 = y - j0;
       const t0 = 1 - t1;
 
-      d[IX(i, j, N)] = s0 * (t0 * d0[IX(i0, j0, N)] + t1 * d0[IX(i0, j1, N)]) +
-                 s1 * (t0 * d0[IX(i1, j0, N)] + t1 * d0[IX(i1, j1, N)]);
+      d[IX(i, j, N)] = s0 * (t0 * d0[IX(i0, j0, N)] + t1 * d0[IX(i0, j1, N)]) + s1 * (t0 * d0[IX(i1, j0, N)] + t1 * d0[IX(i1, j1, N)]);
 
     }
   }
@@ -166,7 +181,7 @@ function project(velocX, velocY, p, div, iter, N) {
    * F = -∇φ + ∇ x A
    * 
    * take div on both sides:
-   * ∇．F = -∇²φ       (div (∇ x A) = 0)
+   * ∇．F = -∇²φ       (note: div (∇ x A) = 0)
    * 
    * where:
    * ∇．F = dF/dx + dF/dy
@@ -199,7 +214,7 @@ function project(velocX, velocY, p, div, iter, N) {
 
 
   // compute φ(i,j) = (1/4)*{-[Fx(i+1,j)-Fx(i-1,j)+Fy(i,j+1)-Fy(i,j-1)]*(h/2) + φ(i+1,j)+φ(i-1,j)+φ(i,j+1)+φ(i,j-1)}
-  // Gauss–Seidel method
+  // using Gauss–Seidel method
   for (let k = 0; k < iter; k++) {
     for (let j = 1; j < N - 1; j++) {
       for (let i = 1; i < N - 1; i++) {
@@ -238,9 +253,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastMousePos = { x: 0, y: 0 };
   let isMouseDown = false;
 
+
+  function getColorFromPalette(angle) {
+    const r = Math.floor(128 + 127 * Math.sin(angle));
+    const g = Math.floor(128 + 127 * Math.sin(angle + 2 * Math.PI / 3));
+    const b = Math.floor(128 + 127 * Math.sin(angle + 4 * Math.PI / 3));
+    return { r, g, b };
+  }
+
+
+  let colorAngle = Math.random() * 2 * Math.PI;
+  let currentColor = getColorFromPalette(colorAngle);
+
   canvas.addEventListener('mousedown', e => {
     isMouseDown = true;
     lastMousePos = { x: e.offsetX, y: e.offsetY };
+    currentColor = getColorFromPalette(colorAngle);
+    colorAngle += Math.PI * (3 - Math.sqrt(5));
   });
 
   canvas.addEventListener('mouseup', () => {
@@ -252,8 +281,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const { offsetX, offsetY } = e;
       const gridX = Math.floor(offsetX / canvas.width * SIZE);
       const gridY = Math.floor(offsetY / canvas.height * SIZE);
+      colorAngle += 0.03;
+      currentColor = getColorFromPalette(colorAngle);
 
-      fluid.addDensity(gridX, gridY, 100);
+      const amount = 100;
+        fluid.addDensity(
+        gridX,
+        gridY,
+        amount * (currentColor.r / 255),
+        amount * (currentColor.g / 255),
+        amount * (currentColor.b / 255)
+      );
 
       const dx = offsetX - lastMousePos.x;
       const dy = offsetY - lastMousePos.y;
@@ -263,6 +301,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    fluid.reset();
+  });
 
   
   function animate() {
